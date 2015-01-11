@@ -1,6 +1,6 @@
 
-bioscience
-==========
+OpenCog Bioscience Code
+-----------------------
 
 Code related to the AGI-Bio project to be built and run with the opencog server. 
 
@@ -8,11 +8,11 @@ This directory should be moved or copied to your opencog project root directory.
 
 This directory currently contains one subdirectory:
 
--- types - code to create custom atomspace node types for opencog bioscience projects
+  -- types - code to create custom atomspace node types for opencog bioscience projects
 
-   Current custom atom types are:
-     GeneNode
-     ProteinNode
+     Current custom atom types are:
+       GeneNode
+       ProteinNode
 
 
 Requirements
