@@ -1,0 +1,4 @@
+// Custom Atom types for the bio scientist project
+
+GENE_NODE <- CONCEPT_NODE
+PROTEIN_NODE <- CONCEPT_NODE
