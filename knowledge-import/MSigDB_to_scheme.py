@@ -1,5 +1,7 @@
-#from xml to scheme
-#MSigDB 
+# Script to convert MSigDB to atomspace representation in scheme
+
+# Requires: file msigdb_v4.0.xml, from: http://purl.obolibrary.org/obo/go.obo
+# Outputs scheme file to use for atomspace import
 
 from xml.dom import minidom
 xmldoc = minidom.parse('msigdb_v4.0.xml')
