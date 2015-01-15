@@ -15,62 +15,59 @@ f.write("\t (ConceptNode \""+ "MsigDB_GeneSet_v4.0"+ "\")\n")
 f.write("\t (ConceptNode \"" + "MSigDB_GeneSet" + "\")\n")
 f.write(")\n\n")
 
+def inLink(node1 ,node2):
+            f.write("(InheritanceLink \n")
+	    f.write("\t (ConceptNode \"" + "MSigDB_GeneSet: "+ node1 + "\")\n")
+	    f.write("\t (ConceptNode \""+ node2 + "\")\n")
+	    f.write(")\n\n")
+def evaLink(predicate , node1,node1_type, node2,node2_type):
+            f.write("(EvaluationLink \n")
+	    f.write("\t (PredicateNode \"" + predicate + "\"\n")
+	    f.write("\t (ListLink \n")
+	    f.write("\t\t("+node1_type+" \"" + "MSigDB_GeneSet: "+ node1 + "\")\n")
+	    f.write("\t\t("+node2_type+" \"" + node2 + "\"))\n")
+	    f.write("\t )\n")
+	    f.write(")\n\n")
+def memLink(members,geneset):
+           f.write("(MemberLink \n")  
+	   f.write("\t\t(GeneNode \"" + members + "\")\n") 
+	   f.write("\t\t(ConceptNode \"" + "MSigDB_GeneSet: "+ geneset + "\"))\n")
+
+#loop in genesets
 
 for s in genelist :
+    
 	if  not(not (genelist[1].attributes[fields[0]].value).encode('ascii','ignore')):
-	    f.write("(InheritanceLink \n")
-	    f.write("\t (ConceptNode \"" + "MSigDB_GeneSet: " +(s.attributes[fields[0]].value).encode('ascii','ignore') + "\")\n")
-	    f.write("\t (ConceptNode \""+ "MsigDB_GeneSet_v4.0"+ "\")\n")
-	    f.write(")\n\n")
+	   
+            inLink((s.attributes[fields[0]].value).encode('ascii','ignore') , "MsigDB_GeneSet_v4.0")
 
 	if  not(not (genelist[1].attributes[fields[2]].value).encode('ascii','ignore')):
-	    f.write("(EvaluationLink \n")
-	    f.write("\t (PredicateNode \"" + "organism_of" + "\"\n")
-	    f.write("\t (ListLink \n")
-	    f.write("\t\t(ConceptNode \"" + "MSigDB_GeneSet: "+ (s.attributes[fields[0]].value).encode('ascii','ignore') + "\")\n")
-	    f.write("\t\t(ConceptNode \"" + (s.attributes[fields[2]].value).encode('ascii','ignore') + "\"))\n")
-	    f.write("\t )\n")
-	    f.write(")\n\n")
-
+            node1_type = "ConceptNode"
+            node2_type = "ConceptNode"   
+            PredicateNode = "organism_of"
+	    evaLink(PredicateNode ,(s.attributes[fields[0]].value).encode('ascii','ignore') ,node1_type, (s.attributes[fields[2]].value).encode('ascii','ignore'), node2_type)
+	    
 	if  not(not (genelist[1].attributes[fields[1]].value).encode('ascii','ignore')):
-	    f.write("(EvaluationLink \n")
-	    f.write("\t (PredicateNode \"" + "historical_name_of" + "\"\n")
-	    f.write("\t (ListLink \n")
-	    f.write("\t\t(ConceptNode \"" + "MSigDB_GeneSet: "+ (s.attributes[fields[0]].value).encode('ascii','ignore') + "\")\n")
-	    f.write("\t\t(WordNode \"" + (s.attributes[fields[1]].value).encode('ascii','ignore') + "\"))\n")
-	    f.write("\t )\n")
-	    f.write(")\n\n")
-
+	    node1_type = "ConceptNode"
+            node2_type = "WordNode"  
+	    PredicateNode = "historical_name_of"
+            evaLink(PredicateNode, (s.attributes[fields[0]].value).encode('ascii','ignore'),node1_type,(s.attributes[fields[1]].value).encode('ascii','ignore'), node2_type )
+	   
 	if  not(not (genelist[1].attributes[fields[3]].value).encode('ascii','ignore')):
-	    f.write("(EvaluationLink \n")
-	    f.write("\t (PredicateNode \"" + "brief_description_of" + "\"\n")
-	    f.write("\t (ListLink \n")
-	    f.write("\t\t(ConceptNode \"" + "MSigDB_GeneSet: "+ (s.attributes[fields[0]].value).encode('ascii','ignore') + "\")\n")
-	    f.write("\t\t(PhraseNode \"" + (s.attributes[fields[3]].value).encode('ascii','ignore') + "\"))\n")
-	    f.write("\t )\n")
-	    f.write(")\n\n")
+            node1_type = "ConceptNode"
+            node2_type = "PhraseNode"  
+	    PredicateNode = "brief_description_of"
+	    evaLink(PredicateNode,(s.attributes[fields[0]].value).encode('ascii','ignore'),node1_type,(s.attributes[fields[3]].value).encode('ascii','ignore'),node2_type)
+	    
 
 	if  not(not (genelist[1].attributes[fields[4]].value).encode('ascii','ignore')):
-	    f.write("(EvaluationLink \n")
-	    f.write("\t (PredicateNode \"" + "full_description_of" + "\"\n")
-	    f.write("\t (ListLink \n")
-	    f.write("\t\t(ConceptNode \"" + "MSigDB_GeneSet: "+ (s.attributes[fields[0]].value).encode('ascii','ignore') + "\")\n")
-	    f.write("\t\t(PhraseNode \"" + (s.attributes[fields[4]].value).encode('ascii','ignore') + "\"))\n")
-	    f.write("\t )\n")
-	    f.write(")\n\n")
-
+            node1_type = "ConceptNode"
+            node2_type = "PhraseNode"   
+	    PredicateNode = "full_description_of"
+	    evaLink(PredicateNode, (s.attributes[fields[0]].value).encode('ascii','ignore'),node1_type,(s.attributes[fields[4]].value).encode('ascii','ignore'),node2_type)
+	    
 	if  not(not (genelist[1].attributes[fields[5]].value).encode('ascii','ignore')):	    
 	    for memebers in [x.strip() for x in ((s.attributes[fields[5]].value).encode('ascii','ignore')).split(',')]:
-		f.write("(MemberLink \n")  
-		f.write("\t\t(GeneNode \"" + memebers + "\")\n") 
-		f.write("\t\t(ConceptNode \"" + "MSigDB_GeneSet: "+ (s.attributes[fields[0]].value).encode('ascii','ignore') + "\"))\n")
-
+		memLink(memebers, (s.attributes[fields[0]].value).encode('ascii','ignore'))
 
 f.close()
-
-
-
-
-
-
-
