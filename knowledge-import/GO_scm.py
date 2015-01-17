@@ -55,7 +55,7 @@ def go_altid(idd,alt_id):
 def go_relationship(idd,relate_id, relation_type):
 
     #impLink(("GO_" + relation_type), idd, relate_id, "VariableNode" , "VariableNode")
-    evaLink(("GO_" + relation_type), idd, relate_id, "VariableNode" , "VariableNode")
+    evaLink(("RO_" + relation_type), idd, relate_id, "VariableNode" , "VariableNode")
     print ""
 
 #open file to write 
