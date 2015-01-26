@@ -1,5 +1,5 @@
-# Go Annotation to atomspace representation in scheme 
-# Requires: file gene_association.goa_ref_human.gz from http://geneontology.org/gene-associations/gene_association.goa_ref_human.gz 
+# Go Annotation to atomspace represerntation in scheme  
+# Requires: file gene_association.goa_ref_human.gz from http://geneontology.org/gene-associations/gene_association.goa_ref_human.gz
 
 
 f = open('gene_association.goa_ref_human')
