@@ -6,6 +6,7 @@ FROM opencog/opencog-deps
 RUN git clone --depth 1 https://github.com/opencog/opencog oc
 ADD . /home/opencog/oc/bioscience
 RUN echo  'ADD_SUBDIRECTORY(bioscience)' >> oc/CMakeLists.txt 
+ADD opencog.conf /oc/lib/
 RUN (cd oc; mkdir build; cd build; cmake ..; make -j6)
 
 # Defaults
