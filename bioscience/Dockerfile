@@ -20,7 +20,7 @@ EXPOSE 5432
 
 # Docker defaults
 ## Start cogserver when container runs
-#WORKDIR /home/opencog/oc/build
-#ENTRYPOINT ["/home/opencog/oc/build/opencog/server/cogserver"]
-#CMD ["-c",  "oc/lib/opencog.conf"]
-CMD bash
+WORKDIR /home/opencog/oc/build
+ENTRYPOINT ["/home/opencog/oc/build/opencog/server/cogserver"]
+CMD ["-c",  "oc/lib/opencog.conf"]
+USER opencog
