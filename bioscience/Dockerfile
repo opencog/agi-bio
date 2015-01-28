@@ -9,16 +9,6 @@ RUN echo  'ADD_SUBDIRECTORY(bioscience)' >> oc/CMakeLists.txt
 ADD opencog.conf /home/opencog/oc/lib/
 RUN (cd oc; mkdir build; cd build; cmake ..; make -j6)
 
-# Defaults
-## cogserver shell ports
-EXPOSE 17001 18001
-
-## REST api
-EXPOSE 5000
-
-## Default postgresql port
-EXPOSE 5432
-
 # Docker defaults
 ## Start cogserver when container runs
 WORKDIR /home/opencog/oc/build
