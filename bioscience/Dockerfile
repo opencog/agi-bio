@@ -10,8 +10,8 @@ ADD opencog.conf /home/opencog/oc/lib/
 RUN (cd oc; mkdir build; cd build; cmake ..; make -j6)
 
 # Docker defaults
-## Start cogserver when container runs
 WORKDIR /home/opencog/oc/build
-ENTRYPOINT ["/home/opencog/oc/build/opencog/server/cogserver"]
-CMD ["-c",  "oc/lib/opencog.conf"]
 USER opencog
+
+## Start cogserver when container runs
+CMD opencog/server/cogserver
