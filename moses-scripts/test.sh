@@ -65,7 +65,7 @@ hr2i() {
 
 # Pad $1 symbol with up to $2 0s
 pad() {
-    pad_expression="%0${2}d"
+    local pad_expression="%0${2}d"
     printf "$pad_expression" "$1"
 }
 
@@ -100,6 +100,20 @@ train_test_split() {
             echo "$line" >> "${DATAFILE_TEST}"
         fi
     done < <(tail -n +2 "$DATAFILE")
+}
+
+# Given
+#
+# 1. a model name
+#
+# 2. a combo model
+#
+# return a scheme code defining the equivalence between the model name
+# and the model.
+model_def() {
+    name="$1"
+    model="$2"
+    echo "(EquivalenceLink (stv 1.0 1.0) (PredicateNode \"${name}\") $model)"
 }
 
 ########
@@ -155,7 +169,7 @@ infoEcho "Load MOSES models into the AtomSpace"
     i=0
     while read line; do
         moses_model_name="moses_$(pad $i 3)"
-        echo "(EquivalenceLink (stv 1.0 1.0) (EvaluationLink (PredicateNode \"${moses_model_name}\") (VariableNode \"\$X\")) $line)"
+        echo "$(model_def "$moses_model_name" "$line")"
         ((++i))
     done < "$moses_output_file"
 ) | "$opencog_repo_path/scripts/run_telnet_cogserver.sh"
