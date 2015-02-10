@@ -5,7 +5,7 @@ This document contains a few suggestions to map model scores (gotten
 from MOSES) into hypergraphs.
 
 I'm discussing 2 fitnesses, used by Mike, accuracy (1 - score, in
-Mike's terminology) and balance accuracy.
+Mike's terminology) and balanced accuracy.
 
 Accuracy
 --------
