@@ -40,7 +40,7 @@ set -u
 # Program argument #
 ####################
 if [[ $# != 3 ]]; then
-    echo "Usage: $0 MODEL_CSV_FILE COGSERVER_HOST COGSERVER_PORT"
+    echo "Usage: $0 COGSERVER_HOST COGSERVER_PORT MODEL_CSV_FILE"
     echo "Example: $0 chr10_moses.5x10.csv localhost 17001"
     exit 1
 fi
@@ -48,9 +48,9 @@ fi
 #############
 # Constants #
 #############
-readonly MODEL_CSV_FILE="$1"
-readonly COGSERVER_HOST="$2"
-readonly COGSERVER_PORT="$3"
+readonly COGSERVER_HOST="$1"
+readonly COGSERVER_PORT="$2"
+readonly MODEL_CSV_FILE="$3"
 readonly BASE_MODEL_CSV_FILE="$(basename "$MODEL_CSV_FILE")"
 
 #############
