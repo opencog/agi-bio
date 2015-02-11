@@ -1,0 +1,10 @@
+scm
+(EquivalenceLink (stv 1.0 1.0) (PredicateNode "chr22_moses.5x10.csv:moses_model_000") (PredicateNode "ADORA2A") )
+(EvaluationLink (stv 1 1) (PredicateNode "accuracy") (ListLink (PredicateNode "chr22_moses.5x10.csv:moses_model_000") (PredicateNode "aging")))
+(EvaluationLink (stv 1 1) (PredicateNode "balancedAccuracy") (ListLink (PredicateNode "chr22_moses.5x10.csv:moses_model_000") (PredicateNode "aging")))
+(EquivalenceLink (stv 1.0 1.0) (PredicateNode "chr22_moses.5x10.csv:moses_model_001") (PredicateNode "ADRBK2") )
+(EvaluationLink (stv 1 1) (PredicateNode "accuracy") (ListLink (PredicateNode "chr22_moses.5x10.csv:moses_model_001") (PredicateNode "aging")))
+(EvaluationLink (stv 1 1) (PredicateNode "balancedAccuracy") (ListLink (PredicateNode "chr22_moses.5x10.csv:moses_model_001") (PredicateNode "aging")))
+(EquivalenceLink (stv 1.0 1.0) (PredicateNode "chr22_moses.5x10.csv:moses_model_002") (AndLink (PredicateNode "A4GALT") (PredicateNode "CHEK2")) )
+(EvaluationLink (stv 1 1) (PredicateNode "accuracy") (ListLink (PredicateNode "chr22_moses.5x10.csv:moses_model_002") (PredicateNode "aging")))
+(EvaluationLink (stv 1 1) (PredicateNode "balancedAccuracy") (ListLink (PredicateNode "chr22_moses.5x10.csv:moses_model_002") (PredicateNode "aging")))
