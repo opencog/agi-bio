@@ -1,0 +1,33 @@
+# This is to be used for starting the cogserver and the visuzlizer linked or run
+# them independently.
+
+# How to use
+# 1. sudo pip install -U fig    # One time only
+# 2. fig up -d
+# 3. fig ps    # Note to what port cogserver's  17001 port is published to.
+               # Look for the new port number which in 0.0.0.0:NEW_PORT->17001/tcp
+               # publishing port to host is ok on devlopment machine but not
+               # good for deployment on production machine.
+# 4. echo restapi.Start | nc  localhost NEW_PORT_FROM_STEP_3    # start restapi
+# 5. fig run --rm --no-deps visualizer cat /etc/hosts | grep cogserver
+     # Use the ip address you get for the CogServer ip-address in the visualizer.
+# 6. echo  "(clear)" | nc  localhost NEW_PORT_FROM_STEP_3    # Clean atomspace 
+     # Put any scheme command in double quotes and pip it using netcat
+# 7. cat path/to/scheme/file.scm | nc localhost NEW_PORT_FROM_STEP_3
+     # Populate the atomspace with atoms from a scheme file
+# 8. rlwrap telnet localhost 17001    # to work with the cogserver from host
+# 9. fig stop   # To stop the visualizer and cogserver
+
+cogserver:
+    build: .
+    ports:
+        - 17001
+
+# opencog/visualizer image must be built on the machine or pulled from docker.
+# The image is the apache server used to publish the visualizer.
+visualizer:
+    image: opencog/visualizer
+    ports:
+        - "80:80"
+    links:
+        - cogserver:cogserver
