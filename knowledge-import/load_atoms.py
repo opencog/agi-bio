@@ -12,12 +12,12 @@ import os
 
 os.system('export GUILE_AUTO_COMPILE=0')
 time.sleep(5)
-os.chdir('/home/opencog/opencog/build')
+os.chdir('/home/opencog/build')
 os.system('./opencog/server/cogserver &')
 time.sleep(30)
 
 #load files 
-path = '/home/data/'
+path = '/home/doc/'
 scm_files = [f for f in os.listdir(path) if f.endswith('.scm')]
 
 os.system(' echo  \'scm\' | nc localhost 17001')
