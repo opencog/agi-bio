@@ -1,4 +1,5 @@
-# go.obd to go scheme file 
+# Script to convert go.obd to atomspace representation in scheme 
+# Requires: file go.obo from http://purl.obolibrary.org/obo/go.obo
 
 f = open('go.obo')
 lines = f.readlines()

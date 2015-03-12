@@ -1,5 +1,5 @@
-####
 # Python script used to generate scheme file from Aging-Mythelation_Geneset. 
+# Requires: file mmc4.xlsx
 
 import xlrd
 book = xlrd.open_workbook('mmc4.xlsx')
