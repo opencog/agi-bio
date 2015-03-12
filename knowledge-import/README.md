@@ -17,7 +17,7 @@ Description
 
 -- moses_out.scm -- Atomspace representaion of moses output model generated with combo-fmt-converter using moses perfectFeatures as input. 
 
-- load_atoms.py --- This python script load all bio scheme files from docker container set for loading these scheme files in Hetzner server. In order to use this one needs to have acess to the server. once login to the server run the folllowing commands 
+-- load_atoms.py --- This python script load all bio scheme files from docker container set for loading these scheme files in Hetzner server. In order to use this one needs to have acess to the server. once login to the server run the folllowing commands 
 
 	$ docker exec -i -t for_pattern bash
 	$ cd /home/doc
