@@ -94,7 +94,7 @@ for i in range(len(line_no)):
                 relationship.append((((test[k][2].partition('\n')[0]).partition(relationship_type[rel_typeno])[2]).partition('!')[0]).partition(' ')[2])
                 rel_typeno = rel_typeno + 1
         elif (test[k][0] == 'is_a'):
-            is_a.append(((test[k][2].partition('\n')[0]).partition('!')[0]).partition(' ')[2])
+            is_a.append(((test[k][2].partition('\n')[0]).partition('!')[0]).partition(' ')[2].strip())
   
         print relationship_type
         print relationship
