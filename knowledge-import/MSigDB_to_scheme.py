@@ -1,5 +1,5 @@
 # Script to convert MSigDB to atomspace representation in scheme
-# Requires: file msigdb_v4.0.xml, from: http://purl.obolibrary.org/obo/go.obo
+# Requires: file msigdb_v4.0.xml, http://www.broadinstitute.org/gsea/msigdb/download_file.jsp?filePath=/resources/msigdb/4.0/msigdb_v4.0.xml 
 # Outputs scheme file to use for atomspace import
 # Added creation date, MSigDB version, and MSigDB fields included
 # Option to creat MSigDB scheme with or with out Description fields 

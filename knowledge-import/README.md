@@ -1,21 +1,23 @@
 knowledge-import 
-=================
-Scripts for converting Bio knowledge bases into scheme files for importing into the atomspace
+----------------
+Scripts for converting Bio knowledge bases into scheme files for importing into the atomspace 
 
 Description
 -----------
 
--- Aging-Mythelation.py  -- Python script to generate scheme file from Aging-Mythelation_Geneset dataset
+- Bio_schemeFiles.zip --  Imported Bio Scheme files all in one
 
--- GO_scm.py -- Python script used file from http://purl.obolibrary.org/obo/go.obo to generate gene onltology scheme file 
+-- msigdb_v4.0_verbose.scm -- Atomspace representation of Molecular signatures database from http://www.broadinstitute.org/gsea/msigdb/download_file.jsp?filePath=/resources/msigdb/4.0/msigdb_v4.0.xml. MSigDB_to_scheme.py script convert msigdb xml file to scheme file. 
 
--- Go_Annotation_scm.py -- Python script used file gene_association.goa_ref_human.gz from http://geneontology.org/gene-associations/gene_association.goa_ref_human.gz and generate scheme file for human gene annotation
+-- GO_new.scm -- Atomspace representation of Human ontology from http://purl.obolibrary.org/obo/go.obo,  GO_scm.py script used to convert go.obo to scheme. 
 
--- MSigDB_to_scheme.py -- Python script to generate scheme file from Molecular signatures database, version 4
+-- GO_annotation.scm -- Atomspace representation of Human gene annotation from http://geneontology.org/gene-associations/gene_association.goa_ref_human.gz and generated using Go_Annotation_scm.py. 
 
-Bio_schemeFiles.zip --  Bio Scheme files all in one
+-- mmc4.scm  -- Atomspace representation of Aging-Mythelation_Geneset dataset (mmc4.xml). Aging-Mythelation.py script read mmc4 excel file and rewrite it in scheme.
 
-load_atoms.py --- This python script load all bio scheme files from docker container set for loading these scheme files in Hetzner server. In order to use this one needs to have acess to the server. once login to the server run the folllowing commands 
+-- moses_out.scm -- Atomspace representaion of moses output model generated with combo-fmt-converter using moses perfectFeatures as input. 
+
+-- load_atoms.py --- This python script load all bio scheme files from docker container set for loading these scheme files in Hetzner server. In order to use this one needs to have acess to the server. once login to the server run the folllowing commands 
 
 	$ docker exec -i -t for_pattern bash
 	$ cd /home/doc
