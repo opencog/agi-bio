@@ -1,3 +1,5 @@
+#!/usr/bin/env python2.7
+
 # Script to convert go.obd to atomspace representation in scheme 
 # Requires: file go.obo from http://purl.obolibrary.org/obo/go.obo
 
@@ -8,9 +10,9 @@ lines = f.readlines()
 line_no = []
 
 with open('go.obo') as  f:  
- for num, line in enumerate(f , 1):
-  if "[Term]" in line or "[Typedef]" in line:
-      line_no.append(num)
+    for num, line in enumerate(f , 1):
+        if "[Term]" in line or "[Typedef]" in line:
+            line_no.append(num)
 
 line_no.sort()
 ###### function to write on file
@@ -62,78 +64,64 @@ def go_relationship(idd,relate_id, relation_type):
 #open file to write 
 f_go = open('ontology2.scm', 'a')
 
-#start iteration
-i = 0 ; 
-
 #partition each line and call functions
-while i < len(line_no):
- if i + 1 == len(line_no) :
-  part = lines[line_no[i] : len(lines)]
- else :
-  part = lines[line_no[i] : line_no[i+1] - 1]
- test = [l.partition(':') for l in part]
- k = 0 ; rel_typeno = 0 ; synonym = [] ; synonym_type = [] ;is_a = []; alt_id =[] ; relationship = [] ;relationship_type= []; idd ="" ; name= ""; namespace="" ; obsolete =""
- while k < len(test):
-   if (test[k][0] == 'is_obsolete'):
-       obsolete = (test[k][2].partition('\n')[0]).partition(' ')[2]
-   elif (test[k][0] == 'id'):
-       idd = (test[k][2].partition('\n')[0]).partition(' ')[2]
-   elif (test[k][0] == 'name'):
-       name = (test[k][2].partition('\n')[0]).partition(' ')[2]
-   elif (test[k][0] == 'namespace'):
-       namespace = (test[k][2].partition('\n')[0]).partition(' ')[2]
-   elif (test[k][0] == 'synonym'):
-       synonym.append(((test[k][2].partition('\n')[0]).partition(' ')[2]).split('"',2)[1])
-       synonym_type.append((((test[k][2].split('"',2))[2].partition('[]')[0]).partition(" ")[2]).partition(" ")[0])
-   elif (test[k][0] == 'alt_id'):
-       alt_id.append((test[k][2].partition('\n')[0]).partition(' ')[2])
-   elif (test[k][0] == 'relationship'):
-       relationship_type.append((((test[k][2].partition('\n')[0]).partition('GO')[0]).split(' ')[1]))
-       while rel_typeno < len(relationship_type):
-        relationship.append((((test[k][2].partition('\n')[0]).partition(relationship_type[rel_typeno])[2]).partition('!')[0]).partition(' ')[2])
-        rel_typeno = rel_typeno + 1
-   elif (test[k][0] == 'is_a'):
-       is_a.append(((test[k][2].partition('\n')[0]).partition('!')[0]).partition(' ')[2])
+for i in range(len(line_no)):
+    if i + 1 == len(line_no) :
+        part = lines[line_no[i] : len(lines)]
+    else :
+        part = lines[line_no[i] : line_no[i+1] - 1]
+    test = [l.partition(':') for l in part]
+    rel_typeno = 0 ; synonym = [] ; synonym_type = []
+    is_a = []; alt_id =[] ; relationship = [] ;relationship_type= []
+    idd ="" ; name= ""; namespace="" ; obsolete =""
+    for k in range(len(test)):
+        if (test[k][0] == 'is_obsolete'):
+            obsolete = (test[k][2].partition('\n')[0]).partition(' ')[2]
+        elif (test[k][0] == 'id'):
+            idd = (test[k][2].partition('\n')[0]).partition(' ')[2]
+        elif (test[k][0] == 'name'):
+            name = (test[k][2].partition('\n')[0]).partition(' ')[2]
+        elif (test[k][0] == 'namespace'):
+            namespace = (test[k][2].partition('\n')[0]).partition(' ')[2]
+        elif (test[k][0] == 'synonym'):
+            synonym.append(((test[k][2].partition('\n')[0]).partition(' ')[2]).split('"',2)[1])
+            synonym_type.append((((test[k][2].split('"',2))[2].partition('[]')[0]).partition(" ")[2]).partition(" ")[0])
+        elif (test[k][0] == 'alt_id'):
+            alt_id.append((test[k][2].partition('\n')[0]).partition(' ')[2])
+        elif (test[k][0] == 'relationship'):
+            relationship_type.append((((test[k][2].partition('\n')[0]).partition('GO')[0]).split(' ')[1]))
+            while rel_typeno < len(relationship_type):
+                relationship.append((((test[k][2].partition('\n')[0]).partition(relationship_type[rel_typeno])[2]).partition('!')[0]).partition(' ')[2])
+                rel_typeno = rel_typeno + 1
+        elif (test[k][0] == 'is_a'):
+            is_a.append(((test[k][2].partition('\n')[0]).partition('!')[0]).partition(' ')[2].strip())
   
-   k = k +1
- print relationship_type
- print relationship
- if (obsolete != 'true') :
-	 go_term(idd)
-	 go_name(idd,name)
-	 go_namespace(idd,namespace)
-	 if len(synonym) != 0:
-	   sy_len = 0
-	   while sy_len < len(synonym):
-	    go_synonyms(idd,synonym[sy_len],synonym_type[sy_len])
-	    sy_len = sy_len +1
-	 if len(is_a) != 0:
-	   isa_len = 0
-	   while isa_len < len(is_a):
-	    go_isa(idd,is_a[isa_len])
-	    isa_len = isa_len +1
-	 if len(alt_id) != 0:
-	   altid_len = 0
-	   while altid_len < len(alt_id):
-	    go_altid(idd,alt_id[altid_len])
-	    altid_len = altid_len +1
-	 if len(relationship) != 0:
-	   parts_len = 0
-	   while parts_len < len(relationship):
-	    go_relationship(idd ,relationship[parts_len],relationship_type[parts_len])
-	    parts_len = parts_len + 1
- i= i + 1
+    print relationship_type
+    print relationship
+    if (obsolete != 'true') :
+        go_term(idd)
+        go_name(idd,name)
+        go_namespace(idd,namespace)
+        if len(synonym) != 0:
+            sy_len = 0
+            while sy_len < len(synonym):
+                go_synonyms(idd,synonym[sy_len],synonym_type[sy_len])
+                sy_len = sy_len +1
+        if len(is_a) != 0:
+            isa_len = 0
+            while isa_len < len(is_a):
+                go_isa(idd,is_a[isa_len])
+                isa_len = isa_len +1
+        if len(alt_id) != 0:
+            altid_len = 0
+            while altid_len < len(alt_id):
+                go_altid(idd,alt_id[altid_len])
+                altid_len = altid_len +1
+        if len(relationship) != 0:
+            parts_len = 0
+            while parts_len < len(relationship):
+                go_relationship(idd ,relationship[parts_len],relationship_type[parts_len])
+                parts_len = parts_len + 1
 
 #close file
 f_go.close()
-
-
-
-
-
-
-
-
-
-
-
