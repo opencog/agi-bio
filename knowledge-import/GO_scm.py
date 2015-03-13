@@ -63,19 +63,16 @@ def go_relationship(idd,relate_id, relation_type):
 #open file to write 
 f_go = open('ontology2.scm', 'a')
 
-#start iteration
-i = 0 ; 
-
 #partition each line and call functions
 for i in range(len(line_no)):
     if i + 1 == len(line_no) :
         part = lines[line_no[i] : len(lines)]
     else :
         part = lines[line_no[i] : line_no[i+1] - 1]
-        test = [l.partition(':') for l in part]
-        k = 0 ; rel_typeno = 0 ; synonym = [] ; synonym_type = []
-        is_a = []; alt_id =[] ; relationship = [] ;relationship_type= []
-        idd ="" ; name= ""; namespace="" ; obsolete =""
+    test = [l.partition(':') for l in part]
+    rel_typeno = 0 ; synonym = [] ; synonym_type = []
+    is_a = []; alt_id =[] ; relationship = [] ;relationship_type= []
+    idd ="" ; name= ""; namespace="" ; obsolete =""
     for k in range(len(test)):
         if (test[k][0] == 'is_obsolete'):
             obsolete = (test[k][2].partition('\n')[0]).partition(' ')[2]
@@ -98,32 +95,32 @@ for i in range(len(line_no)):
         elif (test[k][0] == 'is_a'):
             is_a.append(((test[k][2].partition('\n')[0]).partition('!')[0]).partition(' ')[2].strip())
   
-        print relationship_type
-        print relationship
-        if (obsolete != 'true') :
-            go_term(idd)
-            go_name(idd,name)
-            go_namespace(idd,namespace)
-            if len(synonym) != 0:
-                sy_len = 0
-                while sy_len < len(synonym):
-                    go_synonyms(idd,synonym[sy_len],synonym_type[sy_len])
-                    sy_len = sy_len +1
-            if len(is_a) != 0:
-                isa_len = 0
-                while isa_len < len(is_a):
-                    go_isa(idd,is_a[isa_len])
-                    isa_len = isa_len +1
-            if len(alt_id) != 0:
-                altid_len = 0
-                while altid_len < len(alt_id):
-                    go_altid(idd,alt_id[altid_len])
-                    altid_len = altid_len +1
-            if len(relationship) != 0:
-                parts_len = 0
-                while parts_len < len(relationship):
-                    go_relationship(idd ,relationship[parts_len],relationship_type[parts_len])
-                    parts_len = parts_len + 1
+    print relationship_type
+    print relationship
+    if (obsolete != 'true') :
+        go_term(idd)
+        go_name(idd,name)
+        go_namespace(idd,namespace)
+        if len(synonym) != 0:
+            sy_len = 0
+            while sy_len < len(synonym):
+                go_synonyms(idd,synonym[sy_len],synonym_type[sy_len])
+                sy_len = sy_len +1
+        if len(is_a) != 0:
+            isa_len = 0
+            while isa_len < len(is_a):
+                go_isa(idd,is_a[isa_len])
+                isa_len = isa_len +1
+        if len(alt_id) != 0:
+            altid_len = 0
+            while altid_len < len(alt_id):
+                go_altid(idd,alt_id[altid_len])
+                altid_len = altid_len +1
+        if len(relationship) != 0:
+            parts_len = 0
+            while parts_len < len(relationship):
+                go_relationship(idd ,relationship[parts_len],relationship_type[parts_len])
+                parts_len = parts_len + 1
 
 #close file
 f_go.close()
