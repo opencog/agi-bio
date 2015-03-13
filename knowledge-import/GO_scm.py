@@ -65,7 +65,7 @@ f_go = open('ontology2.scm', 'a')
 i = 0 ; 
 
 #partition each line and call functions
-while i < len(line_no):
+for i in range(len(line_no)):
     if i + 1 == len(line_no) :
         part = lines[line_no[i] : len(lines)]
     else :
@@ -74,7 +74,7 @@ while i < len(line_no):
         k = 0 ; rel_typeno = 0 ; synonym = [] ; synonym_type = []
         is_a = []; alt_id =[] ; relationship = [] ;relationship_type= []
         idd ="" ; name= ""; namespace="" ; obsolete =""
-    while k < len(test):
+    for k in range(len(test)):
         if (test[k][0] == 'is_obsolete'):
             obsolete = (test[k][2].partition('\n')[0]).partition(' ')[2]
         elif (test[k][0] == 'id'):
@@ -96,7 +96,6 @@ while i < len(line_no):
         elif (test[k][0] == 'is_a'):
             is_a.append(((test[k][2].partition('\n')[0]).partition('!')[0]).partition(' ')[2])
   
-        k = k +1
         print relationship_type
         print relationship
         if (obsolete != 'true') :
@@ -123,7 +122,6 @@ while i < len(line_no):
                 while parts_len < len(relationship):
                     go_relationship(idd ,relationship[parts_len],relationship_type[parts_len])
                     parts_len = parts_len + 1
-    i= i + 1
 
 #close file
 f_go.close()
