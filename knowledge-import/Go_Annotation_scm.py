@@ -1,3 +1,5 @@
+#!/usr/bin/env python2.7
+
 # Go Annotation to atomspace representation in scheme  
 # Requires: file gene_association.goa_ref_human.gz from http://geneontology.org/gene-associations/gene_association.goa_ref_human.gz
 

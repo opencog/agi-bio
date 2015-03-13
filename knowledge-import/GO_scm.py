@@ -1,3 +1,5 @@
+#!/usr/bin/env python2.7
+
 # go.obd to go scheme file 
 
 f = open('go.obo')
