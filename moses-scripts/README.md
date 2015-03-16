@@ -30,3 +30,9 @@ mkdir <MY_EXP>
 cd <MY_EXP>
 ../scripts/test.sh ../scripts/settings.sh
 ```
+
+Additional documentation
+------------------------
+
+See file FitnessFunctions.md for a discussion of how to represent the
+fitness functions in the AtomSpace.
