@@ -5,7 +5,7 @@ This document contains a few suggestions to map model scores (gotten
 from MOSES) into hypergraphs.
 
 I'm discussing 2 fitnesses, used by Mike, accuracy (1 - score, in
-Mike's terminology) and balanced accuracy.
+Mike's terminology) and precision.
 
 Accuracy
 --------
@@ -29,7 +29,7 @@ EquivalenceLink <1>
             $M
             $D
         EvaluationLink
-            PredicateNode "Accuracy"
+            PredicateNode "accuracy"
             ListLink
                 $M
                 $D
@@ -64,8 +64,44 @@ target feature:
 
 ```
 EvaluationLink <model accuracy>
-    PredicateNode "Accuracy"
+    PredicateNode "accuracy"
     ListLink
         PredicateNode <MODEL>
         PredicateNode <TARGET FEATURE>
 ```
+
+Precision
+---------
+
+The cool thing about precision is that it translates directly into an
+Implication TV strength. that is
+
+```
+ImplicationLink <TV.s = model precision>
+    PredicateNode <MODEL>
+    PredicateNode <TARGET FEATURE>
+```
+
+Indeed, According to PLN (assuming all individuals are equiprobable)
+
+TV.s = Sum_x min(P(x), Q(x)) / Sum_x P(x)
+
+where P correspond to the predicate of a model, x runs over the
+individuals of the dataset.
+
+This corresponds indeed to the precision
+
+precision = TP / (TP + FP)
+
+as Sum_x P(x) is indeed the number of positively classified
+individuals (TP + FP), and Sum_x min(P(x), Q(x)) the number of
+correctly classified individuals, TP.
+
+Confidence
+----------
+
+The confidence can be
+
+c = n / (n+k)
+
+where n is the number of individuals, and k is a parameter.

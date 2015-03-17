@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Little script to export the models and their scores, given to a CSV,
-# following Mike's format, 3 columns, the combo program, then its
-# score (that is 1 - accuracy), and finally it's balanced accuracy.
+# following Mike's format, 4 columns, the combo program, then its
+# score (that is 1 - accuracy), it's balanced accuracy and its
+# precision.
 #
 # The model will be labeled FILENAME:moses_model_INDEX
 #
@@ -32,6 +33,12 @@
 #     ListLink
 #         PredicateNode PREDICATE_MODEL_NAME
 #         PredicateNode TARGET_FEATURE_NAME
+#
+# 4. The label associated with its precision
+#
+# ImplicationLink <precision>
+#     PredicateNode MODEL_PREDICATE_NAME
+#     PredicateNode TARGET_FEATURE_NAME
 
 set -u
 # set -x
@@ -104,11 +111,31 @@ model_accuracy_def() {
 }
 
 # Like above but for balanced accuracy
-model_balanced_accuracy_def() {
+model_precision_def() {
     local name="$1"
     local target="$2"
     local accuracy="$3"
     echo "(EvaluationLink (stv $accuracy 1) (PredicateNode \"balancedAccuracy\") (ListLink (PredicateNode \"$name\") (PredicateNode \"$target\")))"
+}
+
+# Given
+#
+# 1. a model predicate name
+#
+# 2. a target feature name
+#
+# 3. a precision
+#
+# return a scheme code relating the model predicate with its precision:
+#
+# ImplicationLink <precision>
+#     PredicateNode PREDICATE_MODEL_NAME
+#     PredicateNode TARGET_FEATURE_NAME
+model_accuracy_def() {
+    local name="$1"
+    local target="$2"
+    local precision="$3"
+    echo "(ImplicationLink (stv $accuracy 1) (PredicateNode \"$name\") (PredicateNode \"$target\"))"
 }
 
 ########
@@ -119,7 +146,7 @@ model_balanced_accuracy_def() {
     OLDIFS="$IFS"
     IFS=","
     i=0                             # used to give unique names to models
-    while read combo score balanced_accuracy; do
+    while read combo score balanced_accuracy precision; do
         # Skip if that's the header
         if [[ $combo =~ combo ]]; then
             continue
@@ -136,6 +163,9 @@ model_balanced_accuracy_def() {
 
         # Output model balanced accuracy
         echo "$(model_balanced_accuracy_def "$model_name" aging $balanced_accuracy)"
+
+        # Output model precision
+        echo "$(model_precision_def "$model_name" aging $precision)"
 
         ((++i))
     done < "$MODEL_CSV_FILE"
