@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Little script to export the models and their scores, given to a CSV,
-# following Mike's format, 3 columns, the combo program, then its
-# score (that is 1 - accuracy), and finally it's balanced accuracy.
+# following Mike's format, 4 columns, the combo program, then its
+# score (that is 1 - accuracy), it's balanced accuracy and its
+# precision.
 #
 # The model will be labeled FILENAME:moses_model_INDEX
 #
