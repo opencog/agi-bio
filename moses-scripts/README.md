@@ -20,8 +20,19 @@ make -j4 && sudo make install && sudo ldconfig
 Usage
 -----
 
-The main scripts is test.sh that runs the whole thing. You may need to
-configure settings.sh, like setting your OpenCog path.
+We have several scripts here:
+
+1. export_models_and_fitness.sh <MODEL_CSV_FILE>
+to convert models and their scores into a scheme readily dumpable into
+the AtomSpace
+
+2. relate_features_and_genes.sh < <FEATURES>
+to generate scheme code to relate MOSES features and their
+corresponding genes
+
+3. test.sh, and obsolete script to experiment with MOSES learning and
+PLN reasoning.. You may need to configure settings.sh, like setting
+your OpenCog path.
 
 Usage is as follows:
 
@@ -34,5 +45,6 @@ cd <MY_EXP>
 Additional documentation
 ------------------------
 
-See file FitnessFunctions.md for a discussion of how to represent the
-fitness functions in the AtomSpace.
+See file export_models.md for a detailed discussion about how to
+represent the models, their fitness functions and teir features in the
+AtomSpace.
