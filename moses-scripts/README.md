@@ -34,5 +34,6 @@ cd <MY_EXP>
 Additional documentation
 ------------------------
 
-See file FitnessFunctions.md for a discussion of how to represent the
-fitness functions in the AtomSpace.
+See file export_models.md for a detailed discussion about how to
+represent the models, their fitness functions and teir features in the
+AtomSpace.

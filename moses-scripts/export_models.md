@@ -1,14 +1,46 @@
-Fitness Functions
-=================
+# Mapping MOSES models into the AtomSpace
 
-This document contains a few suggestions to map model scores (gotten
-from MOSES) into hypergraphs.
+This document contains suggestions to map models, their scores, and
+their features into AtomSpace hypergraphs.
+
+## Models
+
+Models are exported in the following format
+
+```
+EquivalenceLink <1, 1>
+    PredicateNode <MODEL_PREDICATE_NAME>
+    <MODEL_BODY>
+```
+
+## Features
+
+We need to related GeneNodes <GENE_NAME>, used in the GO description,
+and PredicateNodes <GENE_NAME>, used in the MOSES models. For that I
+suggest to use the predicate "overexpressed" as follows:
+
+```
+EquivalenceLink <1, 1>
+    PredicateNode <GENE_NAME>
+    EvaluationLink
+        PredicateNode "overexpressed"
+        ListLink
+            GeneNode <GENE_NAME>
+            $X
+```
+which says that PredicateNode <GENE_NAME> over individual $X is
+equivalent to "GeneNode <GENE_NAME> is overexpressed in individual $X".
+
+Note that this formulation uses Ben's suggestion to have
+EvaluationLink automatically converted to a predicate (I'm not sure
+I'm in favor of that, but we haven't come to an agreement yet).
+
+## Fitnesses
 
 I'm discussing 2 fitnesses, used by Mike, accuracy (1 - score, in
-Mike's terminology) and precision.
+Mike's terminology) and precision. Plus a word about confidence.
 
-Accuracy
---------
+### Accuracy
 
 ACC = (TP + TN) / (P + N)
 
@@ -23,7 +55,7 @@ to 1 when the individual $X has its target feature active, 0
 otherwise.
 
 ```
-EquivalenceLink <1>
+EquivalenceLink <1, 1>
     BindLink
         ListLink
             $M
@@ -70,8 +102,7 @@ EvaluationLink <model accuracy>
         PredicateNode <TARGET FEATURE>
 ```
 
-Precision
----------
+### Precision
 
 The cool thing about precision is that it translates directly into an
 Implication TV strength. that is
@@ -97,11 +128,11 @@ as Sum_x P(x) is indeed the number of positively classified
 individuals (TP + FP), and Sum_x min(P(x), Q(x)) the number of
 correctly classified individuals, TP.
 
-Confidence
-----------
+### Confidence
 
 The confidence can be
 
 c = n / (n+k)
 
 where n is the number of individuals, and k is a parameter.
+
