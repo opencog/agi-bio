@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Little script to export the models and their scores, given to a CSV,
-# following Mike's format, 4 columns, the combo program, then its
-# score (that is 1 - accuracy), it's balanced accuracy and its
-# precision.
+# Little script to export in scheme format (readily dumpable into the
+# AtomSpace) the models and their scores, given to a CSV, following
+# Mike's format, 4 columns, the combo program, then its score (that is
+# 1 - accuracy), it's balanced accuracy and its precision.
 #
 # The model will be labeled FILENAME:moses_model_INDEX
 #
@@ -46,9 +46,9 @@ set -u
 ####################
 # Program argument #
 ####################
-if [[ $# != 3 ]]; then
-    echo "Usage: $0 COGSERVER_HOST COGSERVER_PORT MODEL_CSV_FILE"
-    echo "Example: $0 chr10_moses.5x10.csv localhost 17001"
+if [[ $# != 1 ]]; then
+    echo "Usage: $0 MODEL_CSV_FILE"
+    echo "Example: $0 chr10_moses.5x10.csv"
     exit 1
 fi
 
@@ -142,32 +142,30 @@ model_accuracy_def() {
 # Main #
 ########
 
-(echo "scm";
-    OLDIFS="$IFS"
-    IFS=","
-    i=0                             # used to give unique names to models
-    while read combo score balanced_accuracy precision; do
-        # Skip if that's the header
-        if [[ $combo =~ combo ]]; then
-            continue
-        fi
+OLDIFS="$IFS"
+IFS=","
+i=0                             # used to give unique names to models
+while read combo score balanced_accuracy precision; do
+    # Skip if that's the header
+    if [[ $combo =~ combo ]]; then
+        continue
+    fi
 
-        # Output model name predicate associated with model
-        model_name="${BASE_MODEL_CSV_FILE}:moses_model_$(pad $i 3)"
-        scm_model="$(combo-fmt-converter -c "$combo" -f scheme)"
-        echo "$(model_name_def "$model_name" "$scm_model")"
+    # Output model name predicate associated with model
+    model_name="${BASE_MODEL_CSV_FILE}:moses_model_$(pad $i 3)"
+    scm_model="$(combo-fmt-converter -c "$combo" -f scheme)"
+    echo "$(model_name_def "$model_name" "$scm_model")"
 
-        # Output model accuracy
-        accuracy=$(bc <<< "1 - $score")
-        echo "$(model_accuracy_def "$model_name" aging $accuracy)"
+    # Output model accuracy
+    accuracy=$(bc <<< "1 - $score")
+    echo "$(model_accuracy_def "$model_name" aging $accuracy)"
 
-        # Output model balanced accuracy
-        echo "$(model_balanced_accuracy_def "$model_name" aging $balanced_accuracy)"
+    # Output model balanced accuracy
+    echo "$(model_balanced_accuracy_def "$model_name" aging $balanced_accuracy)"
 
-        # Output model precision
-        echo "$(model_precision_def "$model_name" aging $precision)"
+    # Output model precision
+    echo "$(model_precision_def "$model_name" aging $precision)"
 
-        ((++i))
-    done < "$MODEL_CSV_FILE"
-    IFS="$OLDIFS"
-) | telnet "$COGSERVER_HOST" "$COGSERVER_PORT"
+    ((++i))
+done < "$MODEL_CSV_FILE"
+IFS="$OLDIFS"
