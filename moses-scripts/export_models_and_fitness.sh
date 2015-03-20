@@ -68,6 +68,11 @@ pad() {
     printf "$pad_expression" "$1"
 }
 
+# Return the number of rows (header excluded) in a CSV files
+nrows () {
+    echo $(($(wc -l < $1) - 1))
+}
+
 # Given
 #
 # 1. a model predicate name
@@ -140,12 +145,15 @@ model_accuracy_def() {
 # Main #
 ########
 
+rows=$(nrows "$MODEL_CSV_FILE") # number of models
+npads=$(python -c "import math; print int(math.log($rows, 10) + 1)")
+
 OLDIFS="$IFS"
 IFS=","
 i=0                             # used to give unique names to models
 while read combo score precision; do
     # Output model name predicate associated with model
-    model_name="${BASE_MODEL_CSV_FILE}:moses_model_$(pad $i 3)"
+    model_name="${BASE_MODEL_CSV_FILE}:moses_model_$(pad $i $npads)"
     scm_model="$(combo-fmt-converter -c "$combo" -f scheme)"
     echo "$(model_name_def "$model_name" "$scm_model")"
 
