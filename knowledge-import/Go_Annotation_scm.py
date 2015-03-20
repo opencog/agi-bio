@@ -22,10 +22,10 @@ def evaLink(node1 , node2, qualifier):
 	f_annotation.write("(EvaluationLink (stv 0.0 0.0)\n")
     else :
     	f_annotation.write("(EvaluationLink \n")
-    f_annotation.write("\t (PredicateNode \""+ "annotation"+ "\"\n")
+    f_annotation.write("\t (PredicateNode \""+ "annotation"+ "\")\n")
     f_annotation.write("\t (ListLink \n")
     f_annotation.write("\t\t (GeneNode"  + " \"" + node1 + "\")\n")
-    f_annotation.write("\t\t (ConceptNode" + " \"GO:" + node2 + "\"))\n")
+    f_annotation.write("\t\t (ConceptNode" + " \"GO:" + node2 + "\")\n")
     f_annotation.write("\t )\n")
     f_annotation.write(")\n\n")
 

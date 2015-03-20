@@ -24,10 +24,10 @@ def inLink( node1 , node2):
 
 def evaLink(predicateName ,node1 , node2 , node1_type, node2_type):
     f_go.write("(EvaluationLink \n")
-    f_go.write("\t (PredicateNode \"" + predicateName + "\"\n")
+    f_go.write("\t (PredicateNode \"" + predicateName + "\")\n")
     f_go.write("\t (ListLink \n")
     f_go.write("\t\t (" + node1_type + " \"" + node1 + "\")\n")
-    f_go.write("\t\t (" + node2_type + " \"" + node2 + "\"))\n")
+    f_go.write("\t\t (" + node2_type + " \"" + node2 + "\")\n")
     f_go.write("\t )\n")
     f_go.write(")\n\n")
 
