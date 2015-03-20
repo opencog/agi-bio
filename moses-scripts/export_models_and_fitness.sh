@@ -62,6 +62,17 @@ readonly BASE_MODEL_CSV_FILE="$(basename "$MODEL_CSV_FILE")"
 # Functions #
 #############
 
+# Output date at a certain format
+my_date() {
+    date --rfc-3339=seconds
+}
+
+# Given an error message, display that error on stderr and exit
+fatalError() {
+    echo "[$(my_date)] [ERROR] $@" 1>&2
+    exit 1
+}
+
 # Pad $1 symbol with up to $2 0s
 pad() {
     local pad_expression="%0${2}d"
@@ -145,8 +156,17 @@ model_accuracy_def() {
 # Main #
 ########
 
-rows=$(nrows "$MODEL_CSV_FILE") # number of models
+# Count the number of models and how to pad their unique numeric ID
+rows=$(nrows "$MODEL_CSV_FILE")
 npads=$(python -c "import math; print int(math.log($rows, 10) + 1)")
+
+# Check that the header is correct (if not maybe the file format has
+# changed)
+header=$(head -n 1 "$MODEL_CSV_FILE")
+expected_header='"","Accuracy","Pos Pred Value"'
+if [[ "$header" != "$expected_header" ]]; then
+    fatalError "Wrong header format: expect '$expected_header' but got '$header'"
+fi
 
 OLDIFS="$IFS"
 IFS=","
