@@ -44,6 +44,13 @@ set -u
 # set -x
 
 ####################
+# Source common.sh #
+####################
+PRG_PATH="$(readlink -f "$0")"
+PRG_DIR="$(dirname "$PRG_PATH")"
+. "$PRG_DIR/common.sh"
+
+####################
 # Program argument #
 ####################
 if [[ $# != 1 ]]; then
@@ -62,28 +69,6 @@ readonly BASE_MODEL_CSV_FILE="$(basename "$MODEL_CSV_FILE")"
 # Functions #
 #############
 
-# Output date at a certain format
-my_date() {
-    date --rfc-3339=seconds
-}
-
-# Given an error message, display that error on stderr and exit
-fatalError() {
-    echo "[$(my_date)] [ERROR] $@" 1>&2
-    exit 1
-}
-
-# Pad $1 symbol with up to $2 0s
-pad() {
-    local pad_expression="%0${2}d"
-    printf "$pad_expression" "$1"
-}
-
-# Return the number of rows (header excluded) in a CSV files
-nrows () {
-    echo $(($(wc -l < $1) - 1))
-}
-
 # Given
 #
 # 1. a model predicate name
@@ -99,7 +84,11 @@ nrows () {
 model_name_def() {
     local name="$1"
     local model="$2"
-    echo "(EquivalenceLink (stv 1.0 1.0) (PredicateNode \"${name}\") $model)"
+    cat <<EOF
+(EquivalenceLink (stv 1.0 1.0)
+    (PredicateNode "${name}")
+    $model)
+EOF
 }
 
 # Given
@@ -121,15 +110,27 @@ model_accuracy_def() {
     local name="$1"
     local target="$2"
     local accuracy="$3"
-    echo "(EvaluationLink (stv $accuracy 1) (PredicateNode \"accuracy\") (ListLink (PredicateNode \"$name\") (PredicateNode \"$target\")))"
+    cat <<EOF
+(EvaluationLink (stv $accuracy 1)
+    (PredicateNode "accuracy")
+    (ListLink
+        (PredicateNode "$name")
+        (PredicateNode "$target")))
+EOF
 }
 
 # Like above but for balanced accuracy
-model_precision_def() {
+model_balanced_accuracy_def() {
     local name="$1"
     local target="$2"
     local accuracy="$3"
-    echo "(EvaluationLink (stv $accuracy 1) (PredicateNode \"balancedAccuracy\") (ListLink (PredicateNode \"$name\") (PredicateNode \"$target\")))"
+    cat <<EOF
+(EvaluationLink (stv $accuracy 1)
+    (PredicateNode "balancedAccuracy")
+    (ListLink
+        (PredicateNode "$name")
+        (PredicateNode "$target")))
+EOF
 }
 
 # Given
@@ -145,11 +146,15 @@ model_precision_def() {
 # ImplicationLink <precision>
 #     PredicateNode PREDICATE_MODEL_NAME
 #     PredicateNode TARGET_FEATURE_NAME
-model_accuracy_def() {
+model_precision_def() {
     local name="$1"
     local target="$2"
     local precision="$3"
-    echo "(ImplicationLink (stv $accuracy 1) (PredicateNode \"$name\") (PredicateNode \"$target\"))"
+    cat <<EOF
+(ImplicationLink (stv $accuracy 1)
+    (PredicateNode "$name")
+    (PredicateNode "$target"))
+EOF
 }
 
 ########
