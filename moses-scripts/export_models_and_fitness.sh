@@ -2,8 +2,8 @@
 
 # Little script to export in scheme format (readily dumpable into the
 # AtomSpace) the models and their scores, given to a CSV, following
-# Mike's format, 4 columns, the combo program, then its score (that is
-# 1 - accuracy), it's balanced accuracy and its precision.
+# Mike's format, 3 columns, the combo program, then its score (that is
+# 1 - accuracy) and its precision.
 #
 # The model will be labeled FILENAME:moses_model_INDEX
 #
@@ -26,7 +26,7 @@
 #         PredicateNode PREDICATE_MODEL_NAME
 #         PredicateNode TARGET_FEATURE_NAME
 #
-# 3. The label associated with its balanced accuracy
+# 3. The label associated with its balanced accuracy [REMOVED]
 #
 # EvaluationLink <balanced_accuracy>
 #     PredicateNode "balancedAccuracy"
@@ -44,6 +44,13 @@ set -u
 # set -x
 
 ####################
+# Source common.sh #
+####################
+PRG_PATH="$(readlink -f "$0")"
+PRG_DIR="$(dirname "$PRG_PATH")"
+. "$PRG_DIR/common.sh"
+
+####################
 # Program argument #
 ####################
 if [[ $# != 1 ]]; then
@@ -55,20 +62,12 @@ fi
 #############
 # Constants #
 #############
-readonly COGSERVER_HOST="$1"
-readonly COGSERVER_PORT="$2"
-readonly MODEL_CSV_FILE="$3"
+readonly MODEL_CSV_FILE="$1"
 readonly BASE_MODEL_CSV_FILE="$(basename "$MODEL_CSV_FILE")"
 
 #############
 # Functions #
 #############
-
-# Pad $1 symbol with up to $2 0s
-pad() {
-    local pad_expression="%0${2}d"
-    printf "$pad_expression" "$1"
-}
 
 # Given
 #
@@ -85,7 +84,11 @@ pad() {
 model_name_def() {
     local name="$1"
     local model="$2"
-    echo "(EquivalenceLink (stv 1.0 1.0) (PredicateNode \"${name}\") $model)"
+    cat <<EOF
+(EquivalenceLink (stv 1.0 1.0)
+    (PredicateNode "${name}")
+    $model)
+EOF
 }
 
 # Given
@@ -107,15 +110,27 @@ model_accuracy_def() {
     local name="$1"
     local target="$2"
     local accuracy="$3"
-    echo "(EvaluationLink (stv $accuracy 1) (PredicateNode \"accuracy\") (ListLink (PredicateNode \"$name\") (PredicateNode \"$target\")))"
+    cat <<EOF
+(EvaluationLink (stv $accuracy 1)
+    (PredicateNode "accuracy")
+    (ListLink
+        (PredicateNode "$name")
+        (PredicateNode "$target")))
+EOF
 }
 
 # Like above but for balanced accuracy
-model_precision_def() {
+model_balanced_accuracy_def() {
     local name="$1"
     local target="$2"
     local accuracy="$3"
-    echo "(EvaluationLink (stv $accuracy 1) (PredicateNode \"balancedAccuracy\") (ListLink (PredicateNode \"$name\") (PredicateNode \"$target\")))"
+    cat <<EOF
+(EvaluationLink (stv $accuracy 1)
+    (PredicateNode "balancedAccuracy")
+    (ListLink
+        (PredicateNode "$name")
+        (PredicateNode "$target")))
+EOF
 }
 
 # Given
@@ -131,28 +146,39 @@ model_precision_def() {
 # ImplicationLink <precision>
 #     PredicateNode PREDICATE_MODEL_NAME
 #     PredicateNode TARGET_FEATURE_NAME
-model_accuracy_def() {
+model_precision_def() {
     local name="$1"
     local target="$2"
     local precision="$3"
-    echo "(ImplicationLink (stv $accuracy 1) (PredicateNode \"$name\") (PredicateNode \"$target\"))"
+    cat <<EOF
+(ImplicationLink (stv $accuracy 1)
+    (PredicateNode "$name")
+    (PredicateNode "$target"))
+EOF
 }
 
 ########
 # Main #
 ########
 
+# Count the number of models and how to pad their unique numeric ID
+rows=$(nrows "$MODEL_CSV_FILE")
+npads=$(python -c "import math; print int(math.log($rows, 10) + 1)")
+
+# Check that the header is correct (if not maybe the file format has
+# changed)
+header=$(head -n 1 "$MODEL_CSV_FILE")
+expected_header='"","Accuracy","Pos Pred Value"'
+if [[ "$header" != "$expected_header" ]]; then
+    fatalError "Wrong header format: expect '$expected_header' but got '$header'"
+fi
+
 OLDIFS="$IFS"
 IFS=","
 i=0                             # used to give unique names to models
-while read combo score balanced_accuracy precision; do
-    # Skip if that's the header
-    if [[ $combo =~ combo ]]; then
-        continue
-    fi
-
+while read combo score precision; do
     # Output model name predicate associated with model
-    model_name="${BASE_MODEL_CSV_FILE}:moses_model_$(pad $i 3)"
+    model_name="${BASE_MODEL_CSV_FILE}:moses_model_$(pad $i $npads)"
     scm_model="$(combo-fmt-converter -c "$combo" -f scheme)"
     echo "$(model_name_def "$model_name" "$scm_model")"
 
@@ -160,12 +186,9 @@ while read combo score balanced_accuracy precision; do
     accuracy=$(bc <<< "1 - $score")
     echo "$(model_accuracy_def "$model_name" aging $accuracy)"
 
-    # Output model balanced accuracy
-    echo "$(model_balanced_accuracy_def "$model_name" aging $balanced_accuracy)"
-
     # Output model precision
     echo "$(model_precision_def "$model_name" aging $precision)"
 
     ((++i))
-done < "$MODEL_CSV_FILE"
+done < <(tail -n +2 "$MODEL_CSV_FILE") # skip header
 IFS="$OLDIFS"
