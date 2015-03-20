@@ -22,18 +22,16 @@ suggest to use the predicate "overexpressed" as follows:
 ```
 EquivalenceLink <1, 1>
     PredicateNode <GENE_NAME>
-    EvaluationLink
-        PredicateNode "overexpressed"
-        ListLink
-            GeneNode <GENE_NAME>
-            $X
+    LambdaLink
+        VariableNode "$X"
+        EvaluationLink
+            PredicateNode "overexpressed"
+            ListLink
+                GeneNode <GENE_NAME>
+                VariableNode "$X"
 ```
 which says that PredicateNode <GENE_NAME> over individual $X is
 equivalent to "GeneNode <GENE_NAME> is overexpressed in individual $X".
-
-Note that this formulation uses Ben's suggestion to have
-EvaluationLink automatically converted to a predicate (I'm not sure
-I'm in favor of that, but we haven't come to an agreement yet).
 
 ## Fitnesses
 

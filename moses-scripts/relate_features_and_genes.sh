@@ -6,8 +6,8 @@
 #
 # EquivalenceLink <1, 1>
 #     PredicateNode <GENE_NAME>
-#     BinLink              --- DEPENDING ON ACCEPTED CONVENTION
-#         VariableNode $X  --- DEPENDING ON ACCEPTED CONVENTION
+#     LambdaLink
+#         VariableNode $X
 #         EvaluationLink
 #             PredicateNode "overexpressed"
 #             ListLink
@@ -22,7 +22,7 @@ while read gene_name; do
     cat <<EOF
 (EquivalenceLink
     (PredicateNode "$gene_name")
-    (BindLink
+    (LambdaLink
         (VariableNode "$X")
         (EvaluationLink
             (PredicateNode "overexpressed")
