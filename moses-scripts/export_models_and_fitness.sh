@@ -2,8 +2,8 @@
 
 # Little script to export in scheme format (readily dumpable into the
 # AtomSpace) the models and their scores, given to a CSV, following
-# Mike's format, 4 columns, the combo program, then its score (that is
-# 1 - accuracy), it's balanced accuracy and its precision.
+# Mike's format, 3 columns, the combo program, then its score (that is
+# 1 - accuracy) and its precision.
 #
 # The model will be labeled FILENAME:moses_model_INDEX
 #
@@ -26,7 +26,7 @@
 #         PredicateNode PREDICATE_MODEL_NAME
 #         PredicateNode TARGET_FEATURE_NAME
 #
-# 3. The label associated with its balanced accuracy
+# 3. The label associated with its balanced accuracy [REMOVED]
 #
 # EvaluationLink <balanced_accuracy>
 #     PredicateNode "balancedAccuracy"
@@ -55,9 +55,7 @@ fi
 #############
 # Constants #
 #############
-readonly COGSERVER_HOST="$1"
-readonly COGSERVER_PORT="$2"
-readonly MODEL_CSV_FILE="$3"
+readonly MODEL_CSV_FILE="$1"
 readonly BASE_MODEL_CSV_FILE="$(basename "$MODEL_CSV_FILE")"
 
 #############
@@ -145,12 +143,7 @@ model_accuracy_def() {
 OLDIFS="$IFS"
 IFS=","
 i=0                             # used to give unique names to models
-while read combo score balanced_accuracy precision; do
-    # Skip if that's the header
-    if [[ $combo =~ combo ]]; then
-        continue
-    fi
-
+while read combo score precision; do
     # Output model name predicate associated with model
     model_name="${BASE_MODEL_CSV_FILE}:moses_model_$(pad $i 3)"
     scm_model="$(combo-fmt-converter -c "$combo" -f scheme)"
@@ -160,12 +153,9 @@ while read combo score balanced_accuracy precision; do
     accuracy=$(bc <<< "1 - $score")
     echo "$(model_accuracy_def "$model_name" aging $accuracy)"
 
-    # Output model balanced accuracy
-    echo "$(model_balanced_accuracy_def "$model_name" aging $balanced_accuracy)"
-
     # Output model precision
     echo "$(model_precision_def "$model_name" aging $precision)"
 
     ((++i))
-done < "$MODEL_CSV_FILE"
+done < <(tail -n +2 "$MODEL_CSV_FILE") # skip header
 IFS="$OLDIFS"
