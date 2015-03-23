@@ -157,6 +157,30 @@ model_precision_def() {
 EOF
 }
 
+# Given
+#
+# 1. a model predicate name
+#
+# 2. a target feature name
+#
+# 3. a recall
+#
+# return a scheme code relating the model predicate with its recall:
+#
+# ImplicationLink <recall>
+#     PredicateNode TARGET_FEATURE_NAME
+#     PredicateNode PREDICATE_MODEL_NAME
+model_precision_def() {
+    local name="$1"
+    local target="$2"
+    local recall="$3"
+    cat <<EOF
+(ImplicationLink (stv $accuracy 1)
+    (PredicateNode "$target"))
+    (PredicateNode "$name")
+EOF
+}
+
 ########
 # Main #
 ########
@@ -168,7 +192,7 @@ npads=$(python -c "import math; print int(math.log($rows, 10) + 1)")
 # Check that the header is correct (if not maybe the file format has
 # changed)
 header=$(head -n 1 "$MODEL_CSV_FILE")
-expected_header='"","Accuracy","Pos Pred Value"'
+expected_header='"","Accuracy","Pos Pred Value","Recall"'
 if [[ "$header" != "$expected_header" ]]; then
     fatalError "Wrong header format: expect '$expected_header' but got '$header'"
 fi
@@ -176,7 +200,7 @@ fi
 OLDIFS="$IFS"
 IFS=","
 i=0                             # used to give unique names to models
-while read combo score precision; do
+while read combo score precision recall; do
     # Output model name predicate associated with model
     model_name="${BASE_MODEL_CSV_FILE}:moses_model_$(pad $i $npads)"
     scm_model="$(combo-fmt-converter -c "$combo" -f scheme)"
@@ -188,6 +212,9 @@ while read combo score precision; do
 
     # Output model precision
     echo "$(model_precision_def "$model_name" aging $precision)"
+
+    # Output model recall
+    echo "$(model_recall_def "$model_name" aging $recall)"
 
     ((++i))
 done < <(tail -n +2 "$MODEL_CSV_FILE") # skip header
