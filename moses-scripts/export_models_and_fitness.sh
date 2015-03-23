@@ -2,8 +2,8 @@
 
 # Little script to export in scheme format (readily dumpable into the
 # AtomSpace) the models and their scores, given to a CSV, following
-# Mike's format, 3 columns, the combo program, then its score (that is
-# 1 - accuracy) and its precision.
+# Mike's format, 4 columns, the combo program, then its score (that is
+# 1 - accuracy), its precision and recall.
 #
 # The model will be labeled FILENAME:moses_model_INDEX
 #
