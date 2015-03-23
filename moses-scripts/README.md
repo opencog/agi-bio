@@ -30,9 +30,9 @@ the AtomSpace
 to generate scheme code to relate MOSES features and their
 corresponding genes
 
-3. test.sh, and obsolete script to experiment with MOSES learning and
-PLN reasoning.. You may need to configure settings.sh, like setting
-your OpenCog path.
+3. [OBSOLETE] test.sh, and obsolete script to experiment with MOSES
+learning and PLN reasoning.. You may need to configure settings.sh,
+like setting your OpenCog path.
 
 Usage is as follows:
 
