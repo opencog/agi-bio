@@ -27,16 +27,21 @@ PRG_DIR="$(dirname "$PRG_PATH")"
 ####################
 # Program argument #
 ####################
-if [[ $# != 1 ]]; then
-    echo "Usage: $0 FEATURE_CSV_FILE"
-    echo "Example: $0 oldoffvscontrolFeatures.csv"
+if [[ $# == 0 || $# -gt 3 ]]; then
+    echo "Usage: $0 FEATURE_CSV_FILE [-o OUTPUT_FILE]"
+    echo "Example: $0 oldvscontrolFeatures.csv -o oldvscontrol-features-and-genes.scm"
     exit 1
 fi
 
-#############
-# Constants #
-#############
 readonly FEATURE_CSV_FILE="$1"
+shift
+OUTPUT_FILE="/dev/stdout"
+while getopts "o:" opt; do
+    case $opt in
+        o) OUTPUT_FILE="$OPTARG"
+            ;;
+    esac
+done
 
 ########
 # Main #
@@ -64,5 +69,5 @@ while read feature freq level; do
                 (GeneNode $feature)
                 (VariableNode "\$X"))))
 EOF
-done < <(tail -n +2 "$FEATURE_CSV_FILE") #skip header
+done < <(tail -n +2 "$FEATURE_CSV_FILE") > "$OUTPUT_FILE"
 IFS="$OLDIFS"
