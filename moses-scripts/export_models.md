@@ -126,6 +126,21 @@ as Sum_x P(x) is indeed the number of positively classified
 individuals (TP + FP), and Sum_x min(P(x), Q(x)) the number of
 correctly classified individuals, TP.
 
+### Recall
+
+Similarly recall is easily translated into an Implication TV
+strength. that is
+
+```
+ImplicationLink <TV.s = model precision>
+    PredicateNode <TARGET FEATURE>
+    PredicateNode <MODEL>
+```
+
+given that
+
+recall = TP / (TP + TN)
+
 ### Confidence
 
 The confidence can be

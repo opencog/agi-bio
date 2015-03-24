@@ -2,8 +2,8 @@
 
 # Little script to export in scheme format (readily dumpable into the
 # AtomSpace) the models and their scores, given to a CSV, following
-# Mike's format, 3 columns, the combo program, then its score (that is
-# 1 - accuracy) and its precision.
+# Mike's format, 3 columns, the combo program, its recall (aka
+# sensitivity) and its precision (aka positive predictive value).
 #
 # The model will be labeled FILENAME:moses_model_INDEX
 #
@@ -34,14 +34,20 @@
 #         PredicateNode PREDICATE_MODEL_NAME
 #         PredicateNode TARGET_FEATURE_NAME
 #
-# 4. The label associated with its precision
+# 4. The label associated with its precision [REMOVED]
 #
 # ImplicationLink <precision>
 #     PredicateNode MODEL_PREDICATE_NAME
 #     PredicateNode TARGET_FEATURE_NAME
+#
+# 5. The label associated with its recall
+#
+# ImplicationLink <recall>
+#     PredicateNode TARGET_FEATURE_NAME
+#     PredicateNode MODEL_PREDICATE_NAME
 
-set -u
-# set -x
+set -u                          # raise error on unknown variable read
+# set -x                          # debug trace
 
 ####################
 # Source common.sh #
@@ -151,9 +157,33 @@ model_precision_def() {
     local target="$2"
     local precision="$3"
     cat <<EOF
-(ImplicationLink (stv $accuracy 1)
+(ImplicationLink (stv $precision 1)
     (PredicateNode "$name")
     (PredicateNode "$target"))
+EOF
+}
+
+# Given
+#
+# 1. a model predicate name
+#
+# 2. a target feature name
+#
+# 3. a recall
+#
+# return a scheme code relating the model predicate with its recall:
+#
+# ImplicationLink <recall>
+#     PredicateNode TARGET_FEATURE_NAME
+#     PredicateNode PREDICATE_MODEL_NAME
+model_recall_def() {
+    local name="$1"
+    local target="$2"
+    local recall="$3"
+    cat <<EOF
+(ImplicationLink (stv $recall 1)
+    (PredicateNode "$target"))
+    (PredicateNode "$name")
 EOF
 }
 
@@ -168,7 +198,7 @@ npads=$(python -c "import math; print int(math.log($rows, 10) + 1)")
 # Check that the header is correct (if not maybe the file format has
 # changed)
 header=$(head -n 1 "$MODEL_CSV_FILE")
-expected_header='"","Accuracy","Pos Pred Value"'
+expected_header='"","Sensitivity","Pos Pred Value"'
 if [[ "$header" != "$expected_header" ]]; then
     fatalError "Wrong header format: expect '$expected_header' but got '$header'"
 fi
@@ -176,18 +206,17 @@ fi
 OLDIFS="$IFS"
 IFS=","
 i=0                             # used to give unique names to models
-while read combo score precision; do
+while read combo recall precision; do
     # Output model name predicate associated with model
     model_name="${BASE_MODEL_CSV_FILE}:moses_model_$(pad $i $npads)"
     scm_model="$(combo-fmt-converter -c "$combo" -f scheme)"
     echo "$(model_name_def "$model_name" "$scm_model")"
 
-    # Output model accuracy
-    accuracy=$(bc <<< "1 - $score")
-    echo "$(model_accuracy_def "$model_name" aging $accuracy)"
-
     # Output model precision
     echo "$(model_precision_def "$model_name" aging $precision)"
+
+    # Output model recall
+    echo "$(model_recall_def "$model_name" aging $recall)"
 
     ((++i))
 done < <(tail -n +2 "$MODEL_CSV_FILE") # skip header
