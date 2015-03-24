@@ -1,10 +1,18 @@
 #!/bin/bash
 
+# Overview
+# --------
 # Little script to export in scheme format (readily dumpable into the
 # AtomSpace) the models and their scores, given to a CSV, following
 # Mike's format, 3 columns, the combo program, its recall (aka
 # sensitivity) and its precision (aka positive predictive value).
 #
+# Usage
+# -----
+# Run it without argument to print the usage.
+#
+# Description
+# -----------
 # The model will be labeled FILENAME:moses_model_INDEX
 #
 # where FILENAME is the basename of the filename provided in argument,
@@ -59,17 +67,22 @@ PRG_DIR="$(dirname "$PRG_PATH")"
 ####################
 # Program argument #
 ####################
-if [[ $# != 1 ]]; then
-    echo "Usage: $0 MODEL_CSV_FILE"
-    echo "Example: $0 chr10_moses.5x10.csv"
+if [[ $# == 0 || $# -gt 3 ]]; then
+    echo "Usage: $0 MODEL_CSV_FILE [-o OUTPUT_FILE]"
+    echo "Example: $0 chr10_moses.5x10.csv -o chr10_moses.5x10.scm"
     exit 1
 fi
 
-#############
-# Constants #
-#############
 readonly MODEL_CSV_FILE="$1"
 readonly BASE_MODEL_CSV_FILE="$(basename "$MODEL_CSV_FILE")"
+shift
+OUTPUT_FILE="/dev/stdout"
+while getopts "o:" opt; do
+    case $opt in
+        o) OUTPUT_FILE="$OPTARG"
+            ;;
+    esac
+done
 
 #############
 # Functions #
@@ -203,6 +216,10 @@ if [[ "$header" != "$expected_header" ]]; then
     fatalError "Wrong header format: expect '$expected_header' but got '$header'"
 fi
 
+# Create a temporary pipe and save the scheme code
+tmp_pipe=$(mktemp -u)
+mkfifo "$tmp_pipe"
+
 OLDIFS="$IFS"
 IFS=","
 i=0                             # used to give unique names to models
@@ -219,5 +236,5 @@ while read combo recall precision; do
     echo "$(model_recall_def "$model_name" aging $recall)"
 
     ((++i))
-done < <(tail -n +2 "$MODEL_CSV_FILE") # skip header
+done < <(tail -n +2 "$MODEL_CSV_FILE") > "$OUTPUT_FILE"
 IFS="$OLDIFS"
