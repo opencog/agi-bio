@@ -1,6 +1,10 @@
 """
 Relationship mining functionality for the opencog bio project: https://github.com/opencog/agi-bio
 
+Requires that the following KB scheme files have been loaded in to the atomspace:
+    agi-bio/knowledge-import/scheme/GO_new.scm'
+    agi-bio/knowledge-import/scheme/GO_annotation.scm'
+
 Usage:
 Make sure this file is somewhere the cogserver can find it: http://wiki.opencog.org/w/Python#MindAgents_in_Python
 
@@ -143,7 +147,9 @@ class Bio:
 
     def do_full_mining(self,args=None):
         print "Initiate bio.py mining"
-        self.load_scheme()
+
+        # self.load_scheme()
+
         print "Initial number of atoms in atomsapce: " + str(self.a.size())
 
         self.populate_genesets_with_descendent_members()
