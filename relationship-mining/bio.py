@@ -20,6 +20,7 @@ Code cleanup and documentation to come ...
 
 # TODO: proper logging
 # TODO: code cleanup and documentation
+# TODO: tv certainty vs count
 
 __author__ = 'eddie'
 
@@ -63,7 +64,7 @@ if SMALL_RUN:
     SUBSET_SCHEME_FILE = 'subset_relationships_small.scm'
 
 else:
-    GO_FILE = 'GO_new.scm'
+    GO_FILE = 'GO.scm'
     GO_ANN_FILE = 'GO_annotation.scm'
 
     SET_MEMBERS_FILE = 'set_members.txt'
@@ -164,12 +165,10 @@ class Bio:
 
         goterms = scheme_eval_list(self.atomspace,
                                    '(cog-bind pattern_match_go_terms)')
-        # goterms = scheme_eval_h(self.atomspace,'(cog-bind pattern_match_go_terms)')
-        # goterms = self.atomspace[goterms].out
-
         # print "\nGO nodes: "
         # print self.goterms
         #self.goterms = goterms  #for debugging
+
         return goterms
 
     def load_scheme(self):
@@ -292,7 +291,8 @@ class Bio:
                 = set(atoms_in_listlink_h(self.a, results_h))
 
             # or, using scheme (cog-bind) method
-            #self.set_members_dict[geneset] = set(scheme_eval_list(self.a,'(get_members_of "' + geneset.name + '")'))
+            # self.set_members_dict[geneset] = set(scheme_eval_list(
+            #     self.a,'(get_members_of "' + geneset.name + '")'))
         else:
             genes = self.set_members_dict[geneset]
         return genes
@@ -608,80 +608,7 @@ if __name__ == '__main__':
                'link_creation_time'): print "completed creating subsets in " + str(
         bio.link_creation_time) + " seconds"
 
-#bio.persist_set_members()
 
-
-# bio.atomspace.print_list()
-
-
-
-# goterms = scheme_eval(bio.atomspace,'(cog-bind pattern_match_go_terms)')
-#print goterms
-
-#print scheme_eval(bio.atomspace,'(get_members_of)')
-
-#print scheme_eval(bio.atomspace,'(testing)')
-
-
-
-
-# print "\nGO terms in processing set:"
-# print bio.goterms
-
-# print "(cog-prt-atomspace): ****************************"
-# print scheme_eval(bio.atomspace,"(cog-prt-atomspace)")
-
-
-
-
-# print "********************************* print_list(): ***************************************************************"
-# bio.atomspace.print_list() # weird shit is happening with the output when i use this,
-#                            # e.g., missing lines in subsequent output, weird formatting of Links
-
-
-
-
-
-
-
-
-
-#a.print_list()
-
-# a = scheme_eval(atomspace,'(+ 1 1)')
-# print a
-# b = scheme_eval_h(atomspace,'(+ 1 1)')
-# print b
-
-
-# print a.get_atoms_by_type(types.EvaluationLink)
-
-
-# goterms = scheme_eval_h(atomspace,'(cog-bind pattern_match_go_terms)')
-# goterms = a[goterms].out
-
-# print "goterms type:"
-# print type(goterms)
-# print goterms
-
-
-
-
-#a.print_list()
-
-#print goterms.out
-
-# str_res = scheme_eval(atomspace,'(cog-bind pattern_match_go_terms)')
-#
-# print result
-# print
-# print atomspace[result]
-#
-# print; print; print;
-# print "string result: " + str_res
-
-# print "atomspace.get_atoms_by_type: "
-# print atomspace.get_atoms_by_type(types.ConceptNode)
 
 
 
