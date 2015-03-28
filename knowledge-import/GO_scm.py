@@ -62,7 +62,7 @@ def go_relationship(idd,relate_id, relation_type):
     print ""
 
 #open file to write 
-f_go = open('ontology2.scm', 'a')
+f_go = open('GO.scm', 'a')
 
 #partition each line and call functions
 for i in range(len(line_no)):
