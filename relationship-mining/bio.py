@@ -49,14 +49,15 @@ DEFAULT_TV_COUNT = 1000
 SUBSET_LINK_TV_STRENGTH_CUTOFF = .5  # within interval (0,1
 IMPORTANCE_SCORE_PERCENTILE_CUTOFF = .5  # within interval (0,1)
 
-KB_SCHEME_DIR = '../agi-bio/knowledge-import/scheme/'
+# KB_SCHEME_DIR = '../agi-bio/knowledge-import/scheme/'
+KB_SCHEME_DIR = '../agi-bio/scheme-representation/'
 
 if SMALL_RUN:
     SUBSET_LINK_TV_STRENGTH_CUTOFF = 0
 
 if SMALL_RUN:
     GO_FILE = 'GO_1K.scm'
-    GO_ANN_FILE = 'GO_ann1K.scm'
+    GO_ANN_FILE = 'GO_ann_1K.scm'
 
     SET_MEMBERS_FILE = 'set_members_small.txt'
     SUBSET_VALUES_FILE = 'subset_values_small.txt'
