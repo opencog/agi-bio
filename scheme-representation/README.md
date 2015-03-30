@@ -36,7 +36,7 @@ are obtained by running respectively
 ```
 moses-scripts/relate_features_and_genes.sh oldoffvscontrolFeatures.csv
 moses-scripts/relate_features_and_genes.sh oldvscontrolFeatures.csv
-
+```
 * Files
 ```
 super-centenarian_snp.scm 
@@ -44,7 +44,7 @@ super-centenarian_snp.scm
 obtained by running
 ```
 /opencog/build/opencog/comboreduct/main/combo-fmt-converter  perfectCombos.csv
-
+```
 ### Scheme files generated using python scripts from knowledge-import
 
 
@@ -53,28 +53,38 @@ obtained by running
 msigdb_v4.0_verbose.scm 
 ```
 obtained by running 
+```
 python knowledge-import/MSigDB_to_scheme.py 
 ```
-
+* Files
+```
 GO_new.scm
 ```
 obtained by running 
-python knowledge-import/GO_scm.py 
 ```
-
+python knowledge-import/GO_scm.py 
+``` 
+* Files
+```
 GO_annotation.scm 
 ```
-obtained by running 
+obtained by running
+``` 
 python knowledge-import/Go_Annotation_scm.py 
-
+```
+* Files
+```
 mmc4.scm 
 ```
 obtained by running 
+```
 python knowledge-import/Aging-Mythelation.py 
-
-
+```
+* Files
+```
 Lifespan-observations_2015-02-21.scm
 ```
 obtained by running 
+```
 python knowledge-import/lifeSpanObservation_2015.py
 ```
