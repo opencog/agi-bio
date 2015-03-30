@@ -1,25 +1,27 @@
 knowledge-import 
 ----------------
-Scripts for converting Bio knowledge bases into scheme files for importing into the atomspace 
+Scripts for converting Bio knowledge bases into scheme files for importing into  atomspace 
 
 Description
 -----------
 
-- Bio_schemeFiles.zip --  Imported Bio Scheme files all in one
+-- MSigDB_to_scheme.py
+Script convert Molecular signatures database from http://www.broadinstitute.org/gsea/msigdb/download_file.jsp?filePath=/resources/msigdb/4.0/msigdb_v4.0.xml to Atomspace representation scheme file. 
 
--- msigdb_v4.0_verbose.scm -- Atomspace representation of Molecular signatures database from http://www.broadinstitute.org/gsea/msigdb/download_file.jsp?filePath=/resources/msigdb/4.0/msigdb_v4.0.xml. MSigDB_to_scheme.py script convert msigdb xml file to scheme file. 
+-- GO_scm.py 
+Script convert Human ontology, go.obo, from http://purl.obolibrary.org/obo to scheme file. 
 
--- GO_new.scm -- Atomspace representation of Human ontology from http://purl.obolibrary.org/obo/go.obo,  GO_scm.py script used to convert go.obo to scheme. 
+-- Go_Annotation_scm.py
+Script to generate atomspace representation of Human gene annotation from http://geneontology.org/gene-associations/gene_association.goa_ref_human.gz.
 
--- GO_annotation.scm -- Atomspace representation of Human gene annotation from http://geneontology.org/gene-associations/gene_association.goa_ref_human.gz and generated using Go_Annotation_scm.py. 
+-- Aging-Mythelation.py 
+Script read Aging-Mythelation_Geneset dataset, mmc4.xls, and rewrite it in to scheme file.
 
--- mmc4.scm  -- Atomspace representation of Aging-Mythelation_Geneset dataset (mmc4.xml). Aging-Mythelation.py script read mmc4 excel file and rewrite it in scheme.
+-- lifeSpanObservation_2015.py
+Script to convert Human homologue genes from file Lifespan-observations_2015-02-21.csv to scheme file, equivalent atomspace representation.
 
--- super-centenarian_snp.scm -- Atomspace representaion of moses output model, perfect combos from moses runs on the super-centenarian data set, and used combo-fmt-converter to create the scheme file. 
-
--- Lifespan-observations_2015-02-21.scm -- Atomspace representation of Human homologue genes from file Lifespan-observations_2015-02-21.csv where lifeSpanObservation_2015.py script used to convert the csv file to scheme file.
-
--- load_atoms.py --- This python script load all bio scheme files from docker container set for loading these scheme files in Hetzner server. In order to use this one needs to have acess to the server. once login to the server run the folllowing commands 
+-- load_atoms.py 
+This python script load all bio scheme files from docker container set for loading these scheme files in Hetzner server. In order to use this one needs to have acess to the server. once login to the server run the folllowing commands 
 
 	$ docker exec -i -t bio_cogserver bash
 	$ cd /home/doc
