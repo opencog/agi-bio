@@ -76,7 +76,7 @@ if SMALL_RUN:
 else:
     GO_FILE = 'GO.scm'
     GO_ANN_FILE = 'GO_annotation.scm'
-    GO_ANN_FILE = 'GO_ann_1Kaaa.scm'
+    # GO_ANN_FILE = 'GO_ann_1.scm'
 
     SET_MEMBERS_FILE = 'set_members.txt'
     SUBSET_VALUES_FILE = 'subset_values.txt'
@@ -165,7 +165,7 @@ class Bio:
     def do_full_mining(self, args=None):
         print "Initiate bio.py mining"
 
-        # self.load_scheme()
+        self.load_scheme()
 
         print "Initial number of atoms in atomsapce: {:,}".format(self.a.size())
 
@@ -184,26 +184,30 @@ class Bio:
     def get_GO_nodes(self):
         # save nodes as handles or node objects?
 
-        go_term_node = self.get_go_term_node()
+        if not hasattr(self,'go_nodes'):
 
-        goterms = scheme_eval_list(self.atomspace,
-                                   '(cog-bind pattern_match_go_terms)')
-        print "cog-bind go terms: {0}".format(len(goterms))
+            go_term_node = self.get_go_term_node()
 
-
-        golinks = self.a.get_atoms_by_target_atom(types.InheritanceLink,go_term_node)
-        goterms = set()
-        for link in golinks:
-            goterms.add(link.out[0])
+            # goterms = scheme_eval_list(self.atomspace,
+            #                            '(cog-bind pattern_match_go_terms)')
+            # print "cog-bind go terms: {0}".format(len(goterms))
 
 
-        print "python go terms: {0}".format(len(goterms))
+            golinks = self.a.get_atoms_by_target_atom(types.InheritanceLink,go_term_node)
+            goterms = set()
+            for link in golinks:
+                goterms.add(link.out[0])
 
-        # print "\nGO nodes: "
-        # print self.goterms
-        #self.goterms = goterms  #for debugging
 
-        return goterms
+            print "python go terms: {0}".format(len(goterms))
+
+            # print "\nGO nodes: "
+            # print self.goterms
+            #self.goterms = goterms  #for debugging
+
+            self.go_nodes = goterms
+
+        return self.go_nodes
 
     def load_scheme(self):
         """
@@ -231,6 +235,25 @@ class Bio:
         self.scheme_loaded = True
 
 
+    def load_subset_rels_from_scheme(self,filepath=None):
+        """
+        Populates the atomspace with subset mining results saved to file from
+        previous run of subset mining.
+
+        :param filepath:
+        :return:
+        """
+        if not filepath:
+            filepath = SUBSET_SCHEME_FILE
+        print "Loading subset relationships from {0}".format(filepath)
+        start = time.clock()
+        if not load_scm(self.atomspace,filepath):
+            print "*** Error loading scheme file: {0}".format(filepath)
+        else:
+            print "Loaded subset relationships in {0} seconds".format(
+                int(time.clock()-start)
+            )
+
     def get_go_term_node(self):
         """
         Returns the atom (ConceptNode "GO_term")
@@ -241,7 +264,7 @@ class Bio:
         return self.go_term_node
 
     def populate_genesets_with_descendent_members(self):
-        print "Populating gene sets with descendent members"
+        print "\nPopulating gene sets with descendent members"
         start = time.clock()
         self.go_term_node = self.get_go_term_node()
         # self.go_term_node = \
@@ -250,27 +273,14 @@ class Bio:
 
         go_terms = set(self.get_GO_nodes())
 
-        whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0016705")[0] #500K
-        whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0031758")[0] #700K pass
-        whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0033842")[0] #800K pass
-        whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0035014")[0] #850K fail
-        whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0036029")[0] #892K
-        print whereru
-        whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0038096")[0]
-        print whereru
-        # whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0038095")[0]
-        print whereru
-        print "whereru in go_terms: {0}".format(whereru in go_terms)
-        links = self.a.get_atoms_by_target_atom(types.InheritanceLink,whereru)
-        print_atoms_in_list(links,'InheritanceLinks',whereru.name)
-        incoming = self.a.get_incoming(whereru.h)
-        print_atoms_in_list(incoming,'incoming',whereru.name)
-
-        ilinks = self.a.get_atoms_by_type(types.InheritanceLink)
-        print "from all inheritance links:"
-        for link in ilinks:
-            if link.out[0].name == "GO:0038095":
-                print link
+        # debugging code
+        # whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0016705")[0] #500K
+        # print whereru
+        # print "whereru in go_terms: {0}".format(whereru in go_terms)
+        # links = self.a.get_atoms_by_target_atom(types.InheritanceLink,whereru)
+        # print_atoms_in_list(links,'InheritanceLinks',whereru.name)
+        # incoming = self.a.get_incoming(whereru.h)
+        # print_atoms_in_list(incoming,'incoming',whereru.name)
 
         unprocessed_sets = go_terms
         # print goterms
@@ -292,7 +302,7 @@ class Bio:
 
         self.populate_time = int(time.clock() - start)
         print "Completed populating sets with descendent members in " \
-              + str(self.populate_time) + " seconds\n"
+              + str(self.populate_time) + " seconds"
 
 
     def get_inheritance_children_of(self,parent):
@@ -320,9 +330,9 @@ class Bio:
 
         children = self.get_inheritance_children_of(geneset)
 
-        if geneset.name == 'GO:0044804':
-            print "**********  here we are"
-            print str(geneset)
+        # if geneset.name == 'GO:0044804':
+        #     print "**********  here we are"
+        #     print str(geneset)
 
 
         # children = scheme_eval_list(self.a, '(get_inheritance_child_nodes "'
@@ -472,8 +482,10 @@ class Bio:
         Caculates probabistic extensional inhereitance relationships based on
                 set members
 
-        Excludes crisp ancestor-descendent category relationships since these
-        can be established through PLN inference
+        Leaving in crisp ancestor-descendent relationships for now as though do
+        seem to add a lot of extra links.
+        # Excludes crisp ancestor-descendent category relationships since these
+        # can be established through PLN inference
         """
         print "Calculating gene category subset truth values"
         start = time.clock()
@@ -491,6 +503,8 @@ class Bio:
                     # print "related genesets: " + " ".join([set.name for set in related_genesets])
 
                     for setB in related_genesets:
+                        # Leaving in ancestor relationships for now since they
+                        # don't seem to add a lot of extra links
                         # Check to see they are the same set or if one set is an
                         # ancestor of the other
                         if (
@@ -543,7 +557,7 @@ class Bio:
                                 # print set_pair + " has already been processed"
 
             i = i + 1
-            if i % 100 == 0:
+            if i % 1000 == 0:
                 timing = int((time.clock() - start) / 60)
                 if timing != 0:
                     set_per_min = i / timing
@@ -566,7 +580,7 @@ class Bio:
         self.subset_time = int(time.clock() - start)
         print 'Gene category Subset truth values completed in ' + str(
             self.subset_time) + " seconds"
-        print 'Created {:,} subset relationships.'.format(
+        print 'Created {:,} subset relationships above cuttoff strength value.'.format(
             len(self.subset_values))
         print "\nSubset value percentiles: " + str(
             np.percentile(self.subset_values.values(),
@@ -691,7 +705,8 @@ class Bio:
         self.link_creation_time = int(time.clock() - start)
         print "completed creating subsets in " + str(
             self.link_creation_time) + " seconds"
-        print "{0} SubSet relationships created".format(created_count)
+        print "{0} SubSet relationships created after importance score filtering".format(
+            created_count)
 
         # write to scheme file:
         f = open(SUBSET_SCHEME_FILE, 'wb')
@@ -797,8 +812,11 @@ if __name__ == '__main__':
 
     bio = Bio()
 
+    KB_FILES = None
     bio.load_scheme()
-    bio.do_full_mining()
+    # bio.do_full_mining()
+
+    bio.load_subset_rels_from_scheme()
 
     # bio._get_category_ancestors_test()
 
