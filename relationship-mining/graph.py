@@ -24,7 +24,7 @@ import os
 
 os.system('export GUILE_AUTO_COMPILE=0')
 
-SUBGRAPH_SIZE = 10000
+SUBGRAPH_SIZE = 1000
 
 SUBGRAPH_FILE_NAME = 'SUBGRAPH_' + str(SUBGRAPH_SIZE) + '.scm'
 

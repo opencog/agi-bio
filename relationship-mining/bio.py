@@ -34,6 +34,8 @@ from opencog.scheme_wrapper import load_scm, scheme_eval, scheme_eval_h, \
     __init__
 from opencog.bindlink import bindlink
 
+from utilities import load_scheme_files
+
 import numpy as np
 import pickle
 import time
@@ -44,7 +46,7 @@ os.system('export GUILE_AUTO_COMPILE=0')
 
 
 SMALL_RUN = False
-# SMALL_RUN = True
+SMALL_RUN = True
 
 
 
@@ -95,24 +97,29 @@ KB_FILES = [
 ]
 
 
-class subset_miner(opencog.cogserver.Request):
+class miner(opencog.cogserver.Request):
     def run(self, args, atomspace):
         print 'received request subset_miner ' + str(args)
         bio = Bio(atomspace)
         bio.atomspace = bio.a = atomspace
 
         if args:
-            if args[0] == 'test':
+            if args[0] == 'clear':
                 bio.atomspace.clear()
 
-                bio.a.add_node(types.ConceptNode, "yippers!")
+            elif args[0] == 'run':
+                bio.do_full_mining(args)
+
+
+            elif args[0] == 'run':
+                bio.do_full_mining(args)
+
+
 
             elif args[0] == 'generate_subsets_from_pickle':
                 bio.unpickle_subset_values()
                 bio.create_subset_links()
 
-            elif args[0] == 'run':
-                bio.do_full_mining(args)
 
             else:
                 print args[0] + ' command not found'
@@ -216,22 +223,11 @@ class Bio:
         This is primarily for use when running the script standalone for
         testing,that is, without a pre-existing cogserver atomspace.
         """
-        print "Loading scheme files"
-        if T:
-            start = time.clock()
 
         kb_files = KB_FILES
 
         scheme_files = SCHEME_INIT_FILES + kb_files
-        for file in scheme_files:
-            print "  Loading scheme file: " + file
-            if not load_scm(self.atomspace, file):
-                print "***  Error loading scheme file: " + file + "  ***"
-
-        self.scheme_load_time = int(time.clock() - start)
-        print 'Scheme file loading completed in ' + str(self.scheme_load_time) \
-              + " seconds\n"
-
+        load_scheme_files(self.atomspace,scheme_files)
         self.scheme_loaded = True
 
 
@@ -798,6 +794,7 @@ def print_atoms_in_list(atoms,atom_name='',list_name=''):
         print atom
 
 
+
 ################
 
 # import pickle
@@ -812,7 +809,7 @@ if __name__ == '__main__':
 
     bio = Bio()
 
-    KB_FILES = None
+    # KB_FILES = None
     bio.load_scheme()
     # bio.do_full_mining()
 
