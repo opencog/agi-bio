@@ -15,10 +15,10 @@ def inLink(node1 ,node2):
 
 def evaLink(predicate , node1,node1_type, node2,node2_type):
             f_mmc4.write("(EvaluationLink \n")
-	    f_mmc4.write("\t (PredicateNode \"" + predicate + "\"\n")
+	    f_mmc4.write("\t (PredicateNode \"" + predicate + "\")\n")
 	    f_mmc4.write("\t (ListLink \n")
 	    f_mmc4.write("\t\t("+node1_type+" \"" + "MSigDB_GeneSet: "+ node1 + "\")\n")
-	    f_mmc4.write("\t\t("+node2_type+" \"" + node2 + "\"))\n")
+	    f_mmc4.write("\t\t("+node2_type+" \"" + node2 + "\")\n")
 	    f_mmc4.write("\t )\n")
 	    f_mmc4.write(")\n\n")
 
@@ -36,8 +36,8 @@ f_mmc4.write("(display message)\n")
 f_mmc4.write("(define start_time (current-time))\n")
 
 inLink("Aging-Mythelation_Geneset", "Geneset")
-evaLink("organism_of", "Aging-Mythelation_Geneset","ConceptNode", "Homo sapiens", "ConceptNode")
-evaLink("source_PubMedID", "Aging-Mythelation_Geneset","ConceptNode", "#23177740", "NumberNode")
+evaLink("organism", "Aging-Mythelation_Geneset","ConceptNode", "Homo sapiens", "ConceptNode")
+evaLink("source_PubMedID", "Aging-Mythelation_Geneset","ConceptNode", "23177740", "NumberNode")
 evaLink("brief_description_of", "Aging-Mythelation_Geneset","ConceptNode", "Genes Associated with Aging in Both the Methylome and th Transcript.", "PhraseNode")
 
 # lop through file
