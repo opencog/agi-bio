@@ -7,14 +7,19 @@ Requires that the following KB scheme files have been loaded into the atomspace:
     agi-bio/knowledge-import/scheme/GO_annotation.scm'
 
 Usage:
-Add this directory to your PYTHONPATH or otherwise make sure this file is
-somewhere the cogserver can find it:
+Add this directory to your PYTHONPATH
+or otherwise make sure this file is somewhere the cogserver can find it:
 http://wiki.opencog.org/w/Python#MindAgents_in_Python
 
 opencog> loadpy bio
   No subclasses of opencog.cogserver.MindAgent found.
-  Python Requests found: subset_miner.
-opencog> bio.subset-miner
+  Python Requests found: miner
+
+# to load default scheme init and knowledge base files
+opencog> bio.miner load_scheme
+
+# to run the miner
+opencog> bio.miner run
 
 Code cleanup and documentation to come ...
 """
@@ -35,6 +40,7 @@ from opencog.scheme_wrapper import load_scm, scheme_eval, scheme_eval_h, \
 from opencog.bindlink import bindlink
 
 from utilities import load_scheme_files
+import graph
 
 import numpy as np
 import pickle
@@ -43,11 +49,8 @@ import os
 
 os.system('export GUILE_AUTO_COMPILE=0')
 
-
-
 SMALL_RUN = False
-SMALL_RUN = True
-
+# SMALL_RUN = True
 
 
 V = VERBOSE = False
@@ -99,22 +102,34 @@ KB_FILES = [
 
 class miner(opencog.cogserver.Request):
     def run(self, args, atomspace):
-        print 'received request subset_miner ' + str(args)
+        print 'received request miner ' + str(args)
         bio = Bio(atomspace)
         bio.atomspace = bio.a = atomspace
 
         if args:
-            if args[0] == 'clear':
+            arg = args[0]
+            print "arg: {0}".format(arg)
+
+            if arg == 'clear':
                 bio.atomspace.clear()
 
-            elif args[0] == 'run':
+            elif arg == 'run':   # default
                 bio.do_full_mining(args)
 
+            elif arg == 'load_scheme':
+                bio.load_scheme()
 
-            elif args[0] == 'run':
-                bio.do_full_mining(args)
+            elif arg == 'create_subgraph':
+                if len(args) > 1:
+                    bio.create_connected_subgraph(args[1])
+                else:
+                    bio.create_connected_subgraph()
 
+            elif arg == 'load_scheme_init':
+                bio.load_scheme_init_files()
 
+            elif arg == 'load_scheme_knowledge_files':
+                bio.load_scheme_knowledge_files()
 
             elif args[0] == 'generate_subsets_from_pickle':
                 bio.unpickle_subset_values()
@@ -172,7 +187,8 @@ class Bio:
     def do_full_mining(self, args=None):
         print "Initiate bio.py mining"
 
-        self.load_scheme()
+        if not self.scheme_loaded:
+            self.load_scheme()
 
         print "Initial number of atoms in atomsapce: {:,}".format(self.a.size())
 
@@ -224,11 +240,20 @@ class Bio:
         testing,that is, without a pre-existing cogserver atomspace.
         """
 
-        kb_files = KB_FILES
+        self.load_scheme_init_files()
+        self.load_scheme_knowledge_files()
 
-        scheme_files = SCHEME_INIT_FILES + kb_files
-        load_scheme_files(self.atomspace,scheme_files)
+        # kb_files = KB_FILES
+        #
+        # scheme_files = SCHEME_INIT_FILES + kb_files
+        # load_scheme_files(self.atomspace,scheme_files)
         self.scheme_loaded = True
+
+    def load_scheme_init_files(self):
+        load_scheme_files(self.atomspace,SCHEME_INIT_FILES)
+
+    def load_scheme_knowledge_files(self):
+        load_scheme_files(self.atomspace,KB_FILES)
 
 
     def load_subset_rels_from_scheme(self,filepath=None):
@@ -772,7 +797,9 @@ class Bio:
             for atom in atoms:
                 f.write(str(atom))
 
-
+    def create_connected_subgraph(self,n=10000):
+        g = graph.SubgraphMiner(self.atomspace)
+        g.create_connected_subgraph(n)
 
 
 ###### Utils ########
@@ -814,6 +841,8 @@ if __name__ == '__main__':
     # bio.do_full_mining()
 
     bio.load_subset_rels_from_scheme()
+
+    bio.create_connected_subgraph()
 
     # bio._get_category_ancestors_test()
 

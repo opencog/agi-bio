@@ -91,7 +91,7 @@ class SubgraphMiner:
 
 
 
-    def get_connected_subgraph(self,n):
+    def create_connected_subgraph(self,n):
         a = self.atomspace
 
         print "total atomspace size = {0}".format(len(a))
@@ -181,7 +181,7 @@ if __name__ == '__main__':
     sm = SubgraphMiner()
     sm.load_scheme_init()
 
-    sm.get_connected_subgraph(SUBGRAPH_SIZE)
+    sm.create_connected_subgraph(SUBGRAPH_SIZE)
 
 
 
