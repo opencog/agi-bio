@@ -26,10 +26,10 @@ def inLink(node1 ,node2):
 	    f.write(")\n\n")
 def evaLink(predicate , node1,node1_type, node2,node2_type):
             f.write("(EvaluationLink \n")
-	    f.write("\t (PredicateNode \"" + predicate + "\"\n")
+	    f.write("\t (PredicateNode \"" + predicate + "\")\n")
 	    f.write("\t (ListLink \n")
 	    f.write("\t\t("+node1_type+" \"" + "MSigDB_GeneSet: "+ node1 + "\")\n")
-	    f.write("\t\t("+node2_type+" \"" + node2 + "\"))\n")
+	    f.write("\t\t("+node2_type+" \"" + node2 + "\")\n")
 	    f.write("\t )\n")
 	    f.write(")\n\n")
 def memLink(members,geneset):
@@ -70,7 +70,7 @@ def scheme_writer(fields):
 	if  not(not (s.attributes["ORGANISM"].value).encode('ascii','ignore')):
             node1_type = "ConceptNode"
             node2_type = "ConceptNode"   
-            PredicateNode = "organism_of"
+            PredicateNode = "organism"
 	    evaLink(PredicateNode ,(s.attributes["STANDARD_NAME"].value).encode('ascii','ignore').replace('\\', '\\\\') ,node1_type, (s.attributes["ORGANISM"].value).encode('ascii','ignore').replace('\\', '\\\\'), node2_type)
 	    
 	if  not(not (s.attributes["HISTORICAL_NAMES"].value).encode('ascii','ignore')):
