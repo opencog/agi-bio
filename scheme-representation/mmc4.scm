@@ -9,26 +9,26 @@
 )
 
 (EvaluationLink 
-	 (PredicateNode "organism_of"
+	 (PredicateNode "organism")
 	 (ListLink 
 		(ConceptNode "MSigDB_GeneSet: Aging-Mythelation_Geneset")
-		(ConceptNode "Homo sapiens"))
+		(ConceptNode "Homo sapiens")
 	 )
 )
 
 (EvaluationLink 
-	 (PredicateNode "source_PubMedID"
+	 (PredicateNode "source_PubMedID")
 	 (ListLink 
 		(ConceptNode "MSigDB_GeneSet: Aging-Mythelation_Geneset")
-		(NumberNode "#23177740"))
+		(NumberNode "23177740")
 	 )
 )
 
 (EvaluationLink 
-	 (PredicateNode "brief_description_of"
+	 (PredicateNode "brief_description_of")
 	 (ListLink 
 		(ConceptNode "MSigDB_GeneSet: Aging-Mythelation_Geneset")
-		(PhraseNode "Genes Associated with Aging in Both the Methylome and th Transcript."))
+		(PhraseNode "Genes Associated with Aging in Both the Methylome and th Transcript.")
 	 )
 )
 
