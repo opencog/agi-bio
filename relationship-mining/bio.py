@@ -7,14 +7,19 @@ Requires that the following KB scheme files have been loaded into the atomspace:
     agi-bio/knowledge-import/scheme/GO_annotation.scm'
 
 Usage:
-Add this directory to your PYTHONPATH or otherwise make sure this file is
-somewhere the cogserver can find it:
+Add this directory to your PYTHONPATH
+or otherwise make sure this file is somewhere the cogserver can find it:
 http://wiki.opencog.org/w/Python#MindAgents_in_Python
 
 opencog> loadpy bio
   No subclasses of opencog.cogserver.MindAgent found.
-  Python Requests found: subset_miner.
-opencog> bio.subset-miner
+  Python Requests found: miner
+
+# to load default scheme init and knowledge base files
+opencog> bio.miner load_scheme
+
+# to run the miner
+opencog> bio.miner run
 
 Code cleanup and documentation to come ...
 """
@@ -34,6 +39,9 @@ from opencog.scheme_wrapper import load_scm, scheme_eval, scheme_eval_h, \
     __init__
 from opencog.bindlink import bindlink
 
+from utilities import load_scheme_files
+import subgraph
+
 import numpy as np
 import pickle
 import time
@@ -41,11 +49,8 @@ import os
 
 os.system('export GUILE_AUTO_COMPILE=0')
 
-
-
 SMALL_RUN = False
 # SMALL_RUN = True
-
 
 
 V = VERBOSE = False
@@ -76,7 +81,7 @@ if SMALL_RUN:
 else:
     GO_FILE = 'GO.scm'
     GO_ANN_FILE = 'GO_annotation.scm'
-    GO_ANN_FILE = 'GO_ann_1Kaaa.scm'
+    # GO_ANN_FILE = 'GO_ann_1.scm'
 
     SET_MEMBERS_FILE = 'set_members.txt'
     SUBSET_VALUES_FILE = 'subset_values.txt'
@@ -95,24 +100,41 @@ KB_FILES = [
 ]
 
 
-class subset_miner(opencog.cogserver.Request):
+class miner(opencog.cogserver.Request):
     def run(self, args, atomspace):
-        print 'received request subset_miner ' + str(args)
+        print 'received request miner ' + str(args)
         bio = Bio(atomspace)
         bio.atomspace = bio.a = atomspace
 
         if args:
-            if args[0] == 'test':
+            arg = args[0]
+            print "arg: {0}".format(arg)
+
+            if arg == 'clear':
                 bio.atomspace.clear()
 
-                bio.a.add_node(types.ConceptNode, "yippers!")
+            elif arg == 'run':   # default
+                bio.do_full_mining(args)
+
+            elif arg == 'load_scheme':
+                bio.load_scheme()
+
+            elif arg == 'create_subgraph':
+                if len(args) > 1:
+                    bio.create_connected_subgraph(args[1])
+                else:
+                    bio.create_connected_subgraph()
+
+            elif arg == 'load_scheme_init':
+                bio.load_scheme_init_files()
+
+            elif arg == 'load_scheme_knowledge_files':
+                bio.load_scheme_knowledge_files()
 
             elif args[0] == 'generate_subsets_from_pickle':
                 bio.unpickle_subset_values()
                 bio.create_subset_links()
 
-            elif args[0] == 'run':
-                bio.do_full_mining(args)
 
             else:
                 print args[0] + ' command not found'
@@ -165,7 +187,8 @@ class Bio:
     def do_full_mining(self, args=None):
         print "Initiate bio.py mining"
 
-        # self.load_scheme()
+        if not self.scheme_loaded:
+            self.load_scheme()
 
         print "Initial number of atoms in atomsapce: {:,}".format(self.a.size())
 
@@ -184,26 +207,30 @@ class Bio:
     def get_GO_nodes(self):
         # save nodes as handles or node objects?
 
-        go_term_node = self.get_go_term_node()
+        if not hasattr(self,'go_nodes'):
 
-        goterms = scheme_eval_list(self.atomspace,
-                                   '(cog-bind pattern_match_go_terms)')
-        print "cog-bind go terms: {0}".format(len(goterms))
+            go_term_node = self.get_go_term_node()
 
-
-        golinks = self.a.get_atoms_by_target_atom(types.InheritanceLink,go_term_node)
-        goterms = set()
-        for link in golinks:
-            goterms.add(link.out[0])
+            # goterms = scheme_eval_list(self.atomspace,
+            #                            '(cog-bind pattern_match_go_terms)')
+            # print "cog-bind go terms: {0}".format(len(goterms))
 
 
-        print "python go terms: {0}".format(len(goterms))
+            golinks = self.a.get_atoms_by_target_atom(types.InheritanceLink,go_term_node)
+            goterms = set()
+            for link in golinks:
+                goterms.add(link.out[0])
 
-        # print "\nGO nodes: "
-        # print self.goterms
-        #self.goterms = goterms  #for debugging
 
-        return goterms
+            print "python go terms: {0}".format(len(goterms))
+
+            # print "\nGO nodes: "
+            # print self.goterms
+            #self.goterms = goterms  #for debugging
+
+            self.go_nodes = goterms
+
+        return self.go_nodes
 
     def load_scheme(self):
         """
@@ -212,24 +239,41 @@ class Bio:
         This is primarily for use when running the script standalone for
         testing,that is, without a pre-existing cogserver atomspace.
         """
-        print "Loading scheme files"
-        if T:
-            start = time.clock()
 
-        kb_files = KB_FILES
+        self.load_scheme_init_files()
+        self.load_scheme_knowledge_files()
 
-        scheme_files = SCHEME_INIT_FILES + kb_files
-        for file in scheme_files:
-            print "  Loading scheme file: " + file
-            if not load_scm(self.atomspace, file):
-                print "***  Error loading scheme file: " + file + "  ***"
-
-        self.scheme_load_time = int(time.clock() - start)
-        print 'Scheme file loading completed in ' + str(self.scheme_load_time) \
-              + " seconds\n"
-
+        # kb_files = KB_FILES
+        #
+        # scheme_files = SCHEME_INIT_FILES + kb_files
+        # load_scheme_files(self.atomspace,scheme_files)
         self.scheme_loaded = True
 
+    def load_scheme_init_files(self):
+        load_scheme_files(self.atomspace,SCHEME_INIT_FILES,'scheme init files')
+
+    def load_scheme_knowledge_files(self):
+        load_scheme_files(self.atomspace,KB_FILES,'knowledge base files')
+
+
+    def load_subset_rels_from_scheme(self,filepath=None):
+        """
+        Populates the atomspace with subset mining results saved to file from
+        previous run of subset mining.
+
+        :param filepath:
+        :return:
+        """
+        if not filepath:
+            filepath = SUBSET_SCHEME_FILE
+        print "Loading subset relationships from {0}".format(filepath)
+        start = time.clock()
+        if not load_scm(self.atomspace,filepath):
+            print "*** Error loading scheme file: {0}".format(filepath)
+        else:
+            print "Loaded subset relationships in {0} seconds".format(
+                int(time.clock()-start)
+            )
 
     def get_go_term_node(self):
         """
@@ -241,7 +285,7 @@ class Bio:
         return self.go_term_node
 
     def populate_genesets_with_descendent_members(self):
-        print "Populating gene sets with descendent members"
+        print "\nPopulating gene sets with descendent members"
         start = time.clock()
         self.go_term_node = self.get_go_term_node()
         # self.go_term_node = \
@@ -250,27 +294,14 @@ class Bio:
 
         go_terms = set(self.get_GO_nodes())
 
-        whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0016705")[0] #500K
-        whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0031758")[0] #700K pass
-        whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0033842")[0] #800K pass
-        whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0035014")[0] #850K fail
-        whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0036029")[0] #892K
-        print whereru
-        whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0038096")[0]
-        print whereru
-        # whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0038095")[0]
-        print whereru
-        print "whereru in go_terms: {0}".format(whereru in go_terms)
-        links = self.a.get_atoms_by_target_atom(types.InheritanceLink,whereru)
-        print_atoms_in_list(links,'InheritanceLinks',whereru.name)
-        incoming = self.a.get_incoming(whereru.h)
-        print_atoms_in_list(incoming,'incoming',whereru.name)
-
-        ilinks = self.a.get_atoms_by_type(types.InheritanceLink)
-        print "from all inheritance links:"
-        for link in ilinks:
-            if link.out[0].name == "GO:0038095":
-                print link
+        # debugging code
+        # whereru = self.a.get_atoms_by_name(types.ConceptNode,"GO:0016705")[0] #500K
+        # print whereru
+        # print "whereru in go_terms: {0}".format(whereru in go_terms)
+        # links = self.a.get_atoms_by_target_atom(types.InheritanceLink,whereru)
+        # print_atoms_in_list(links,'InheritanceLinks',whereru.name)
+        # incoming = self.a.get_incoming(whereru.h)
+        # print_atoms_in_list(incoming,'incoming',whereru.name)
 
         unprocessed_sets = go_terms
         # print goterms
@@ -292,7 +323,7 @@ class Bio:
 
         self.populate_time = int(time.clock() - start)
         print "Completed populating sets with descendent members in " \
-              + str(self.populate_time) + " seconds\n"
+              + str(self.populate_time) + " seconds"
 
 
     def get_inheritance_children_of(self,parent):
@@ -320,9 +351,9 @@ class Bio:
 
         children = self.get_inheritance_children_of(geneset)
 
-        if geneset.name == 'GO:0044804':
-            print "**********  here we are"
-            print str(geneset)
+        # if geneset.name == 'GO:0044804':
+        #     print "**********  here we are"
+        #     print str(geneset)
 
 
         # children = scheme_eval_list(self.a, '(get_inheritance_child_nodes "'
@@ -472,8 +503,10 @@ class Bio:
         Caculates probabistic extensional inhereitance relationships based on
                 set members
 
-        Excludes crisp ancestor-descendent category relationships since these
-        can be established through PLN inference
+        Leaving in crisp ancestor-descendent relationships for now as though do
+        seem to add a lot of extra links.
+        # Excludes crisp ancestor-descendent category relationships since these
+        # can be established through PLN inference
         """
         print "Calculating gene category subset truth values"
         start = time.clock()
@@ -491,6 +524,8 @@ class Bio:
                     # print "related genesets: " + " ".join([set.name for set in related_genesets])
 
                     for setB in related_genesets:
+                        # Leaving in ancestor relationships for now since they
+                        # don't seem to add a lot of extra links
                         # Check to see they are the same set or if one set is an
                         # ancestor of the other
                         if (
@@ -543,7 +578,7 @@ class Bio:
                                 # print set_pair + " has already been processed"
 
             i = i + 1
-            if i % 100 == 0:
+            if i % 1000 == 0:
                 timing = int((time.clock() - start) / 60)
                 if timing != 0:
                     set_per_min = i / timing
@@ -566,7 +601,7 @@ class Bio:
         self.subset_time = int(time.clock() - start)
         print 'Gene category Subset truth values completed in ' + str(
             self.subset_time) + " seconds"
-        print 'Created {:,} subset relationships.'.format(
+        print 'Created {:,} subset relationships above cuttoff strength value.'.format(
             len(self.subset_values))
         print "\nSubset value percentiles: " + str(
             np.percentile(self.subset_values.values(),
@@ -691,7 +726,8 @@ class Bio:
         self.link_creation_time = int(time.clock() - start)
         print "completed creating subsets in " + str(
             self.link_creation_time) + " seconds"
-        print "{0} SubSet relationships created".format(created_count)
+        print "{0} SubSet relationships created after importance score filtering".format(
+            created_count)
 
         # write to scheme file:
         f = open(SUBSET_SCHEME_FILE, 'wb')
@@ -761,7 +797,9 @@ class Bio:
             for atom in atoms:
                 f.write(str(atom))
 
-
+    def create_connected_subgraph(self,n=10000):
+        g = subgraph.SubgraphMiner(self.atomspace)
+        g.create_connected_subgraph(n)
 
 
 ###### Utils ########
@@ -783,6 +821,7 @@ def print_atoms_in_list(atoms,atom_name='',list_name=''):
         print atom
 
 
+
 ################
 
 # import pickle
@@ -797,8 +836,13 @@ if __name__ == '__main__':
 
     bio = Bio()
 
+    # KB_FILES = None
     bio.load_scheme()
-    bio.do_full_mining()
+    # bio.do_full_mining()
+
+    bio.load_subset_rels_from_scheme()
+
+    bio.create_connected_subgraph()
 
     # bio._get_category_ancestors_test()
 
