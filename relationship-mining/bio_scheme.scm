@@ -28,8 +28,8 @@
             (ImplicationLink
                 ;(AndLink
                     (InheritanceLink
-                        (ConceptNode parent)
-                        (VariableNode "$child"))
+                        (VariableNode "$child")
+                        (ConceptNode parent))
                 ;    (NotLink
                 ;        (EquivalenceLink
                 ;            (VariableNode "$child")
