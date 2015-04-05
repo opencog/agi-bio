@@ -12,8 +12,8 @@ sg.create_connected_subgraph(10000)
 Output is a scheme file named SUBGRAPH_N.scm, where N is the size of the
 subgraph in number of atoms.
 
-This functionality can also be accessed through the bio.miner module through the 
-cogserver shell:
+This functionality can also be accessed through the through the bio.miner module
+through the cogserver shell:
 
 opencog> loadpy bio
 opencog> bio.miner create_connected_subgraph 10000
