@@ -91,7 +91,7 @@ else:
 SCHEME_INIT_FILES = ['opencog/atomspace/core_types.scm',
                      'opencog/scm/utilities.scm',
                      'bioscience/types/bioscience_types.scm',
-                     '/home/opencog/agi-bio/eddie/bio_scheme.scm'
+                     '../agi-bio/relationship_mining/bio_scheme.scm'
                     ]
 
 KB_FILES = [
