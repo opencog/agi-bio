@@ -33,14 +33,14 @@ Code cleanup and documentation to come ...
 __author__ = 'eddie'
 
 import opencog.cogserver
-from opencog.atomspace import AtomSpace, TruthValue, types, get_type_name, \
-    is_defined, add_type
+from opencog.atomspace import AtomSpace, TruthValue, types, get_type_name # , \
+    #is_defined, add_type
 from opencog.scheme_wrapper import load_scm, scheme_eval, scheme_eval_h, \
     __init__
 from opencog.bindlink import bindlink
 
 from utilities import load_scheme_files
-import graph
+import subgraph
 
 import numpy as np
 import pickle
@@ -91,7 +91,7 @@ else:
 SCHEME_INIT_FILES = ['opencog/atomspace/core_types.scm',
                      'opencog/scm/utilities.scm',
                      'bioscience/types/bioscience_types.scm',
-                     '/home/opencog/agi-bio/eddie/bio_scheme.scm'
+                     '../agi-bio/relationship_mining/bio_scheme.scm'
                     ]
 
 KB_FILES = [
@@ -159,10 +159,10 @@ class Bio:
         # See https://github.com/opencog/agi-bio/tree/master/bioscience for
         # instructions on how to add the custom bio atom types and use config to
         # load when the cogserver starts up
-        if not is_defined('GeneNode'):
-            types.GeneNode = add_type(types.ConceptNode, 'GeneNode')
-        if not is_defined('ProteinNode'):
-            types.ProteinNode = add_type(types.ConceptNode, 'ProteinNode')
+        # if not is_defined('GeneNode'):
+        #     types.GeneNode = add_type(types.ConceptNode, 'GeneNode')
+        # if not is_defined('ProteinNode'):
+        #     types.ProteinNode = add_type(types.ConceptNode, 'ProteinNode')
 
         # geneset (dicrect) members cache
         self.set_members_dict = {}
@@ -250,10 +250,10 @@ class Bio:
         self.scheme_loaded = True
 
     def load_scheme_init_files(self):
-        load_scheme_files(self.atomspace,SCHEME_INIT_FILES)
+        load_scheme_files(self.atomspace,SCHEME_INIT_FILES,'scheme init files')
 
     def load_scheme_knowledge_files(self):
-        load_scheme_files(self.atomspace,KB_FILES)
+        load_scheme_files(self.atomspace,KB_FILES,'knowledge base files')
 
 
     def load_subset_rels_from_scheme(self,filepath=None):
@@ -798,7 +798,7 @@ class Bio:
                 f.write(str(atom))
 
     def create_connected_subgraph(self,n=10000):
-        g = graph.SubgraphMiner(self.atomspace)
+        g = subgraph.SubgraphMiner(self.atomspace)
         g.create_connected_subgraph(n)
 
 
