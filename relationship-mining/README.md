@@ -13,4 +13,6 @@ subgraph.py - for creating smaller connected subgraphs of the larger full bio at
 
 scheme - output files from the above programs of atoms in scheme format that can be loaded into an
          atomspace
+         
+Generated relationship mining and subgraph data is in a separate repo here: git@gitlab.com:opencog-bio/bio-data.git 
 
