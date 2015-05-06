@@ -59,7 +59,7 @@ def go_altid(idd,alt_id):
 def go_relationship(idd,relate_id, relation_type):
 
     #impLink(("GO_" + relation_type), idd, relate_id, "VariableNode" , "VariableNode")
-    evaLink(("GO_" + relation_type), idd, relate_id, "VariableNode" , "VariableNode")
+    evaLink(("GO_" + relation_type), idd, relate_id, "ConceptNode" , "ConceptNode")
     
 
 #open file to write 
@@ -91,17 +91,17 @@ while i < len(line_no):
    elif (test[k][0] == 'namespace'):
        namespace = (test[k][2].partition('\n')[0]).partition(' ')[2].replace('\\', '\\\\')
    elif (test[k][0] == 'synonym'):
-       synonym.append(((test[k][2].partition('\n')[0]).partition(' ')[2]).split('"',2)[1].replace('\\', '\\\\'))
+       synonym.append(((test[k][2].partition('\n')[0]).partition(' ')[2]).split('"',2)[1].replace('\\', '\\\\').strip())
        synonym_type.append((((test[k][2].split('"',2))[2].partition('[]')[0]).partition(" ")[2]).partition(" ")[0].replace('\\', '\\\\'))
    elif (test[k][0] == 'alt_id'):
        alt_id.append((test[k][2].partition('\n')[0]).partition(' ')[2].replace('\\', '\\\\'))
    elif (test[k][0] == 'relationship'):
        relationship_type.append((((test[k][2].partition('\n')[0]).partition('GO')[0]).split(' ')[1]).replace('\\', '\\\\'))
        while rel_typeno < len(relationship_type):
-        relationship.append((((test[k][2].partition('\n')[0]).partition(relationship_type[rel_typeno])[2]).partition('!')[0]).partition(' ')[2].replace('\\', '\\\\'))
+        relationship.append((((test[k][2].partition('\n')[0]).partition(relationship_type[rel_typeno])[2]).partition('!')[0]).partition(' ')[2].replace('\\', '\\\\').strip())
         rel_typeno = rel_typeno + 1
    elif (test[k][0] == 'is_a'):
-       is_a.append(((test[k][2].partition('\n')[0]).partition('!')[0]).partition(' ')[2].replace('\\', '\\\\'))
+       is_a.append(((test[k][2].partition('\n')[0]).partition('!')[0]).partition(' ')[2].replace('\\', '\\\\').strip())
   
    k = k +1
 
