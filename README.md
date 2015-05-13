@@ -20,7 +20,8 @@ Description
    scheme files for importing into the atomspace
 
 -- bioscience - code to be built and run with the cogserver
-  
+
+-- generated bio data is in separate repo here: git@gitlab.com:opencog-bio/bio-data.git  
 
 Note from Nil: I don't know what's the right way to organize the
 folders, I just added my work under moses-scripts, although those

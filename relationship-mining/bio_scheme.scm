@@ -1,6 +1,17 @@
 (ConceptNode "hello world")
 
 
+; atomspace populating helpers
+(define knowledge-dir "/home/opencog/bio-data/scheme-representations/")
+
+(define (loadf f) (load (string-append knowledge-dir f)))
+
+(define (loadGO1K) (loadf "subgraphs/subgraph_1K_GO.scm"))
+(define (load1K) (loadf "subgraphs/subgraph_1K.scm"))
+
+; general utility shortcuts and helpers
+(define count count-all)
+(define prt cog-prt-atomspace)
 
 
 
@@ -65,3 +76,6 @@
 
 (define (test something)
     (display something))
+
+
+
