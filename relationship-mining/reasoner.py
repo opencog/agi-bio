@@ -1,8 +1,17 @@
 from opencog.atomspace import AtomSpace, types
 from opencog.scheme_wrapper import load_scm, scheme_eval, scheme_eval_h
 
+VERBOSE = False
+RESULTS2FILE = True
+
+OUT_FILE = 'single_source.txt'
+
 class Reasoner:
-    DEFAULT_ROUNDS = 100
+    DEFAULT_ROUNDS = 5
+
+
+
+    
 
     def __init__(self, atomspace=None):
         print "Reasoner::__init__"
@@ -50,10 +59,12 @@ class Reasoner:
         source = source[0]
         print "source: {}".format(source)
 
-        self.known = set(self.a.get_incoming(source.h))
+        self.known = accum_known = set(self.a.get_incoming(source.h))
+        self.known = self.filter_out_variablenodes(self.known)
         print "Previously Known: {}".format(len(self.known))
-        for atom in self.known:
-            print atom
+        if VERBOSE:
+            for atom in self.known:
+                print atom
 
 
         scheme = "(cog-fc-em ({} \"{}\") cpolicy)".format(
@@ -65,36 +76,51 @@ class Reasoner:
         num_conclusions = prev_num_conclusions = 0
         while not done and i < rounds:
             conclusions = scheme_eval_h(self.a,scheme)
-            conclusions = set(self.a[conclusions].out);
+            conclusions = set(self.a[conclusions].out)
+            print ("conclusions atoms: {}".format(len(conclusions)))
+            conclusions = self.filter_out_variablenodes(conclusions)
+            print ("conclusions post-filter: {}".format(len(conclusions)))
             num_conclusions = len(conclusions)
-            print "\nStep {} Conclusions: {}".format(i,num_conclusions)
-            # for conclusion in conclusions:
-            #     # if not ("VariableNode" in str(conclusion)):
-            #     print conclusion
-            if num_conclusions == prev_num_conclusions:
+            novel_conclusions = conclusions - accum_known
+            accum_known = accum_known.union(novel_conclusions)
+            print "\nStep {} generated conclusions: {}     novel conclusions: {}"\
+                .format(i,num_conclusions,len(novel_conclusions))
+            #print "novel conclusions: \n" + str(novel_conclusions)
+
+            # this doesn't work when we are doing 1 rule per step
+            if prev_num_conclusions==0 and novel_conclusions==0:
                 done = True
             i += 1
-            prev_num_conclusions = num_conclusions
+            prev_num_conclusions = novel_conclusions
 
 
         conclusions = conclusions - self.known
+        # this is being done at each step now
+        #conclusions = self.filter_out_variablenodes(conclusions)
 
-        # filter out VariableNodes
-        # TODO: Probably should do this based on types rather than by the string
-        conclusions = [conclusion for conclusion in conclusions
-                       if not ("VariableNode" in str(conclusion))]
+        if VERBOSE:
+            print "New conclusions:\n"
+            for conclusion in conclusions:
+                # if not ("VariableNode" in str(conclusion)):
+                print conclusion
 
-        print "New conclusions:\n"
-        for conclusion in conclusions:
-            # if not ("VariableNode" in str(conclusion)):
-            print conclusion
+        if RESULTS2FILE:
+            with open(OUT_FILE,'w') as f:
+                for conclusion in conclusions:
+                    f.write(str(conclusion))
 
 
 
 
-        print "# of steps: {}".format(i-1)
-        print "Previously known relationships: {}".format(len(self.known))
-        print "Inferred relationships: {}".format(len(conclusions))
+        print "\n# of steps: {}".format(i-1)
+        print "Previously known relationships (filtered): {}".format(len(self.known))
+        print "Inferred relationships (filtered): {}".format(len(conclusions))
 
 
         print "\n\nEnd do_one_steps()"
+
+    def filter_out_variablenodes(self,list):
+        # TODO: Probably should do this based on types rather than by the string
+        list = [atom for atom in list
+                       if not ("VariableNode" in str(atom))]
+        return set(list)
