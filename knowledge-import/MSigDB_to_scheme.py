@@ -1,6 +1,7 @@
 #!/usr/bin/env python2.7
 # Script to convert MSigDB to atomspace representation in scheme
-# Requires: file msigdb_v4.0.xml, http://www.broadinstitute.org/gsea/msigdb/download_file.jsp?filePath=/resources/msigdb/4.0/msigdb_v4.0.xml 
+# Requires: file msigdb_v5.0.xml, http://www.broadinstitute.org/gsea/msigdb/download_file.jsp?filePath=/resources/msigdb/5.0/msigdb_v5.0.xml
+# Note: also works with msigdb_v4.0.xml, http://www.broadinstitute.org/gsea/msigdb/download_file.jsp?filePath=/resources/msigdb/4.0/msigdb_v4.0.xml 
 # Outputs scheme file to use for atomspace import
 # Added creation date, MSigDB version, and MSigDB fields included
 # Option to creat MSigDB scheme with or with out Description fields 
@@ -8,7 +9,7 @@
 import datetime
 from xml.dom import minidom
 
-GeneSet = "msigdb_v4.0.xml"
+GeneSet = "msigdb_v5.0.xml"
 sc_filename= GeneSet.split('.xml')[0]
 fields= []
 
