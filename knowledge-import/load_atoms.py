@@ -1,3 +1,4 @@
+#!/usr/bin/env python2.7
 # --- This python script uses to start the cogserver and load Bio datasets scheme files. One has to connect with the running docker container on the Hetzner server and make sure cogserver is not running in the container.  
 # docker exec -i -t bio_cogserver  bash 
 # cd /home/doc
