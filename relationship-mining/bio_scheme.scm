@@ -9,11 +9,19 @@
 (define (loadGO1K) (loadf "subgraphs/subgraph_1K_GO.scm"))
 (define (load1K) (loadf "subgraphs/subgraph_1K.scm"))
 
+
 ; general utility shortcuts and helpers
 (define count count-all)
 (define prt cog-prt-atomspace)
 
 
+
+; set the truth value for GeneNodes
+(define (set_gene_tvs strength confidence)
+    (let ([genes (cog-get-atoms 'GeneNode)])
+       (map (lambda (gene)       
+            (cog-set-tv! gene (cog-new-stv strength confidence))) 
+            genes)))
 
 (define pattern_match_go_terms
     (BindLink
@@ -74,8 +82,9 @@
 
 
 
-(define (test something)
-    (display something))
+;(define (test something)
+;    (display something))
 
-
+;(define (set-genenode-tvs)
+;    (define genenodes (cog-get-atoms 'GeneNode))
 
