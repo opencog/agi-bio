@@ -1,17 +1,21 @@
-(ConceptNode "hello world")
+;(ConceptNode "hello world")
 
+; pln/ure helpers
+(define cpolicy "opencog/reasoning/bio_cpolicy.json")
 
 ; atomspace populating helpers
-(define knowledge-dir "/home/opencog/bio-data/scheme-representations/")
+(define knowledge-dir "../../bio-data/scheme-representations/")
+(define subgraph-dir (string-append knowledge-dir "subgraphs/"))
 
 (define (loadf f) (load (string-append knowledge-dir f)))
+(define (loadsub f) (load (string-append subgraph-dir f)))
 
 (define (loadGO1K) (loadf "subgraphs/subgraph_1K_GO.scm"))
 (define (load1K) (loadf "subgraphs/subgraph_1K.scm"))
 
 
 ; general utility shortcuts and helpers
-(define count count-all)
+(define countall count-all)
 (define prt cog-prt-atomspace)
 
 
@@ -23,6 +27,21 @@
             (cog-set-tv! gene (cog-new-stv strength confidence))) 
             genes)))
 
+; one-step inference forward chaining algo
+; first we could get the incoming links to source and save those as "known"
+(define (do_one_steps source)
+    (do ((i 1 (1+ i)))
+        ((> i 100))
+      (cog-fc-em source cpolicy)))
+; then we could filter out the previously known to get the "new" knowledge
+
+
+
+; one-step inference forward chaining algo with default
+(define (do_one_steps_def)
+    (do_one_steps (GeneNode "SHANK2")))
+
+
 (define pattern_match_go_terms
     (BindLink
         (VariableNode "$go")
@@ -32,7 +51,10 @@
                 (ConceptNode "GO_term"))
             (VariableNode "$go"))))
 
+(define (loadtemp)
+  (load "temp.scm"))
 
+#|             ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define get_go_terms
     (cog-outgoing-set (cog-bind pattern_match_go_terms)))
@@ -79,7 +101,7 @@
                     (VariableNode "$setname"))
                 (VariableNode "$setname")))))
 
-
+|#         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;(define (test something)
@@ -87,4 +109,6 @@
 
 ;(define (set-genenode-tvs)
 ;    (define genenodes (cog-get-atoms 'GeneNode))
+
+
 
