@@ -1,10 +1,10 @@
 from opencog.atomspace import AtomSpace, types
 from opencog.scheme_wrapper import load_scm, scheme_eval, scheme_eval_h
 
-VERBOSE = False
+VERBOSE = True
 RESULTS2FILE = True
 
-OUT_FILE = 'single_source.txt'
+OUT_FILE = 'single_source_results.txt'
 
 class Reasoner:
     DEFAULT_ROUNDS = 5
@@ -37,7 +37,8 @@ class Reasoner:
 
     # TODO: add source_type argument, just using GeneNode for now
     def do_one_steps(self, source_name, source_type_str='GeneNode', rounds=DEFAULT_ROUNDS):
-        print "entering Reasoner::do_one_steps()   source_name: " + source_name
+        print "entering Reasoner::do_one_steps()   source_name: " + source_name \
+            + "   rounds: " + str(rounds)
 
         # remove enclosing quotations if they exist
         if source_name.startswith('"') and source_name.endswith('"'):
@@ -67,13 +68,13 @@ class Reasoner:
                 print atom
 
 
-        scheme = "(cog-fc-em ({} \"{}\") cpolicy)".format(
+        scheme = "(cog-fc-bio ({} \"{}\") biorules)".format(
                                         source_type_str,source_name)
         print "\ndoing " + scheme
 
         done = False;
         i = 0;
-        num_conclusions = prev_num_conclusions = 0
+        num_conclusions = prev_n_novel_conclusions = 0
         while not done and i < rounds:
             conclusions = scheme_eval_h(self.a,scheme)
             conclusions = set(self.a[conclusions].out)
@@ -82,14 +83,17 @@ class Reasoner:
             print ("conclusions post-filter: {}".format(len(conclusions)))
             num_conclusions = len(conclusions)
             novel_conclusions = conclusions - accum_known
+            n_novel_conclusions = len(novel_conclusions)
             accum_known = accum_known.union(novel_conclusions)
-            print "\nStep {} generated conclusions: {}     novel conclusions: {}"\
-                .format(i,num_conclusions,len(novel_conclusions))
+            print "\nStep {} generated conclusions: {}     novel conclusions: {}".format(
+                i,num_conclusions,n_novel_conclusions)
             #print "novel conclusions: \n" + str(novel_conclusions)
 
             # this doesn't work when we are doing 1 rule per step
-            if prev_num_conclusions==0 and novel_conclusions==0:
+            if prev_n_novel_conclusions==0 and n_novel_conclusions==0:
                 done = True
+            print "prev==0: {}  novel==0:{}   done: {}".format(prev_n_novel_conclusions==0,
+                                                               n_novel_conclusions==0,done)
             i += 1
             prev_num_conclusions = novel_conclusions
 
