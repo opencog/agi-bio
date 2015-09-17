@@ -1,7 +1,18 @@
+; paths used in this code assume this file is loaded via the cogserver
+; TODO: make paths friendly for loading file through guile
+
 ;(ConceptNode "bio_scheme.scm")
+
+; workaround b/c add-to-path in opencog.scm is not getting loaded
+(add-to-load-path "/usr/local/share/opencog/scm")
+
+(add-to-load-path "/home/eddie/opencog/opencog/opencog/reasoning/pln/")
+
 
 ; pln rule configuration file
 (load "../../opencog/bio-ure-config.scm")
+
+(load-from-path "pln-config.scm")
 
 (define dkc1 (GeneNode "DKC1"))
 
