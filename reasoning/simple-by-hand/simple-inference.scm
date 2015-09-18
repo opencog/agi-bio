@@ -54,3 +54,30 @@
 
 (load "background-knowledge.scm")
 (load "pln-config.scm")
+(load "substitute.scm")
+
+; apply member-to-subset-rule
+;(cog-bind pln-rule-member-to-subset)
+; This gets us extra results, namely for the pln rules also, so let's add
+; substitution of source atoms before applying the rule
+;
+; Subset  SetLink GeneNode L   ConceptNode "GO_A"
+; Subset  SetLink GeneNode PLAU   ConceptNode "GO_A"
+
+
+; what we really want though is
+; (Subset GO_A (SetLink (Gene G)))  ==> % of GO_A in singleton G = 1 / size(GO_A)
+; (Subset GO_A (SetLink (Gene PLUA)))
+(define subst-map (make-hash-table 2))
+(hash-set! subst-map (VariableNode "$A") (ConceptNode "GO_A"))
+(hash-set! subst-map (VariableNode "$B") (SetLink (GeneNode "L")))
+(define grounded-subset-evaluation
+    (substitute pln-rule-subset-direct-evaluation subst-map))
+;(display "before first bind\n")
+;(display grounded-subset-evaluation)
+;(cog-bind pln-rule-subset-direct-evaluation)
+;(cog-bind grounded-subset-evaluation)
+;(display "after first bind\n")
+
+; use the subset direct eval function (without PM)
+(subset-direct-evaluation (ConceptNode "GO_A") (SetLink (GeneNode "L")))

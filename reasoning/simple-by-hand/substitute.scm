@@ -6,7 +6,7 @@
 ; Usage
 ;(define term (VariableNode "$A"))
 (define term pln-rule-member-to-subset)
-(define subst-map (make-hash-table 10))
+(define subst-map (make-hash-table 3))
 (hash-set! subst-map (VariableNode "$A") (ConceptNode "apple"))
 ;(substitute term subst-map)
 
@@ -45,7 +45,10 @@
                         ))
                     ;(display "subterms: ")(display subterms)(newline)
                     ;(display "link type: " ) (display (cog-type term))(newline)
-                    (set! outgoing (cog-new-link (cog-type term) subterms))
+                    (if (and (eq? (cog-type term) 'VariableList)
+                            (null-list? subterms))
+                        (set! outgoing #nil)
+                        (set! outgoing (cog-new-link (cog-type term) subterms)))
              )
           ))
 

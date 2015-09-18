@@ -10,13 +10,18 @@
 (GeneNode "PLAU" (stv .00001 1))
 (GeneNode "L" (stv .00001 1))
 
+(define PLAU (GeneNode "PLAU"))
+(define L (GeneNode "L"))
+
 (ConceptNode "GO_A" (stv .001 1))
 
-(MemberLink
+(define GO_A (ConceptNode "GO_A"))
+
+(MemberLink (stv 1 1)
     (GeneNode "PLAU")
     (ConceptNode "GO_A"))
 
-(MemberLink
+(MemberLink (stv 1 1)
     (GeneNode "L")
     (ConceptNode "GO_A"))
 
