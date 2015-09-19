@@ -49,8 +49,8 @@
 ;(for-each (lambda (fp) (load (prepend-config-dir fp))) rule-files)
 
 ; Assumes that local dir and opencog/reasoning/pln are in load path
-(define rule-files (list "local_rules/member-to-subset.scm"
-                         "local_rules/subset-direct-evaluation-rule.scm"
+(define rule-files (list "local-rules/member-to-subset.scm"
+                         "local-rules/subset-direct-evaluation-rule.scm"
                          "rules/deduction.scm"
                          "rules/modus-ponens.scm"))
 (for-each load-from-path rule-files)

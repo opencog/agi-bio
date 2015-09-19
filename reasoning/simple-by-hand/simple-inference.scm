@@ -137,53 +137,9 @@
 ;)
 
 ; now we need to substitute in (NotLink GO_A)
-; then use some sort of equivalence rule like?:
-(define notlink-substitution-rule
-  (BindLink
-    (VariableList
-        (VariableNode "$A")
-        (VariableNode "$B")
-        (VariableNode "$C"))
-    (AndLink
-       (EquivalenceLink
-            (NotLink (VariableNode "$A"))
-            (VariableNode "$B"))
-       (SubsetLink
-            (VariableNode "$B")
-            (VariableNode "$C")))
-    (ExecutionOutputLink
-        (GroundedSchemaNode "scm: pln-formula-notlink-substitution-rule")
-        (ListLink
-           (EquivalenceLink
-                (NotLink (VariableNode "$A"))
-                (VariableNode "$B"))
-           (SubsetLink
-                (VariableNode "$B")
-                (VariableNode "$C"))
-           (SubsetLink
-                (NotLink (VariableNode "$A"))
-                (VariableNode "$C"))))))
-
-(define (pln-formula-notlink-substitution-rule notAB BC notAC)
-    ;(display "foruma-notlink-subst-rule\n")
-    ;(display-atom "notAB" notAB)
-    ;(display-atom "BC" BC)
-    ;(display-atom "notAC" notAC)
-    (cog-set-tv! notAC
-        (pln-formula-notlink-substitution-rule-side-effect-free notAB BC)))
-
-(define (pln-formula-notlink-substitution-rule-side-effect-free notAB BC)
-    ; todo: what to do about confidences?
-    (let
-        ((snotAB (cog-stv-strength notAB))
-         (cnotAB (cog-stv-confidence notAB))
-         (sBC (cog-stv-strength BC))
-         (cBC (cog-stv-confidence BC)))
-        ;(display "snotAB: ")(display snotAB)(newline)
-        ;(display "cnotAB: ")(display cnotAB)(newline)
-        (stv (* snotAB sBC) (* cnotAB cBC))))
-
-(define notGO_A-subsets (cog-bind notlink-substitution-rule))
+; then use some sort of equivalence rule like equivalence-subset-substitution-rule?:
+(load "local-rules/equivalence-subset-substitution-rule.scm")
+(define notGO_A-subsets (cog-bind equivalence-subset-substitution-rule))
 (display-atom "notGO_A-subsets" notGO_A-subsets)
 
 ;   (SubsetLink (stv 0 0.99999964) (av 0 0 0)
