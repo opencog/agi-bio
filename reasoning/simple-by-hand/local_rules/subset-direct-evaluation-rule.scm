@@ -24,6 +24,7 @@
         (AndLink
             (VariableNode "$A")
             (VariableNode "$B")
+            ; Avoid forming (Subset A A)
             (NotLink
                 (EqualLink
             (VariableNode "$A")
@@ -49,8 +50,9 @@
     ;(display A)
     ;(display B)
     (let*
-         ((membersA (set-members A))
-          (membersB (set-members B))
+         ((membersA (get-set-members A))
+          (membersB (get-set-members B))
+          ; todo: We could filter out low tv members of the sets above
           (intersectionAB (lset-intersection equal? membersA membersB))
           (sizeA (length membersA))
           (size-intersection (length intersectionAB)))
@@ -58,11 +60,11 @@
             (stv (/ size-intersection sizeA) 1)
             (stv 0 1))))
 
-
-(define (set-members S)
+(define (get-set-members S)
+    ; todo: filter out low tv members?
     (if (equal? (cog-type S) 'SetLink)
         (cog-outgoing-set S)
-    ;(display "set-members cog-bind")(newline)
+    ;(display "get-set-members cog-bind")(newline)
     (cog-outgoing-set
         (cog-bind
             (BindLink
@@ -77,19 +79,26 @@
 (define pln-rule-subset-direct-evaluation-name (Node "pln-rule-subset-direct-evaluation"))
 (DefineLink pln-rule-subset-direct-evaluation-name pln-rule-subset-direct-evaluation)
 
-; Direct function to call when evaluating with specific sets (because can't use
+; Direct function to call when evaluating for specific sets (because can't use
 ; the PM when no variables in the pattern)
-(define (subset-direct-evaluation2  B)
+(define (subset-direct-evaluation A  B)
     (pln-formula-subset-direct-evaluation A B (SubsetLink A B)))
+
 
 ; direct function - old version
 (define (subset-direct-evaluation-old A B)
     (let*
-         ([membersA (set-members A)]
-          (membersB (set-members B))
+         ([membersA (get-set-members A)]
+          (membersB (get-set-members B))
           (intersectionAB (lset-intersection equal? membersA membersB))
           (sizeA (length membersA))
           (size-intersection (length intersectionAB)))
          (if (> sizeA 0)
             (SubsetLink A B (stv (/ size-intersection sizeA) 0))
             #nil)))
+
+; TODO: Add inverse-subset-direct-evaluation-rule
+
+; Direct function to call when evaluating for specific sets
+(define (inverse-subset-direct-evaluation A  B)
+    (pln-formula-subset-direct-evaluation B  A (SubsetLink B A)))

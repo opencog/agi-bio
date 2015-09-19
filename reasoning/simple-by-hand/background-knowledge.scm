@@ -9,6 +9,7 @@
 
 (GeneNode "PLAU" (stv .00001 1))
 (GeneNode "L" (stv .00001 1))
+(GeneNode "Q" (stv .00001 1))
 
 (define PLAU (GeneNode "PLAU"))
 (define L (GeneNode "L"))

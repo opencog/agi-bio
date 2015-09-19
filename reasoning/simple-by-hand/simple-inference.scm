@@ -105,8 +105,8 @@
 ;  Subset  GO_A  (SetLink (GeneNode PLAU))
 
 ; use the subset direct eval function (without PM because no variables)
-(define subAL (subset-direct-evaluation (ConceptNode "GO_A") (SetLink (GeneNode "L"))))
-(define subAPLAU (subset-direct-evaluation (ConceptNode "GO_A") (SetLink (GeneNode "PLAU"))))
+(define subAL (inverse-subset-direct-evaluation (SetLink (GeneNode "L")) (ConceptNode "GO_A")))
+(define subAPLAU (inverse-subset-direct-evaluation (SetLink (GeneNode "PLAU")) (ConceptNode "GO_A")))
 (display-atom "subAL" subAL)
 (display-atom "subAPLAU" subAPLAU)
 
@@ -145,8 +145,101 @@
 ;
 ;  Subset (NotLink GO_A)  (SetLink (Gene L))
 ;  Subset (NotLink GO_A)  (SetLink (Gene PLAU))
+;
+; Assuming here that (NotLink GO_A) is equivalent to the set of all links not in
+; GO_A
+;
 
+(define not-GO_A-set
+    (cog-new-link 'SetLink (lset-difference equal? (cog-get-atoms 'GeneNode)
+        (get-set-members (ConceptNode "GO_A")))))
+(display-atom "not-GO_A-set" not-GO_A-set)
 
+(EquivalenceLink (stv 1 1)
+    (NotLink (ConceptNode "GO_A"))
+    not-GO_A-set)
+
+(define sub-notGO_A-L
+    (subset-direct-evaluation not-GO_A-set (SetLink (GeneNode "L"))))
+(define sub-notGO_A-PLAU
+    (subset-direct-evaluation not-GO_A-set (SetLink (GeneNode "PLAU"))))
+(display-atom "sub-notGO_A-L" sub-notGO_A-L)
+
+;(SubsetLink (stv 0 0.99999982) (av 0 0 0)
+;   (SetLink (av 0 0 0)
+;      (GeneNode "Q" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
+;   )
+;   (SetLink (av 0 0 0)
+;      (GeneNode "L" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
+;   )
+;)
+
+; now we need to substitute in (NotLink GO_A)
+; then use some sort of equivalence rule like?:
+(define notlink-substitution-rule
+  (BindLink
+    (VariableList
+        (VariableNode "$A")
+        (VariableNode "$B")
+        (VariableNode "$C"))
+    (AndLink
+       (EquivalenceLink
+            (NotLink (VariableNode "$A"))
+            (VariableNode "$B"))
+       (SubsetLink
+            (VariableNode "$B")
+            (VariableNode "$C")))
+    (ExecutionOutputLink
+        (GroundedSchemaNode "scm: pln-formula-notlink-substitution-rule")
+        (ListLink
+           (EquivalenceLink
+                (NotLink (VariableNode "$A"))
+                (VariableNode "$B"))
+           (SubsetLink
+                (VariableNode "$B")
+                (VariableNode "$C"))
+           (SubsetLink
+                (NotLink (VariableNode "$A"))
+                (VariableNode "$C"))))))
+
+(define (pln-formula-notlink-substitution-rule notAB BC notAC)
+    ;(display "foruma-notlink-subst-rule\n")
+    ;(display-atom "notAB" notAB)
+    ;(display-atom "BC" BC)
+    ;(display-atom "notAC" notAC)
+    (cog-set-tv! notAC
+        (pln-formula-notlink-substitution-rule-side-effect-free notAB BC)))
+
+(define (pln-formula-notlink-substitution-rule-side-effect-free notAB BC)
+    ; todo: what to do about confidences?
+    (let
+        ((snotAB (cog-stv-strength notAB))
+         (cnotAB (cog-stv-confidence notAB))
+         (sBC (cog-stv-strength BC))
+         (cBC (cog-stv-confidence BC)))
+        ;(display "snotAB: ")(display snotAB)(newline)
+        ;(display "cnotAB: ")(display cnotAB)(newline)
+        (stv (* snotAB sBC) (* cnotAB cBC))))
+
+(define notGO_A-subsets (cog-bind notlink-substitution-rule))
+(display-atom "notGO_A-subsets" notGO_A-subsets)
+
+;   (SubsetLink (stv 0 0.99999964) (av 0 0 0)
+;      (NotLink (av 0 0 0)
+;         (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
+;      )
+;      (SetLink (av 0 0 0)
+;         (GeneNode "L" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
+;      )
+;   )
+;   (SubsetLink (stv 0 0.99999964) (av 0 0 0)
+;      (NotLink (av 0 0 0)
+;         (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
+;      )
+;      (SetLink (av 0 0 0)
+;         (GeneNode "PLAU" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
+;      )
+;   )
 
 
 ; (4) Apply AttractionRule to get:
