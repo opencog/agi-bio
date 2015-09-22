@@ -165,6 +165,24 @@
 ;  AttractionLink GO_A (SetLink (GeneNode L))
 ;  AttractionLink GO_A (SetLink (GeneNode PLAU))
 
+(define attraction-links (cog-bind pln-rule-attraction))
+(display-atom "attraction-links" attraction-links)
+
+;   (AttractionLink (stv 0.33333334 0.99999964) (av 0 0 0)
+;      (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
+;      (SetLink (av 0 0 0)
+;         (GeneNode "L" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
+;      )
+;   )
+;   (AttractionLink (stv 0.33333334 0.99999964) (av 0 0 0)
+;      (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
+;      (SetLink (av 0 0 0)
+;         (GeneNode "PLAU" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
+;      )
+;   )
+
+
+
 
 ; (5) Apply IntensionalSimilarityEvaluationRule, to get:
 

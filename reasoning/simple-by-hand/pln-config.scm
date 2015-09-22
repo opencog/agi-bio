@@ -52,7 +52,8 @@
 (define rule-files (list "local-rules/member-to-subset.scm"
                          "local-rules/subset-direct-evaluation-rule.scm"
                          "rules/deduction.scm"
-                         "rules/modus-ponens.scm"))
+                         "rules/modus-ponens.scm"
+                         "rules/attraction-rule.scm"))
 (for-each load-from-path rule-files)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -63,7 +64,9 @@
 (define rules (list (list pln-rule-member-to-subset-name 1)
                     (list pln-rule-subset-direct-evaluation 1)
                     (list pln-rule-deduction-name 1)
-                    (list pln-rule-modus-ponens-name 1))
+                    (list pln-rule-modus-ponens-name 1)
+                    (list pln-rule-attraction-name 1)
+              )
 )
 
 ; Associate rules to PLN
