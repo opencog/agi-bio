@@ -3,7 +3,7 @@
 ; (could combine with equivalence by using an or link in the premise
 ;
 ; AndLink
-;   SimilarityLink
+;   Equivalance
 ;       A
 ;       B
 ;   LinkType
@@ -25,7 +25,7 @@
             (VariableNode "$C")
         )
         (AndLink
-            ; how to deal with the other direction here? use or link?
+            ; how to deal with the other direction here? use ORLink?
             ; but then how do you deal with that in the formula? check for confidence of 0?
             ; or could use 2 rules with SubsetLink A C in the second one, but that seems clunky
             (EquivalenceLink
@@ -69,7 +69,7 @@
 
 (define (pln-formula-equivalence-subset-substitution-side-effect-free AB BC)
     (display "pln-formula-equivalance-subset-substitution-side-effect-free\n")
-    ; todo: what to do about confidences?
+    ; todo: how to best handle confidence
     (let
         ((sAB (cog-stv-strength AB))
          (cAB (cog-stv-confidence AB))

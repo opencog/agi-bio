@@ -6,7 +6,7 @@
 ; And
 ;   A
 ;   B
-; |- ?
+; |-
 ; SubsetLink
 ;   A
 ;   B
@@ -27,8 +27,8 @@
             ; Avoid forming (Subset A A)
             (NotLink
                 (EqualLink
-            (VariableNode "$A")
-            (VariableNode "$B"))))
+                    (VariableNode "$A")
+                    (VariableNode "$B"))))
         (ExecutionOutputLink
             (GroundedSchemaNode "scm: pln-formula-subset-direct-evaluation")
             (ListLink
