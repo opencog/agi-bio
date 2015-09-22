@@ -64,16 +64,15 @@
     ; todo: filter out low tv members?
     (if (equal? (cog-type S) 'SetLink)
         (cog-outgoing-set S)
-    ;(display "get-set-members cog-bind")(newline)
-    (cog-outgoing-set
-        (cog-bind
-            (BindLink
-                (VariableList
-                    (VariableNode "$x"))
-                (MemberLink
-                    (VariableNode "$x")
-                    S)
-                (VariableNode "$x"))))))
+        (cog-outgoing-set
+            (cog-bind
+                (BindLink
+                    (VariableList
+                        (VariableNode "$x"))
+                    (MemberLink
+                        (VariableNode "$x")
+                        S)
+                    (VariableNode "$x"))))))
 
 ; Name the rule
 (define pln-rule-subset-direct-evaluation-name (Node "pln-rule-subset-direct-evaluation"))
@@ -83,19 +82,6 @@
 ; the PM when no variables in the pattern)
 (define (subset-direct-evaluation A  B)
     (pln-formula-subset-direct-evaluation A B (SubsetLink A B)))
-
-
-; direct function - old version
-(define (subset-direct-evaluation-old A B)
-    (let*
-         ([membersA (get-set-members A)]
-          (membersB (get-set-members B))
-          (intersectionAB (lset-intersection equal? membersA membersB))
-          (sizeA (length membersA))
-          (size-intersection (length intersectionAB)))
-         (if (> sizeA 0)
-            (SubsetLink A B (stv (/ size-intersection sizeA) 0))
-            #nil)))
 
 ; TODO: Add inverse-subset-direct-evaluation-rule
 
