@@ -10,6 +10,9 @@
 (define (display-atom label atom)
     (newline)(display label)(display ": \n")(display atom))
 
+(define (incoming atom)
+    (cog-incoming-set atom))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load the atomspace and rules ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -189,5 +192,8 @@
 ;  InstensionalSimilarityLink (SetLink (Gene L)) (SetLink (Gene PLAU))
 
 
+(load "local-rules/intensional-similarity-direct-evaluation-rule.scm")
+;(define islink (cog-bind pln-rule-intensional-similarity-direct-evaluation))
 
+;(display-atom "islink" islink)
 

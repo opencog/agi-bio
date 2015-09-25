@@ -15,6 +15,7 @@
 (define L (GeneNode "L"))
 
 (ConceptNode "GO_A" (stv .001 1))
+(ConceptNode "GO_B" (stv .001 1))
 
 (define GO_A (ConceptNode "GO_A"))
 
@@ -25,6 +26,12 @@
 (MemberLink (stv 1 1)
     (GeneNode "L")
     (ConceptNode "GO_A"))
+
+(MemberLink (stv 1 1)
+    (GeneNode "L")
+    (ConceptNode "GO_B"))
+
+
 
 
 ; Domain particular knowledge/rule: if 2 genes have similar properties, over-
