@@ -3,15 +3,7 @@
 (use-modules (opencog))
 (use-modules (opencog rule-engine))
 
-;;;;;;;;;;;;;;;;;;;;;;;
-;; Utility Functions ;;
-;;;;;;;;;;;;;;;;;;;;;;;
-
-(define (display-atom label atom)
-    (newline)(display label)(display ": \n")(display atom))
-
-(define (incoming atom)
-    (cog-incoming-set atom))
+(load "utilities.scm")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load the atomspace and rules ;;
@@ -193,7 +185,6 @@
 
 
 (load "local-rules/intensional-similarity-direct-evaluation-rule.scm")
-;(define islink (cog-bind pln-rule-intensional-similarity-direct-evaluation))
-
-;(display-atom "islink" islink)
+(define islink (cog-bind pln-rule-intensional-similarity-direct-evaluation))
+(display-atom "islink" islink)
 

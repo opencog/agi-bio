@@ -46,6 +46,7 @@
     )
 
 (define (pln-formula-subset-direct-evaluation-side-effect-free A B)
+    (load "rule-helpers.scm")
     ;(display "in formula side-effect-free\n")
     ;(display A)
     ;(display B)
@@ -60,19 +61,6 @@
             (stv (/ size-intersection sizeA) 1)
             (stv 0 1))))
 
-(define (get-set-members S)
-    ; todo: filter out low tv members?
-    (if (equal? (cog-type S) 'SetLink)
-        (cog-outgoing-set S)
-        (cog-outgoing-set
-            (cog-bind
-                (BindLink
-                    (VariableList
-                        (VariableNode "$x"))
-                    (MemberLink
-                        (VariableNode "$x")
-                        S)
-                    (VariableNode "$x"))))))
 
 ; Name the rule
 (define pln-rule-subset-direct-evaluation-name (Node "pln-rule-subset-direct-evaluation"))
@@ -81,6 +69,9 @@
 ; Direct function to call when evaluating for specific sets (because can't use
 ; the PM when no variables in the pattern)
 (define (subset-direct-evaluation A  B)
+    (display "(subset-direct-evaluation A B)")
+    (display-atom "A" A)
+    (display-atom "B" B)
     (pln-formula-subset-direct-evaluation A B (SubsetLink A B)))
 
 ; TODO: Add inverse-subset-direct-evaluation-rule
