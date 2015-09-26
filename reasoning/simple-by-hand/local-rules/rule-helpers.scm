@@ -55,7 +55,9 @@
 ; Assumed here is that A is a set that contains GeneNode members via MemberLinks
 ; TODO: this creates very large sets (about 26K?), any way to get around that?
 ;       or maybe it's not really a problem
+;
 (define (create-not-gene-set A)
+    (display-atom "(create-not-gene-set A)" A)
     (cog-new-link 'SetLink (lset-difference equal? (cog-get-atoms 'GeneNode)
         (get-set-members A))))
 

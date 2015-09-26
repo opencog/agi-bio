@@ -10,10 +10,26 @@
 (hash-set! subst-map (VariableNode "$A") (ConceptNode "apple"))
 ;(substitute term subst-map)
 
+(define (substitute term substitution-pairs)
+    (define num-pairs)
+    (define subst-map)
+    ; make the substitution map
+    (set! num-pairs (length substitution-pairs))
+    (set! subst-map (make-hash-table num-pairs))
+    ;(display-label "subst-map" subst-map)
+    ;(display-label "num-pairs" num-pairs)
+    (for-each (lambda(map pair) (hash-set! map (car pair) (cdr pair)))
+              (make-list num-pairs subst-map) substitution-pairs
+    )
+    ;(display "map populated\n")
+    (substitute-with-map term subst-map)
+)
 
-(define (substitute term subst-map)
+
+
+(define (substitute-with-map term subst-map)
     (define outgoing #f)
-    ;(display "substitute() term: ")(display term)
+    ;(display "substitute-with-map() term: ")(display term)
     ;(display "subst-map: ")(display subst-map)(newline)
     (cond
           ; handle term is in substitution map
@@ -27,8 +43,8 @@
           ((> (length (cog-outgoing-set term)) 0) (begin
             ;(display "link")(newline)
             ;(set! outgoing (cog-new-link (cog-type term) (cog-outgoing-set term)))
-            ;(set! outgoing (substitute (list-ref (cog-outgoing-set term) 1) subst-map))
-             (let ((subterms (map substitute (cog-outgoing-set term)
+            ;(set! outgoing (substitute-with-map (list-ref (cog-outgoing-set term) 1) subst-map))
+             (let ((subterms (map substitute-with-map (cog-outgoing-set term)
                         (make-list (length (cog-outgoing-set term)) subst-map))))
 
                     ; if term is VariableList, remove any concept nodes from list

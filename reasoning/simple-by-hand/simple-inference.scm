@@ -30,12 +30,19 @@
 ; This gets us extra results, namely for the pln rules also, so let's add
 ; substitution of source atoms before applying the rule
 
-(define subst-map (make-hash-table 2))
-; cog-bind with no variables doesn't seem to return anything
-;(hash-set! subst-map (VariableNode "$X") (GeneNode "L"))
-(hash-set! subst-map (VariableNode "$A") (ConceptNode "GO_A"))
+;(define subst-map (make-hash-table 2))
+;; cog-bind with no variables doesn't seem to return anything
+;;(hash-set! subst-map (VariableNode "$X") (GeneNode "L"))
+;(hash-set! subst-map (VariableNode "$A") (ConceptNode "GO_A"))
+(define substitutions
+    (list
+        ; cog-bind with no variables doesn't seem to return anything, so need to
+        ; leave one of the variables in and not substitute
+        ;(cons (VariableNode "$X") (GeneNode "L"))
+        (cons (VariableNode "$A") (ConceptNode "GO_A"))))
+;(display-label "substitutions" substitutions)
 (define grounded-member-to-subset
-    (substitute pln-rule-member-to-subset subst-map))
+    (substitute pln-rule-member-to-subset substitutions))
 ;(display "grounded-member-to-subset: ")(display grounded-member-to-subset)
 (define m2s (cog-bind grounded-member-to-subset))
 (display "m2s: ")(display m2s)
@@ -86,10 +93,10 @@
 ;(define subst-map (make-hash-table 2))
 ;(hash-set! subst-map (VariableNode "$A") (ConceptNode "GO_A"))
 ;(hash-set! subst-map (VariableNode "$B") (SetLink (GeneNode "L")))
-;;(define subst-pairs (list (list (VariableNode "$A") (ConceptNode "GO_A"))
-;;                          (list (VariableNode "$B") (SetLink (GeneNode "L")))))
+;;(define subst-pairs (list (cons (VariableNode "$A") (ConceptNode "GO_A"))
+;;                          (cons (VariableNode "$B") (SetLink (GeneNode "L")))))
 ;(define grounded-subset-evaluation
-;    (substitute pln-rule-subset-direct-evaluation subst-map))
+;    (substitute-with-map pln-rule-subset-direct-evaluation subst-map))
 ;;    (substitute pln-rule-subset-direct-evaluation subst-pairs))
 ;(display "before first bind\n")
 ;(display grounded-subset-evaluation)
@@ -184,7 +191,7 @@
 ;  InstensionalSimilarityLink (SetLink (Gene L)) (SetLink (Gene PLAU))
 
 
-(load "local-rules/intensional-similarity-direct-evaluation-rule.scm")
-(define islink (cog-bind pln-rule-intensional-similarity-direct-evaluation))
-(display-atom "islink" islink)
+;(load "local-rules/intensional-similarity-direct-evaluation-rule.scm")
+;(define islink (cog-bind pln-rule-intensional-similarity-direct-evaluation))
+;(display-atom "islink" islink)
 

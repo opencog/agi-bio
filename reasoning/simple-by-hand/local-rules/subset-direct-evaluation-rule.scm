@@ -47,7 +47,7 @@
 
 (define (pln-formula-subset-direct-evaluation-side-effect-free A B)
     (load "rule-helpers.scm")
-    ;(display "in formula side-effect-free\n")
+    (display "in subset-direct-eval-formula-side-effect-free\n")
     ;(display A)
     ;(display B)
     (let*

@@ -13,6 +13,8 @@
 
 (define PLAU (GeneNode "PLAU"))
 (define L (GeneNode "L"))
+(define setPLAU (SetLink PLAU))
+(define setL (SetLink L))
 
 (ConceptNode "GO_A" (stv .001 1))
 (ConceptNode "GO_B" (stv .001 1))

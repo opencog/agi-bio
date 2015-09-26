@@ -47,12 +47,12 @@
 
         (set! attractionLinksA
             (map make-attraction-from-subsets
-                 (make-list superIntersection-length A) superIntersection
+                 superIntersection (make-list superIntersection-length A)
             )
         )
         (set! attractionLinksB
             (map make-attraction-from-subsets
-                 (make-list superIntersection-length B) superIntersection
+                 superIntersection (make-list superIntersection-length B)
             )
         )
 
@@ -70,6 +70,8 @@
     (define subsetAB)
     (define NotA)
     (define subsetNotAB)
+    (define grounded-attraction-rule)
+
 
     (display "(make-attraction-from-subsets A B)")
     (display-atom "A" A)
@@ -79,25 +81,36 @@
     ; subset links that already exist.
     ; Assumed here is that A is a set that contains GeneNode members
     (set! subsetAB (subset-direct-evaluation A B))
+    (display-atom "subsetAB" subsetAB)
     (set! NotA (create-not-gene-set A))
+
     (set! subsetNotAB (SubsetLink (NotLink A) B
         (pln-formula-subset-direct-evaluation-side-effect-free NotA B)))
+    (display-atom "subsetNotAB" subsetNotAB)
 
     ; Use the AttractionRule to create the AttractionLink
-    ;
-    (subsetNotAB) ;temp
+    ; Todo: ground the vars here
+    (set! grounded-attraction-rule
+        (substitute pln-rule-attraction (list (cons (VariableNode "$B") B))))
+    ;(display-atom "grounded-attraction-rule" grounded-attraction-rule)
+    ;(cog-bind pln-rule-attraction)
+    (cog-bind grounded-attraction-rule)
+
 )
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 (use-modules (opencog))
 (use-modules (opencog query))
+(use-modules (opencog rule-engine))
 
 (define (test)
     ;(load "simple-inference.scm")
+    (load-from-path "av-tv.scm")
     (load "background-knowledge.scm")
-
-    (cog-create-intensional-links L PLAU)
+    (load "local-rules/member-to-subset.scm")
+    (cog-bind pln-rule-member-to-subset)
+    (cog-create-intensional-links setL setPLAU)
 )
 (test)
 
