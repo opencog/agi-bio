@@ -13,6 +13,8 @@
 (define (cog-create-intensional-links A B)
     (define attractionLinksA)
     (define attractionLinksB)
+    (define ASSOC_sum)
+    (define tv-strength)
 
     (display "cog-create-intensional-links A B")
     (display-atom "A" A)
@@ -46,34 +48,49 @@
         (display "\nsetting attraction links\n")
 
         (set! attractionLinksA
-            (map make-attraction-from-subsets
+            (map-in-order make-attraction-via-subsets
                  superIntersection (make-list superIntersection-length A)
             )
         )
         (set! attractionLinksB
-            (map make-attraction-from-subsets
+            (map-in-order make-attraction-via-subsets
                  superIntersection (make-list superIntersection-length B)
             )
         )
-
         (display-atom "attractinLinksA" attractionLinksA)
         (display-atom "attractinLinksB" attractionLinksB)
 
+        ; ASSOC(A,L) AND ASSOC(B,L) = min( ASSOC(A,L), ASSOC(B,L) )
+        ; Todo: what confidences of the AttractionLinks?
+        (set! ASSOC_sum
+            (fold (lambda(attractA attractB previous_sum)
+                    (+ previous_sum
+                       (min (cog-stv-strength attractA)
+                            (cog-stv-strength attractB))
+                    )
+                   )
+                   0
+                   attractionLinksA
+                   attractionLinksB
+            )
+        )
+        (display-label "ASSOC_sum" ASSOC_sum)
+        (set! tv-strength (/ ASSOC_sum superUnion-length))
+        (display-label "tv-strength" tv-strength)
+        ; Todo What confidence for the IntensionalSimilarityLink?
+        (IntensionalSimilarityLink A B (stv tv-strength 1))
 
-
-        (stv 1 1) ;temporary
      )
 )
 
 ; TODO: this is specialized for gene sets currently -- need to generalize
-(define (make-attraction-from-subsets A B)
+(define (make-attraction-via-subsets A B)
     (define subsetAB)
     (define NotA)
     (define subsetNotAB)
     (define grounded-attraction-rule)
 
-
-    (display "(make-attraction-from-subsets A B)")
+    (display "(make-attraction-via-subsets A B)")
     (display-atom "A" A)
     (display-atom "B" B)
 
@@ -82,20 +99,24 @@
     ; Assumed here is that A is a set that contains GeneNode members
     (set! subsetAB (subset-direct-evaluation A B))
     (display-atom "subsetAB" subsetAB)
+    ; Todo: calc of (NOT A) could be refactored outside of this function, so
+    ; it's not repeated twice
     (set! NotA (create-not-gene-set A))
 
     (set! subsetNotAB (SubsetLink (NotLink A) B
         (pln-formula-subset-direct-evaluation-side-effect-free NotA B)))
     (display-atom "subsetNotAB" subsetNotAB)
 
-    ; Use the AttractionRule to create the AttractionLink
-    ; Todo: ground the vars here
-    (set! grounded-attraction-rule
-        (substitute pln-rule-attraction (list (cons (VariableNode "$B") B))))
+    ;; Use the AttractionRule to create the AttractionLink
+    ; Todo: ground the vars here -
+    ;(set! grounded-attraction-rule
+    ;    (substitute pln-rule-attraction (list (cons (VariableNode "$B") B))))
     ;(display-atom "grounded-attraction-rule" grounded-attraction-rule)
-    ;(cog-bind pln-rule-attraction)
-    (cog-bind grounded-attraction-rule)
+    ;;(cog-bind pln-rule-attraction)
+    ;(cog-bind grounded-attraction-rule)
 
+    ; use new command to apply attraction rule with no variables
+    (pln-attraction-rule-no-variables subsetAB subsetNotAB)
 )
 
 
@@ -107,12 +128,17 @@
 (define (test)
     ;(load "simple-inference.scm")
     (load-from-path "av-tv.scm")
+    (load "substitute.scm")
     (load "background-knowledge.scm")
     (load "local-rules/member-to-subset.scm")
     (cog-bind pln-rule-member-to-subset)
     (cog-create-intensional-links setL setPLAU)
 )
-(test)
+;(test)
 
 
-
+; identify common supersets
+; for each common superset L:
+;       create (NOT L) ; which will be used in ASSOC calc
+;       calc ASSOC(L,A)
+;       calc ASSOC(L,B)

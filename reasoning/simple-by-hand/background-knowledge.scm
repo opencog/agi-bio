@@ -18,6 +18,7 @@
 
 (ConceptNode "GO_A" (stv .001 1))
 (ConceptNode "GO_B" (stv .001 1))
+(ConceptNode "GO_C" (stv .001 1))
 
 (define GO_A (ConceptNode "GO_A"))
 
@@ -32,6 +33,14 @@
 (MemberLink (stv 1 1)
     (GeneNode "L")
     (ConceptNode "GO_B"))
+
+(MemberLink (stv 1 1)
+    (GeneNode "PLAU")
+    (ConceptNode "GO_B"))
+
+(MemberLink (stv 1 1)
+    (GeneNode "PLAU")
+    (ConceptNode "GO_C"))
 
 
 

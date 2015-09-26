@@ -26,10 +26,11 @@
 ;  Subset (SetLink (GeneNode "L"))  (ConceptNode "GO_A")
 ;  Subset (SetLink (GeneNode "PLAU"))  (ConceptNode "GO_A")
 
-;(cog-bind pln-rule-member-to-subset)
-; This gets us extra results, namely for the pln rules also, so let's add
-; substitution of source atoms before applying the rule
+; let's just apply general rule for now even though it gives extras
+(define m2s (cog-bind pln-rule-member-to-subset))
 
+;; Applying ungrounded rule gets us extra results, namely for the pln rules
+;; also, so let's add substitution of source atoms before applying the rule
 ;(define subst-map (make-hash-table 2))
 ;; cog-bind with no variables doesn't seem to return anything
 ;;(hash-set! subst-map (VariableNode "$X") (GeneNode "L"))
@@ -38,13 +39,16 @@
     (list
         ; cog-bind with no variables doesn't seem to return anything, so need to
         ; leave one of the variables in and not substitute
-        ;(cons (VariableNode "$X") (GeneNode "L"))
-        (cons (VariableNode "$A") (ConceptNode "GO_A"))))
-;(display-label "substitutions" substitutions)
-(define grounded-member-to-subset
-    (substitute pln-rule-member-to-subset substitutions))
-;(display "grounded-member-to-subset: ")(display grounded-member-to-subset)
-(define m2s (cog-bind grounded-member-to-subset))
+        (cons (VariableNode "$X") (GeneNode "L"))
+        ;(cons (VariableNode "$A") (ConceptNode "GO_A"))
+    )
+)
+;;(display-label "substitutions" substitutions)
+;(define grounded-member-to-subset
+;    (substitute pln-rule-member-to-subset substitutions))
+;;(display "grounded-member-to-subset: ")(display grounded-member-to-subset)
+;(define m2s (cog-bind grounded-member-to-subset))
+
 (display "m2s: ")(display m2s)
 
 
@@ -105,12 +109,53 @@
 ;(display "after first bind\n")
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; In place of steps 3-5 below, we will replace with step B that uses the command
+; (cog-create-intensional-links L PLAU), which entails the steps 3-5, but does
+; the evaluation in "batch" mode, i.e., by considering all the sets that
+; these genes are members of.) We can come back to how to do the same using
+; general PLN rules if that makes sense.
+;
+; One of the main issues to be resolved is how to define (Not ConceptNode S), in
+; general, which seems to me to be domain specific. Perhaps different
+; category/set types can specify formulas to used that define what
+; (Not Category_of_Type_X) is.
+;
+; In the present context, we are defining (Not Gene_Category_S) to be all the
+; genes in the system that are not members of S.
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; (B) Create intensional inheritance between L and PLAU, using
+; cog-create-intensional-links command to get:
+;
+; IntensionalInheritanceLink L PLAU
+;
+; Note: This step replaces previous steps 3-5 (placed at the end of the file),
+; which are no longer being used. This command internally carries out steps 3-5
+; for all categories that the genes are members of.
+; The cog-create-intensional-links command does the following:
+; Todo: <fill in>
+
+(define IS-L-PLAU (cog-create-intensional-links
+                    (SetLink (GeneNode "L")) (SetLink (GeneNode "PLAU")))
+)
+(display-atom "IS-L-PLAU" IS-L-PLAU)
+
+(display "\n\n==================================================================\n")
+
+
+(define
+
 ; (3) Calculate not-subset-direct-evaulation, to get:
+; Note: this step not needed when using batch command
+; (cog-create-intensional-links L PLAU)
 ;
 ;  Subset (NotLink GO_A)  (SetLink (Gene L))
 ;  Subset (NotLink GO_A)  (SetLink (Gene PLAU))
 ;
-; Assuming here that (NotLink GO_A) is equivalent to the set of all links not in
+; Assuming here that (NotLink GO_A) is equivalent to the set of all genes not in
 ; GO_A
 ;
 

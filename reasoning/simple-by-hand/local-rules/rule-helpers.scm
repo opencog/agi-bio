@@ -61,3 +61,13 @@
     (cog-new-link 'SetLink (lset-difference equal? (cog-get-atoms 'GeneNode)
         (get-set-members A))))
 
+
+; apply AttractionRule with no VariableNodes
+(define (pln-attraction-rule-no-variables subsetAB subsetNotAB)
+    (define attractionAB)
+    ;(display "(pln-attraction-rule-no-variables subsetAB subsetNotAB)")
+    (set! attractionAB (AttractionLink
+                            (list-ref (cog-outgoing-set subsetAB) 0)
+                            (list-ref (cog-outgoing-set subsetAB) 1)))
+    (pln-formula-attraction attractionAB subsetAB subsetNotAB))
+
