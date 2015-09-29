@@ -1,14 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; substitute.scm
-
-; Utility to substitute atoms in a graph according to given mapping of terms
+;
+; Utility to substitute atoms in a graph according to given mapping of atoms
 ; to be substituted.
-
+;
 ; Usage
-;(define term (VariableNode "$A"))
-(define term pln-rule-member-to-subset)
-(define subst-map (make-hash-table 3))
-(hash-set! subst-map (VariableNode "$A") (ConceptNode "apple"))
-;(substitute term subst-map)
+;(define term pln-rule-member-to-subset)
+;(define subst-pairs (list
+;                        (cons (VariableNode "$A") (ConceptNode "apple"))))
+;(substitute term subst-pairs)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (substitute term substitution-pairs)
     (define num-pairs)

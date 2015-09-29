@@ -15,6 +15,7 @@
 (load "background-knowledge.scm")
 (load "pln-config.scm")
 (load "substitute.scm")
+(load "cog-create-intensional-links.scm")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -143,100 +144,109 @@
 )
 (display-atom "IS-L-PLAU" IS-L-PLAU)
 
-(display "\n\n==================================================================\n")
-
-
-(define
-
-; (3) Calculate not-subset-direct-evaulation, to get:
-; Note: this step not needed when using batch command
-; (cog-create-intensional-links L PLAU)
-;
-;  Subset (NotLink GO_A)  (SetLink (Gene L))
-;  Subset (NotLink GO_A)  (SetLink (Gene PLAU))
-;
-; Assuming here that (NotLink GO_A) is equivalent to the set of all genes not in
-; GO_A
-;
-
-(define not-GO_A-set
-    (cog-new-link 'SetLink (lset-difference equal? (cog-get-atoms 'GeneNode)
-        (get-set-members (ConceptNode "GO_A")))))
-(display-atom "not-GO_A-set" not-GO_A-set)
-
-(EquivalenceLink (stv 1 1)
-    (NotLink (ConceptNode "GO_A"))
-    not-GO_A-set)
-
-(define sub-notGO_A-L
-    (subset-direct-evaluation not-GO_A-set (SetLink (GeneNode "L"))))
-(define sub-notGO_A-PLAU
-    (subset-direct-evaluation not-GO_A-set (SetLink (GeneNode "PLAU"))))
-(display-atom "sub-notGO_A-L" sub-notGO_A-L)
-
-;(SubsetLink (stv 0 0.99999982) (av 0 0 0)
-;   (SetLink (av 0 0 0)
-;      (GeneNode "Q" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
+;(IntensionalSimilarityLink (stv 0.33333334 0.99999982)
+;   (SetLink
+;      (GeneNode "PLAU" (stv 9.9999997e-06 0.99999982))
 ;   )
-;   (SetLink (av 0 0 0)
-;      (GeneNode "L" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
+;   (SetLink
+;      (GeneNode "L" (stv 9.9999997e-06 0.99999982))
 ;   )
 ;)
 
-; now we need to substitute in (NotLink GO_A)
-; then use some sort of equivalence rule like equivalence-subset-substitution-rule?:
-(load "local-rules/equivalence-subset-substitution-rule.scm")
-(define notGO_A-subsets (cog-bind equivalence-subset-substitution-rule))
-(display-atom "notGO_A-subsets" notGO_A-subsets)
 
-;   (SubsetLink (stv 0 0.99999964) (av 0 0 0)
-;      (NotLink (av 0 0 0)
-;         (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
-;      )
-;      (SetLink (av 0 0 0)
-;         (GeneNode "L" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
-;      )
-;   )
-;   (SubsetLink (stv 0 0.99999964) (av 0 0 0)
-;      (NotLink (av 0 0 0)
-;         (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
-;      )
-;      (SetLink (av 0 0 0)
-;         (GeneNode "PLAU" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
-;      )
-;   )
+(display "\n\n==================================================================\n")
 
 
-; (4) Apply AttractionRule to get:
+; (C) Apply singleton-similarity-rule to get
 ;
-;  AttractionLink GO_A (SetLink (GeneNode L))
-;  AttractionLink GO_A (SetLink (GeneNode PLAU))
+; IntensionalSimilarity PLAU L
 
-(define attraction-links (cog-bind pln-rule-attraction))
-(display-atom "attraction-links" attraction-links)
+(cog-bind pln-rule-singleton-similarity)
 
-;   (AttractionLink (stv 0.33333334 0.99999964) (av 0 0 0)
-;      (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
-;      (SetLink (av 0 0 0)
-;         (GeneNode "L" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
-;      )
-;   )
-;   (AttractionLink (stv 0.33333334 0.99999964) (av 0 0 0)
-;      (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
-;      (SetLink (av 0 0 0)
-;         (GeneNode "PLAU" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
-;      )
+;   (IntensionalSimilarityLink (stv 0.33333334 0.99999982)
+;      (GeneNode "PLAU" (stv 9.9999997e-06 0.99999982))
+;      (GeneNode "L" (stv 9.9999997e-06 0.99999982))
 ;   )
 
 
+; (D) Apply gene-similarity2overexpression-equivalence knowledge rule to get
+;
+; IntensionalEquivalence
+;    Pred "Gene-PLAU-overexpressed-in"
+;    Pred "Gene-L-overexpressed-in"
+
+(define IE (cog-bind gene-similarity2overexpression-equivalence))
+(display-atom "IE" IE)
+
+;   (IntensionalEquivalenceLink (stv 0.33333334 0.99999982)
+;      (PredicateNode "Gene-PLAU-overexpressed-in")
+;      (PredicateNode "Gene-L-overexpressed-in")
+;   )
+;   (IntensionalEquivalenceLink (stv 0.33333334 0.99999982)
+;      (PredicateNode "Gene-L-overexpressed-in")
+;      (PredicateNode "Gene-PLAU-overexpressed-in")
+;   )
+
+; Todo: Ben does this step by applying Modus rule, but can that be done with an
+; implication link with vars?
+
+; Todo: Would it work to use a general (Predicate "overexpressed-in" gene $X)
+; rather than gene specific predicates?
+
+; Question: are the results of this step supposed to contain ExecutionOutLinks
+; rather than the Predicates themselves?
 
 
-; (5) Apply IntensionalSimilarityEvaluationRule, to get:
+; (E) Apply intensional-equivalence-transformation to get
+;
+; IntensionalImplication PredNode
+;    PredNode "Gene-PLAU-overexpressed-in"
+;    PredNode "Gene-L-overexpressed-in"
+;
+;Todo: check with Ben re sim2inh rule referenced in the word doc
 
-;  InstensionalSimilarityLink (SetLink (Gene L)) (SetLink (Gene PLAU))
+(define II (cog-bind pln-rule-intensional-equivalence-transformation))
+(display-atom "II" II)
+
+;      (IntensionalImplicationLink (stv 0.33333334 0.99999982)
+;         (PredicateNode "Gene-L-overexpressed-in")
+;         (PredicateNode "Gene-PLAU-overexpressed-in")
+;      )
+;      (IntensionalImplicationLink (stv 0.33333334 0.99999982)
+;         (PredicateNode "Gene-PLAU-overexpressed-in")
+;         (PredicateNode "Gene-L-overexpressed-in")
 
 
-;(load "local-rules/intensional-similarity-direct-evaluation-rule.scm")
-;(define islink (cog-bind pln-rule-intensional-similarity-direct-evaluation))
-;(display-atom "islink" islink)
+; ** first either need to convert first Implication to IntensionalImplication
+; or 2nd IntensionalImplication to Implication
 
+; (F) Apply implication-deduction to get
+;
+; IntensionalImplication PredNode "Gene-L-overexpressed"  PredNode "LongLived"
+
+(define to-long-life (cog-bind pln-rule-deduction-intensional-implication))
+(display-atom "to-long-life" to-long-life)
+
+;   (IntensionalImplicationLink (stv 0 0.69999999)
+;      (PredicateNode "Gene-L-overexpressed-in")
+;      (PredicateNode "LongLived")
+;   )
+
+
+; (G) Apply implication-conversion to get
+;
+; ImplicationLink
+;   ExOut Schema "make-overexpression" (GeneNode L)
+;   PredNode "LongLived"
+
+(define grounded-conversion-rule
+    (substitute pln-rule-intensional-implication-conversion
+        (list (cons (VariableNode "$B") (PredicateNode "LongLived")))))
+;(define conclusion (cog-bind pln-rule-intensional-implication-conversion))
+(define conclusion (cog-bind grounded-conversion-rule))
+(display-atom "conclusion" conclusion)
+
+;   (ImplicationLink (stv 0 0.69999999)
+;      (PredicateNode "Gene-PLAU-overexpressed-in")
+;      (PredicateNode "LongLived")
+;   )

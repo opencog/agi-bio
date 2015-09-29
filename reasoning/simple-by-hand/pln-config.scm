@@ -51,9 +51,12 @@
 ; Assumes that local dir and opencog/reasoning/pln are in load path
 (define rule-files (list "local-rules/member-to-subset.scm"
                          "local-rules/subset-direct-evaluation-rule.scm"
+                         "local-rules/singleton-similarity-rule.scm"
+                         "local-rules/implication-conversion-rule.scm"
                          "rules/deduction.scm"
                          "rules/modus-ponens.scm"
-                         "rules/attraction-rule.scm"))
+                         "rules/attraction-rule.scm"
+                         "rules/equivalence-transformation-rule.scm"))
 (for-each load-from-path rule-files)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -63,9 +66,13 @@
 ; List the rules and their weights.
 (define rules (list (list pln-rule-member-to-subset-name 1)
                     (list pln-rule-subset-direct-evaluation 1)
+                    (list pln-rule-singleton-similarity 1)
+                    (list pln-rule-intensional-implication-conversion-name 1)
                     (list pln-rule-deduction-name 1)
+                    (list pln-rule-deduction-intensional-implication-name 1)
                     (list pln-rule-modus-ponens-name 1)
                     (list pln-rule-attraction-name 1)
+                    (list pln-rule-intensional-equivalence-transformation 1)
               )
 )
 

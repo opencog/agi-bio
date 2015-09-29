@@ -40,12 +40,7 @@
         (display-label "superB-length" superB-length)
         (display-label "superUnion-length" superUnion-length)
         (display-label "superIntersection" superIntersection)
-
         (display-label "superInersection length" superIntersection-length)
-
-        ;(map (lambda(x) display(x)) superIntersection)
-
-        (display "\nsetting attraction links\n")
 
         (set! attractionLinksA
             (map-in-order make-attraction-via-subsets
@@ -120,12 +115,13 @@
 )
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;
-(use-modules (opencog))
-(use-modules (opencog query))
-(use-modules (opencog rule-engine))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 (define (test)
+    (use-modules (opencog))
+    (use-modules (opencog query))
+    (use-modules (opencog rule-engine))
     ;(load "simple-inference.scm")
     (load-from-path "av-tv.scm")
     (load "substitute.scm")
@@ -134,7 +130,7 @@
     (cog-bind pln-rule-member-to-subset)
     (cog-create-intensional-links setL setPLAU)
 )
-;(test)
+(test)
 
 
 ; identify common supersets

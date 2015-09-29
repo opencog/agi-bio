@@ -10,3 +10,10 @@
 
 (define (incoming atom)
     (cog-incoming-set atom))
+
+
+(define (make-overexpression-predicate gene)
+    (PredicateNode (string-append "Gene-" (cog-name gene) "-overexpressed-in")))
+
+; Question: why not use (Eval (Pred "overexpresed-in") (List gene person/organ))
+; rather than gene specific predicates

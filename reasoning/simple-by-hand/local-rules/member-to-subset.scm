@@ -37,7 +37,7 @@
         (pln-formula-member-to-subset-side-effect-free MXA)))
 
 (define (pln-formula-member-to-subset-side-effect-free MXA)
-    (stv (cog-stv-strength MXA) (cog-stv-confidence MXA)))
+    (cog-tv MXA))
 
 ; =============================================================================
 
