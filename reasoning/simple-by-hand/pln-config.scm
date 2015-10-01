@@ -65,14 +65,15 @@
 
 ; List the rules and their weights.
 (define rules (list (list pln-rule-member-to-subset-name 1)
-                    (list pln-rule-subset-direct-evaluation 1)
-                    (list pln-rule-singleton-similarity 1)
+                    (list pln-rule-subset-direct-evaluation-name 1)
+                    (list pln-rule-singleton-similarity-name 1)
                     (list pln-rule-intensional-implication-conversion-name 1)
                     (list pln-rule-deduction-name 1)
                     (list pln-rule-deduction-intensional-implication-name 1)
                     (list pln-rule-modus-ponens-name 1)
                     (list pln-rule-attraction-name 1)
-                    (list pln-rule-intensional-equivalence-transformation 1)
+                    (list pln-rule-intensional-equivalence-transformation-name
+                        1)
               )
 )
 

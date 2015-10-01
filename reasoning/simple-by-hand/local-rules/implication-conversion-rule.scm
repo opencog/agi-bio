@@ -12,6 +12,8 @@
 ; will need to add for extensional mixed implication conversion also
 ; use same rule for inheritance conversion? note: this is an inheritance rule,
 ; but it requres both a subset and intensionalinher as input
+;
+; Question: But what about if Implication A B already exists
 ; -----------------------------------------------------------------------------
 
 (define pln-rule-intensional-implication-conversion
@@ -39,7 +41,7 @@
         (pln-forumula-implication-conversion-side-effect-free iiAB iAB)))
 
 (define (pln-forumula-implication-conversion-side-effect-free iiAB iAB)
-    (cog-tv iiAB))
+    (stv (cog-stv-strength iiAB) (* .7 (cog-stv-confidence iiAB))))
 
 ; Name the rule
 (define pln-rule-intensional-implication-conversion-name

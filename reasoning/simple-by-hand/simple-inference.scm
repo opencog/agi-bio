@@ -18,6 +18,8 @@
 (load "cog-create-intensional-links.scm")
 
 
+(display "------------------- LET THE REASONING BEGIN ----------------------\n")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Let the reasoning begin ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -36,14 +38,14 @@
 ;; cog-bind with no variables doesn't seem to return anything
 ;;(hash-set! subst-map (VariableNode "$X") (GeneNode "L"))
 ;(hash-set! subst-map (VariableNode "$A") (ConceptNode "GO_A"))
-(define substitutions
-    (list
-        ; cog-bind with no variables doesn't seem to return anything, so need to
-        ; leave one of the variables in and not substitute
-        (cons (VariableNode "$X") (GeneNode "L"))
-        ;(cons (VariableNode "$A") (ConceptNode "GO_A"))
-    )
-)
+;(define substitutions
+;    (list
+;        ; cog-bind with no variables doesn't seem to return anything, so need to
+;        ; leave one of the variables in and not substitute
+;        (cons (VariableNode "$X") (GeneNode "L"))
+;        ;(cons (VariableNode "$A") (ConceptNode "GO_A"))
+;    )
+;)
 ;;(display-label "substitutions" substitutions)
 ;(define grounded-member-to-subset
 ;    (substitute pln-rule-member-to-subset substitutions))

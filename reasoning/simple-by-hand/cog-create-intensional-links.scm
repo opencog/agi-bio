@@ -16,7 +16,7 @@
     (define ASSOC_sum)
     (define tv-strength)
 
-    (display "cog-create-intensional-links A B")
+    (display "cog-create-intensional-links")
     (display-atom "A" A)
     (display-atom "B" B)
 
@@ -130,7 +130,7 @@
     (cog-bind pln-rule-member-to-subset)
     (cog-create-intensional-links setL setPLAU)
 )
-(test)
+;(test)
 
 
 ; identify common supersets

@@ -1,29 +1,42 @@
 ; Background knowledge for simple bio inference example
 
-; overexpression of members of LifespanObservationIncrease imply longlived
-; todo: implement SchemaNode "makeOverExpressionPredicate"
-; implementing specifically for PLAU for the demo
+(define gene-strength .00001)
+(define gene-confidence .9)
+(define gene-concept-strength .001)
+(define gene-concept-confidence .9)
 
-(ImplicationLink
-    (PredicateNode "Gene-PLAU-overexpressed-in")
-    (PredicateNode "LongLived") (stv .2 .7))
-
-(IntensionalImplicationLink
-    (PredicateNode "Gene-PLAU-overexpressed-in")
-    (PredicateNode "LongLived") (stv .2 .7))
-
-(GeneNode "PLAU" (stv .00001 1))
-(GeneNode "L" (stv .00001 1))
-(GeneNode "Q" (stv .00001 1))
+(GeneNode "PLAU" (stv gene-strength gene-confidence))
+(GeneNode "L" (stv gene-strength gene-confidence))
+(GeneNode "Q" (stv gene-strength gene-confidence))
 
 (define PLAU (GeneNode "PLAU"))
 (define L (GeneNode "L"))
 (define setPLAU (SetLink PLAU))
 (define setL (SetLink L))
 
-(ConceptNode "GO_A" (stv .001 1))
-(ConceptNode "GO_B" (stv .001 1))
-(ConceptNode "GO_C" (stv .001 1))
+;(PredicateNode "Gene-PLAU-overexpressed-in" (stv .5  1))
+;(PredicateNode "Gene-L-overexpressed-in" (stv .5  1))
+(make-overexpression-predicate (GeneNode "PLAU"))
+;(make-overexpression-predicate (GeneNode "L"))  ; don't need this here i think
+
+; overexpression of members of LifespanObservationIncrease imply longlived
+; todo: implement general rule to specify LSObserv members imply longlived
+; implementing specifically for PLAU for the demo
+
+(PredicateNode "LongLived" (stv .25  9))
+
+;(ImplicationLink
+;    (PredicateNode "Gene-PLAU-overexpressed-in")
+;    (PredicateNode "LongLived") (stv .2 .7))
+
+; todo: What should the tv for these implications be
+(IntensionalImplicationLink
+    (PredicateNode "Gene-PLAU-overexpressed-in")
+    (PredicateNode "LongLived") (stv .2 .7))
+
+(ConceptNode "GO_A" (stv gene-concept-strength gene-concept-confidence))
+(ConceptNode "GO_B" (stv gene-concept-strength gene-concept-confidence))
+(ConceptNode "GO_C" (stv gene-concept-strength gene-concept-confidence))
 
 (define GO_A (ConceptNode "GO_A"))
 
@@ -48,25 +61,10 @@
     (ConceptNode "GO_C"))
 
 
-
-
-; Using the general solution below now
-; Domain particular knowledge/rule: if 2 genes have similar properties, over-
-; expression of one implies overexpression of the other
-; todo: implement makeOverepxressionPred schema node
-; using particular genes for the demo for now
-;(ImplicationLink
-;    (IntensionalSimilarityLink
-;        (GeneNode "PLAU")
-;        (GeneNode "L"))
-;    (IntensionalEquivalenceLink
-;        (PredicateNode "Gene_PLAU_overexpressed-in")
-;        (PredicateNode "Gene_L_overexpressed-in")))
-
 ; todo: no IntensionalEquivalenceLink - add to atomspace/opencog/atomspace/atom_types.script ?
 
-; If 2 genes are similar overexpression in one implies overexpression in the
-; other. (General version)
+; Domain particular knowledge/rule: If 2 genes are similar overexpression in one
+; implies overexpression in the other.
 (define gene-similarity2overexpression-equivalence
     (BindLink
         (VariableList

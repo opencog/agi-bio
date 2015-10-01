@@ -43,3 +43,7 @@
 
 (define (pln-forumula-singleton-similarity-side-effect-free singletonAB AB)
     (stv (cog-stv-strength singletonAB) (cog-stv-confidence singletonAB)))
+
+; Name the rule
+(define pln-rule-singleton-similarity-name (Node "pln-rule-singleton-similarity"))
+(DefineLink pln-rule-singleton-similarity-name pln-rule-singleton-similarity)
