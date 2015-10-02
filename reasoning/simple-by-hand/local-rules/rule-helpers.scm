@@ -1,21 +1,51 @@
+"
+ Helper functions for rule application
+
+ (get-set-members set)
+ (cog-get-supersets A)
+ (cog-apply-rule rule atoms #:optional no-focus-set)
+ (define (create-not-gene-set A)
+
+ ; apply AttractionRule with no VariableNodes
+ (define (pln-attraction-rule-no-variables subsetAB subsetNotAB)
+
+"
+
 (use-modules (opencog))
 (use-modules (opencog query))
 (use-modules (opencog rule-engine))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; cog-apply-rule
-;
-; Utility function to do a one-step inference via the URE using a particular
-; rule on specified atoms.
-;
-; Requires that the applicable scheme rule file (i.e., from
-; opencog/reasoning/pln/rules) has been loaded.
-;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(define (cog-apply-rule rule atoms)
+;-------------------------------------------------------------------------------
+(define* (cog-apply-rule rule atoms #:optional no-focus-set)
+#!
+ Do a one-step inference via the URE using a particular rule on specified atoms
+
+   atoms - The source atom(s) used by the forward chainer for applying the rule.
+      Can be a scheme list of Atoms, a SetLink containing Atoms, or an
+      individual Atom. By default, these atoms will also serve as the focus set
+      of the chainer, unless the optional no-focus-set parameter is set to #t.
+
+   rule - String representation of the rule name used in the rule definition
+      file, e.g., "pln-rule-deduction". Aternatively, can also pass the rule
+      name Node defined in the rule file, e.g., (Node "pln-rule-deduction")
+
+   no-focus-set (optional) - Boolean that defaults to #f. When #t, no focus set
+      is specified, and the whole atomspace is searched for additional premises
+      to satisfy the rule. When #f (default) the atoms in the 'atoms' parameter
+      are used as the focus set.
+
+ Requires that the applicable scheme rule file (i.e., from
+ opencog/reasoning/pln/rules) has been loaded.
+
+ Example usage:
+ (define ab (InheritanceLink (ConceptNode "a") (ConceptNode "b")))
+ (define ab (InheritanceLink (ConceptNode "b") (ConceptNode "c")))
+ (cog-apply-rule "pln-rule-deduction" (list ab bc))
+!#
     (define temp-rbs)
     (define URE-inheritance)
     (define rules)
+    (define focus-set)
 
     ; Do URE configuration for the rule
     (load-from-path "utilities.scm")
@@ -72,29 +102,39 @@
     (if (not (equal? (cog-type atoms) 'SetLink))
         (set! atoms (SetLink atoms)))
 
-    (cog-fc atoms temp-rbs atoms)
+    (if no-focus-set
+        (set! focus-set (SetLink))
+        (set! focus-set atoms))
+    ;(display-atom "focus-set" focus-set)
+
+    (cog-fc atoms temp-rbs focus-set)
 )
 
-(define (cog-apply-rule-test)
+#;(define (cog-apply-rule-test)
     (define atoms (list
         (InheritanceLink (ConceptNode "A" (stv .3 1))
             (ConceptNode "B" (stv .3 1)))
         (InheritanceLink (ConceptNode "B") (ConceptNode "C" (stv .3 1)))))
     (load-from-path "rules/deduction.scm")
-    (display "doing deduction rule\n")
+    (display "Doing deduction rule\n")
     (display (cog-apply-rule "pln-rule-deduction" atoms))
     (load-from-path "rules/induction-rule.scm")
-    (display "doing irrelevant rule\n")
+    (display "Doing irrelevant rule\n")
     (display (cog-apply-rule "pln-rule-induction-inheritance" atoms))
 )
-(cog-apply-rule-test)
+;(cog-apply-rule-test)
 
 
-; Returns members of set S that are defined via a SetLink or through MemberLinks
-(define (get-set-members S)
+
+(define (get-set-members set)
+"
+ Return members of set that are defined through MemberLink relationships with
+ set, or if set is a SetLink return its outgoing set.
+
+"
     ; todo: filter out low tv members?
-    (if (equal? (cog-type S) 'SetLink)
-        (cog-outgoing-set S)
+    (if (equal? (cog-type set) 'SetLink)
+        (cog-outgoing-set set)
         (cog-outgoing-set
             (cog-bind
                 (BindLink
@@ -102,14 +142,18 @@
                         (VariableNode "$x"))
                     (MemberLink
                         (VariableNode "$x")
-                        S)
+                        set)
                     (VariableNode "$x"))))))
 
 
 (define (cog-get-supersets A)
+"
+ Return the atoms that A is a (direct) subset of through a SubsetLink
+ relationship. Also checks for cases where singleton {A} is a subset.
+"
     ; TODO: do we also need to deal with SetLinks here? I don't think we do
-    (display "in cog-get-supersets")
-    (display-atom "arg" A)
+    ;(display "in cog-get-supersets")
+    ;(display-atom "arg" A)
 (let ((result
     (cog-outgoing-set
         (cog-bind

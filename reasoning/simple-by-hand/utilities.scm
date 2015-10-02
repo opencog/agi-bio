@@ -6,7 +6,8 @@
     (newline)(display label)(display ": \n")(display atom))
 
 (define (display-label label value)
-    (newline)(display label)(display ": ")(display value)(newline))
+    (newline)(display label)(display ": \n")(display value)(newline))
+
 
 (define (incoming atom)
     (cog-incoming-set atom))
@@ -18,3 +19,6 @@
 
 ; Question: why not use (Eval (Pred "overexpresed-in") (List gene person/organ))
 ; rather than gene specific predicates
+
+
+

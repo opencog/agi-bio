@@ -36,11 +36,13 @@
          (superIntersection (lset-intersection equal? superA superB))
          (superIntersection-length (length superIntersection))
         )
+        (display-label "superA" superA)
+        (display-label "superB" superB)
         (display-label "superA-length" superA-length)
         (display-label "superB-length" superB-length)
-        (display-label "superUnion-length" superUnion-length)
         (display-label "superIntersection" superIntersection)
         (display-label "superInersection length" superIntersection-length)
+        (display-label "superUnion-length" superUnion-length)
 
         (set! attractionLinksA
             (map-in-order make-attraction-via-subsets
@@ -52,8 +54,8 @@
                  superIntersection (make-list superIntersection-length B)
             )
         )
-        (display-atom "attractinLinksA" attractionLinksA)
-        (display-atom "attractinLinksB" attractionLinksB)
+        (display-atom "attractionLinksA" attractionLinksA)
+        (display-atom "attractionLinksB" attractionLinksB)
 
         ; ASSOC(A,L) AND ASSOC(B,L) = min( ASSOC(A,L), ASSOC(B,L) )
         ; Todo: what confidences of the AttractionLinks?

@@ -29,97 +29,92 @@
 ;  Subset (SetLink (GeneNode "L"))  (ConceptNode "GO_A")
 ;  Subset (SetLink (GeneNode "PLAU"))  (ConceptNode "GO_A")
 
-; let's just apply general rule for now even though it gives extras
-(define m2s (cog-bind pln-rule-member-to-subset))
+; Apply rule just to the gene MemberLinks
+(define gene-memberlinks
+    (cog-filter
+        'MemberLink
+        (append-map cog-incoming-set (cog-get-atoms 'GeneNode))
+    )
+)
+;(display-label "gene-memberlinks" gene-memberlinks)
+;(define m2s (cog-apply-rule "pln-rule-member-to-subset" gene-memberlinks))
 
-;; Applying ungrounded rule gets us extra results, namely for the pln rules
-;; also, so let's add substitution of source atoms before applying the rule
-;(define subst-map (make-hash-table 2))
-;; cog-bind with no variables doesn't seem to return anything
-;;(hash-set! subst-map (VariableNode "$X") (GeneNode "L"))
-;(hash-set! subst-map (VariableNode "$A") (ConceptNode "GO_A"))
-;(define substitutions
-;    (list
-;        ; cog-bind with no variables doesn't seem to return anything, so need to
-;        ; leave one of the variables in and not substitute
-;        (cons (VariableNode "$X") (GeneNode "L"))
-;        ;(cons (VariableNode "$A") (ConceptNode "GO_A"))
-;    )
-;)
-;;(display-label "substitutions" substitutions)
-;(define grounded-member-to-subset
-;    (substitute pln-rule-member-to-subset substitutions))
-;;(display "grounded-member-to-subset: ")(display grounded-member-to-subset)
-;(define m2s (cog-bind grounded-member-to-subset))
+; Applying rule globally through PM until issue with FC and M2S rule is fixed
+(define m2s (cog-bind pln-rule-member-to-subset))
 
 (display "m2s: ")(display m2s)
 
+    ;   (SubsetLink (stv 1 0.99999982) (av 0 0 0)
+    ;      (SetLink (av 0 0 0)
+    ;         (GeneNode "L" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
+    ;      )
+    ;      (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
+    ;   )
+    ;   (SubsetLink (stv 1 0.99999982) (av 0 0 0)
+    ;      (SetLink (av 0 0 0)
+    ;         (GeneNode "PLAU" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
+    ;      )
+    ;      (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
+    ;   )
 
-;   (SubsetLink (stv 1 0.99999982) (av 0 0 0)
-;      (SetLink (av 0 0 0)
-;         (GeneNode "L" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
-;      )
-;      (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
-;   )
-;   (SubsetLink (stv 1 0.99999982) (av 0 0 0)
-;      (SetLink (av 0 0 0)
-;         (GeneNode "PLAU" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
-;      )
-;      (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
-;   )
+#! The following steps occur in the cog-create-intensional-links command:
 
+(2) Get the supersets of L and of PLAU
 
+    superA:
+    ((ConceptNode "GO_A" (stv 0.001 0.89999998))
+     (ConceptNode "GO_B" (stv 0.001 0.89999998))
+    )
 
-; (2) apply subset-inversion-evaluation-rule(?), to get:
-;
-;  Subset  GO_A  (SetLink (GeneNode L))
-;  Subset  GO_A  (SetLink (GeneNode PLAU))
-
-; use the subset direct eval function (without PM because no variables)
-(define subAL (inverse-subset-direct-evaluation (SetLink (GeneNode "L")) (ConceptNode "GO_A")))
-(define subAPLAU (inverse-subset-direct-evaluation (SetLink (GeneNode "PLAU")) (ConceptNode "GO_A")))
-(display-atom "subAL" subAL)
-(display-atom "subAPLAU" subAPLAU)
-
-; let's test out the PM version
-; ... later ;)
-
-;(SubsetLink (stv 0.33333334 0) (av 0 0 0)
-;   (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
-;   (SetLink (av 0 0 0)
-;      (GeneNode "L" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
-;   )
-;)
-;(SubsetLink (stv 0.33333334 0) (av 0 0 0)
-;   (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
-;   (SetLink (av 0 0 0)
-;      (GeneNode "PLAU" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
-;   )
-;)
-
-;(define subst-map (make-hash-table 2))
-;(hash-set! subst-map (VariableNode "$A") (ConceptNode "GO_A"))
-;(hash-set! subst-map (VariableNode "$B") (SetLink (GeneNode "L")))
-;;(define subst-pairs (list (cons (VariableNode "$A") (ConceptNode "GO_A"))
-;;                          (cons (VariableNode "$B") (SetLink (GeneNode "L")))))
-;(define grounded-subset-evaluation
-;    (substitute-with-map pln-rule-subset-direct-evaluation subst-map))
-;;    (substitute pln-rule-subset-direct-evaluation subst-pairs))
-;(display "before first bind\n")
-;(display grounded-subset-evaluation)
-;(cog-bind pln-rule-subset-direct-evaluation)
-;(cog-bind grounded-subset-evaluation)
-;(display "after first bind\n")
+    superB:
+    ((ConceptNode "GO_A" (stv 0.001 0.89999998))
+     (ConceptNode "GO_B" (stv 0.001 0.89999998))
+     (ConceptNode "GO_C" (stv 0.001 0.89999998))
+    )
 
 
+(3) Get the union and intersection of the supersets of L and PLAU
+
+    superIntersection:
+    ((ConceptNode "GO_A" (stv 0.001 0.89999998))
+     (ConceptNode "GO_B" (stv 0.001 0.89999998))
+    )
+
+    superUnion-length: 3
+
+
+(4) For each common relationship (IOW for each relationship in the supersets
+    intersection), create the same inverse relationship.
+
+    (SubsetLink (stv 0.5 0.99999982)
+       (ConceptNode "GO_A" (stv 0.001 0.89999998))
+       (SetLink
+          (GeneNode "L" (stv 9.9999997e-06 0.89999998))
+       )
+    )
+    (SubsetLink (stv 0.5 0.99999982)
+       (ConceptNode "GO_B" (stv 0.001 0.89999998))
+       (SetLink
+          (GeneNode "L" (stv 9.9999997e-06 0.89999998))
+       )
+    )
+    (SubsetLink (stv 0.5 0.99999982)
+       (ConceptNode "GO_A" (stv 0.001 0.89999998))
+       (SetLink
+          (GeneNode "PLAU" (stv 9.9999997e-06 0.89999998))
+       )
+    )
+    (SubsetLink (stv 0.5 0.99999982)
+       (ConceptNode "GO_B" (stv 0.001 0.89999998))
+       (SetLink
+          (GeneNode "PLAU" (stv 9.9999997e-06 0.89999998))
+       )
+    )
+
+
+(5) For each inverse relationship (LinkType A B), create (LinkType (Not A) b)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-; In place of steps 3-5 below, we will replace with step B that uses the command
-; (cog-create-intensional-links L PLAU), which entails the steps 3-5, but does
-; the evaluation in "batch" mode, i.e., by considering all the sets that
-; these genes are members of.) We can come back to how to do the same using
-; general PLN rules if that makes sense.
-;
+; Todo:
 ; One of the main issues to be resolved is how to define (Not ConceptNode S), in
 ; general, which seems to me to be domain specific. Perhaps different
 ; category/set types can specify formulas to used that define what
@@ -127,51 +122,108 @@
 ;
 ; In the present context, we are defining (Not Gene_Category_S) to be all the
 ; genes in the system that are not members of S.
-;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; (B) Create intensional inheritance between L and PLAU, using
-; cog-create-intensional-links command to get:
-;
-; IntensionalInheritanceLink L PLAU
-;
-; Note: This step replaces previous steps 3-5 (placed at the end of the file),
-; which are no longer being used. This command internally carries out steps 3-5
-; for all categories that the genes are members of.
-; The cog-create-intensional-links command does the following:
-; Todo: <fill in>
+    (SubsetLink (stv 0 0.99999982)
+       (NotLink
+          (ConceptNode "GO_A" (stv 0.001 0.89999998))
+       )
+       (SetLink
+          (GeneNode "L" (stv 9.9999997e-06 0.89999998))
+       )
+    )
+    (SubsetLink (stv 0 0.99999982)
+       (NotLink
+          (ConceptNode "GO_B" (stv 0.001 0.89999998))
+       )
+       (SetLink
+          (GeneNode "L" (stv 9.9999997e-06 0.89999998))
+       )
+    )
+    (SubsetLink (stv 0 0.99999982)
+       (NotLink
+          (ConceptNode "GO_A" (stv 0.001 0.89999998))
+       )
+       (SetLink
+          (GeneNode "PLAU" (stv 9.9999997e-06 0.89999998))
+       )
+    )
+    (SubsetLink (stv 0 0.99999982)
+       (NotLink
+          (ConceptNode "GO_B" (stv 0.001 0.89999998))
+       )
+       (SetLink
+          (GeneNode "PLAU" (stv 9.9999997e-06 0.89999998))
+       )
+    )
 
-(define IS-L-PLAU (cog-create-intensional-links
+
+(6) Apply to AttractionRule to make AttractionLinks for L and PLAU for each
+    common relationship (IOW for each relationship in the supersets
+    intersection).
+
+        (AttractionLink (stv 0.5 0.99999982)
+           (ConceptNode "GO_A" (stv 0.001 0.89999998))
+           (SetLink
+              (GeneNode "L" (stv 9.9999997e-06 0.89999998))
+           )
+        )
+        (AttractionLink (stv 0.5 0.99999982)
+           (ConceptNode "GO_B" (stv 0.001 0.89999998))
+           (SetLink
+              (GeneNode "L" (stv 9.9999997e-06 0.89999998))
+           )
+        )
+        (AttractionLink (stv 0.5 0.99999982)
+           (ConceptNode "GO_A" (stv 0.001 0.89999998))
+           (SetLink
+              (GeneNode "PLAU" (stv 9.9999997e-06 0.89999998))
+           )
+        )
+        (AttractionLink (stv 0.5 0.99999982)
+           (ConceptNode "GO_B" (stv 0.001 0.89999998))
+           (SetLink
+              (GeneNode "PLAU" (stv 9.9999997e-06 0.89999998))
+           )
+        )
+
+
+(7) Create IntensionalSimilarityLink via direct evaluation based on
+    AttractionLinks and # of members in the union of supersets
+    tv.s = average(ASSOC(A,L) OR ASSOC(B,L))
+           over all relationships in the union of supersets
+!#
+(define is-l-plau (cog-create-intensional-links
                     (SetLink (GeneNode "L")) (SetLink (GeneNode "PLAU")))
 )
-(display-atom "IS-L-PLAU" IS-L-PLAU)
+(display-atom "is-l-plau" is-l-plau)
 
-;(IntensionalSimilarityLink (stv 0.33333334 0.99999982)
-;   (SetLink
-;      (GeneNode "PLAU" (stv 9.9999997e-06 0.99999982))
-;   )
-;   (SetLink
-;      (GeneNode "L" (stv 9.9999997e-06 0.99999982))
-;   )
-;)
-
+    ;(IntensionalSimilarityLink (stv 0.33333334 0.99999982)
+    ;   (SetLink
+    ;      (GeneNode "PLAU" (stv 9.9999997e-06 0.99999982))
+    ;   )
+    ;   (SetLink
+    ;      (GeneNode "L" (stv 9.9999997e-06 0.99999982))
+    ;   )
+    ;)
 
 (display "\n\n==================================================================\n")
 
 
-; (C) Apply singleton-similarity-rule to get
+; (8) Apply singleton-similarity-rule to get
 ;
 ; IntensionalSimilarity PLAU L
 
-(cog-bind pln-rule-singleton-similarity)
+(define is2-l-plau (cog-bind pln-rule-singleton-similarity))
+(display-atom "is2-l-plau" is2-l-plau)
 
-;   (IntensionalSimilarityLink (stv 0.33333334 0.99999982)
-;      (GeneNode "PLAU" (stv 9.9999997e-06 0.99999982))
-;      (GeneNode "L" (stv 9.9999997e-06 0.99999982))
-;   )
+        ;   (IntensionalSimilarityLink (stv 0.33333334 0.99999982)
+        ;      (GeneNode "PLAU" (stv 9.9999997e-06 0.99999982))
+        ;      (GeneNode "L" (stv 9.9999997e-06 0.99999982))
+        ;   )
 
 
-; (D) Apply gene-similarity2overexpression-equivalence knowledge rule to get
+; (9) Apply gene-similarity2overexpression-equivalence knowledge rule to get
 ;
 ; IntensionalEquivalence
 ;    Pred "Gene-PLAU-overexpressed-in"
@@ -180,14 +232,14 @@
 (define IE (cog-bind gene-similarity2overexpression-equivalence))
 (display-atom "IE" IE)
 
-;   (IntensionalEquivalenceLink (stv 0.33333334 0.99999982)
-;      (PredicateNode "Gene-PLAU-overexpressed-in")
-;      (PredicateNode "Gene-L-overexpressed-in")
-;   )
-;   (IntensionalEquivalenceLink (stv 0.33333334 0.99999982)
-;      (PredicateNode "Gene-L-overexpressed-in")
-;      (PredicateNode "Gene-PLAU-overexpressed-in")
-;   )
+    ;   (IntensionalEquivalenceLink (stv 0.33333334 0.99999982)
+    ;      (PredicateNode "Gene-PLAU-overexpressed-in")
+    ;      (PredicateNode "Gene-L-overexpressed-in")
+    ;   )
+    ;   (IntensionalEquivalenceLink (stv 0.33333334 0.99999982)
+    ;      (PredicateNode "Gene-L-overexpressed-in")
+    ;      (PredicateNode "Gene-PLAU-overexpressed-in")
+    ;   )
 
 ; Todo: Ben does this step by applying Modus rule, but can that be done with an
 ; implication link with vars?
@@ -199,7 +251,7 @@
 ; rather than the Predicates themselves?
 
 
-; (E) Apply intensional-equivalence-transformation to get
+; (10) Apply intensional-equivalence-transformation to get
 ;
 ; IntensionalImplication PredNode
 ;    PredNode "Gene-PLAU-overexpressed-in"
@@ -222,20 +274,20 @@
 ; ** first either need to convert first Implication to IntensionalImplication
 ; or 2nd IntensionalImplication to Implication
 
-; (F) Apply implication-deduction to get
+; (11) Apply implication-deduction to get
 ;
 ; IntensionalImplication PredNode "Gene-L-overexpressed"  PredNode "LongLived"
 
 (define to-long-life (cog-bind pln-rule-deduction-intensional-implication))
 (display-atom "to-long-life" to-long-life)
 
-;   (IntensionalImplicationLink (stv 0 0.69999999)
-;      (PredicateNode "Gene-L-overexpressed-in")
-;      (PredicateNode "LongLived")
-;   )
+    ;   (IntensionalImplicationLink (stv .25 0.69999999)
+    ;      (PredicateNode "Gene-L-overexpressed-in")
+    ;      (PredicateNode "LongLived")
+    ;   )
 
 
-; (G) Apply implication-conversion to get
+; (12) Apply implication-conversion to get
 ;
 ; ImplicationLink
 ;   ExOut Schema "make-overexpression" (GeneNode L)
@@ -248,7 +300,7 @@
 (define conclusion (cog-bind grounded-conversion-rule))
 (display-atom "conclusion" conclusion)
 
-;   (ImplicationLink (stv 0 0.69999999)
-;      (PredicateNode "Gene-PLAU-overexpressed-in")
-;      (PredicateNode "LongLived")
-;   )
+    ;   (ImplicationLink (stv 0.25 0.48999998)
+    ;      (PredicateNode "Gene-L-overexpressed-in")
+    ;      (PredicateNode "LongLived")
+    ;   )
