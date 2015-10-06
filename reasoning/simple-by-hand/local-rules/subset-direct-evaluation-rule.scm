@@ -47,7 +47,7 @@
 
 (define (pln-formula-subset-direct-evaluation-side-effect-free A B)
     (load "rule-helpers.scm")
-    (display "in subset-direct-eval-formula-side-effect-free\n")
+    ;(display "in subset-direct-eval-formula-side-effect-free\n")
     ;(display A)
     ;(display B)
     (let*
@@ -69,9 +69,9 @@
 ; Direct function to call when evaluating for specific sets (because can't use
 ; the PM when no variables in the pattern)
 (define (subset-direct-evaluation A  B)
-    (display "(subset-direct-evaluation A B)")
-    (display-atom "A" A)
-    (display-atom "B" B)
+    ;(display "(subset-direct-evaluation A B)")
+    ;(display-atom "A" A)
+    ;(display-atom "B" B)
     (pln-formula-subset-direct-evaluation A B (SubsetLink A B)))
 
 ; TODO: Add inverse-subset-direct-evaluation-rule

@@ -189,7 +189,7 @@
 ;       or maybe it's not really a problem
 ;
 (define (create-not-gene-set A)
-    (display-atom "(create-not-gene-set A)" A)
+    ;(display-atom "(create-not-gene-set A)" A)
     (cog-new-link 'SetLink (lset-difference equal? (cog-get-atoms 'GeneNode)
         (get-set-members A))))
 

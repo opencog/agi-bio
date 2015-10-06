@@ -87,13 +87,14 @@
     (define subsetNotAB)
     (define grounded-attraction-rule)
 
-    (display "(make-attraction-via-subsets A B)")
-    (display-atom "A" A)
-    (display-atom "B" B)
+    ;(display "(make-attraction-via-subsets A B)")
+    ;(display-atom "A" A)
+    ;(display-atom "B" B)
 
     ; Starting with full evaluation from scratch - later can add option to use
     ; subset links that already exist.
     ; Assumed here is that A is a set that contains GeneNode members
+    ; Todo: How to handle creation of (NOT A) to avoid this assumption above
     (set! subsetAB (subset-direct-evaluation A B))
     (display-atom "subsetAB" subsetAB)
     ; Todo: calc of (NOT A) could be refactored outside of this function, so
@@ -112,8 +113,12 @@
     ;;(cog-bind pln-rule-attraction)
     ;(cog-bind grounded-attraction-rule)
 
-    ; use new command to apply attraction rule with no variables
-    (pln-attraction-rule-no-variables subsetAB subsetNotAB)
+    ; Use new command to apply attraction rule with no variables
+    ;(pln-attraction-rule-no-variables subsetAB subsetNotAB)
+
+    ; Or instead of above if we don't want to have a special "no variables"
+    ; function for the rule, could do;
+    (pln-formula-attraction subsetAB subsetNotAB (AttractionLink A B))
 )
 
 

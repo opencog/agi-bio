@@ -17,8 +17,7 @@
 (load "substitute.scm")
 (load "cog-create-intensional-links.scm")
 
-
-(display "------------------- LET THE REASONING BEGIN ----------------------\n")
+;(display "------------------- LET THE REASONING BEGIN ----------------------\n")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Let the reasoning begin ;;
@@ -36,26 +35,47 @@
         (append-map cog-incoming-set (cog-get-atoms 'GeneNode))
     )
 )
-;(display-label "gene-memberlinks" gene-memberlinks)
-;(define m2s (cog-apply-rule "pln-rule-member-to-subset" gene-memberlinks))
+(display-label "gene-memberlinks" gene-memberlinks)
+(define m2s (map cog-apply-rule (make-list (length gene-memberlinks)
+    "pln-rule-member-to-subset") gene-memberlinks))
 
-; Applying rule globally through PM until issue with FC and M2S rule is fixed
-(define m2s (cog-bind pln-rule-member-to-subset))
+; remove inner listlinks for nicer print formatting
+(set! m2s (map (lambda(x) (list-ref (cog-outgoing-set x) 0)) m2s))
 
 (display "m2s: ")(display m2s)
 
-    ;   (SubsetLink (stv 1 0.99999982) (av 0 0 0)
-    ;      (SetLink (av 0 0 0)
-    ;         (GeneNode "L" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
-    ;      )
-    ;      (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
-    ;   )
-    ;   (SubsetLink (stv 1 0.99999982) (av 0 0 0)
-    ;      (SetLink (av 0 0 0)
-    ;         (GeneNode "PLAU" (stv 9.9999997e-06 0.99999982) (av 0 0 0))
-    ;      )
-    ;      (ConceptNode "GO_A" (stv 0.001 0.99999982) (av 0 0 0))
-    ;   )
+#!
+        (SubsetLink (stv 1 0.99999982)
+           (SetLink
+              (GeneNode "PLAU" (stv 9.9999997e-06 0.89999998))
+           )
+           (ConceptNode "GO_C" (stv 0.001 0.89999998))
+        )
+        (SubsetLink (stv 1 0.99999982)
+           (SetLink
+              (GeneNode "PLAU" (stv 9.9999997e-06 0.89999998))
+           )
+           (ConceptNode "GO_B" (stv 0.001 0.89999998))
+        )
+        (SubsetLink (stv 1 0.99999982)
+           (SetLink
+              (GeneNode "PLAU" (stv 9.9999997e-06 0.89999998))
+           )
+           (ConceptNode "GO_A" (stv 0.001 0.89999998))
+        )
+        (SubsetLink (stv 1 0.99999982)
+           (SetLink
+              (GeneNode "L" (stv 9.9999997e-06 0.89999998))
+           )
+           (ConceptNode "GO_B" (stv 0.001 0.89999998))
+        )
+        (SubsetLink (stv 1 0.99999982)
+           (SetLink
+              (GeneNode "L" (stv 9.9999997e-06 0.89999998))
+           )
+           (ConceptNode "GO_A" (stv 0.001 0.89999998))
+        )
+!#
 
 #! The following steps occur in the cog-create-intensional-links command:
 
@@ -158,7 +178,7 @@
     )
 
 
-(6) Apply to AttractionRule to make AttractionLinks for L and PLAU for each
+(6) Apply the AttractionRule to make AttractionLinks for L and PLAU for each
     common relationship (IOW for each relationship in the supersets
     intersection).
 
