@@ -44,6 +44,8 @@
         (display-label "superInersection length" superIntersection-length)
         (display-label "superUnion-length" superUnion-length)
 
+        (display
+            "\nCreating inverse relationships SubsetAB and SubsetNotAB\n\n")
         (set! attractionLinksA
             (map-in-order make-attraction-via-subsets
                  superIntersection (make-list superIntersection-length A)
@@ -96,14 +98,16 @@
     ; Assumed here is that A is a set that contains GeneNode members
     ; Todo: How to handle creation of (NOT A) to avoid this assumption above
     (set! subsetAB (subset-direct-evaluation A B))
-    (display-atom "subsetAB" subsetAB)
+    ;(display-atom "subsetAB" subsetAB)
+    (display subsetAB)
     ; Todo: calc of (NOT A) could be refactored outside of this function, so
     ; it's not repeated twice
     (set! NotA (create-not-gene-set A))
 
     (set! subsetNotAB (SubsetLink (NotLink A) B
         (pln-formula-subset-direct-evaluation-side-effect-free NotA B)))
-    (display-atom "subsetNotAB" subsetNotAB)
+    ;(display-atom "subsetNotAB" subsetNotAB)
+    (display subsetNotAB)
 
     ;; Use the AttractionRule to create the AttractionLink
     ; Todo: ground the vars here -
@@ -114,11 +118,11 @@
     ;(cog-bind grounded-attraction-rule)
 
     ; Use new command to apply attraction rule with no variables
-    ;(pln-attraction-rule-no-variables subsetAB subsetNotAB)
+    (pln-attraction-rule-no-variables subsetAB subsetNotAB)
 
     ; Or instead of above if we don't want to have a special "no variables"
-    ; function for the rule, could do;
-    (pln-formula-attraction subsetAB subsetNotAB (AttractionLink A B))
+    ; function for the rule, could do something like;
+    ;(pln-formula-attraction subsetAB subsetNotAB (AttractionLink A B))
 )
 
 
