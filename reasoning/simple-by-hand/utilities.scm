@@ -2,11 +2,15 @@
 ;; Utility Functions ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
+(define (display-var label)
+    (newline)(display label)(display ": \n")(display (eval-string label)))
+    ;(newline))
+
 (define (display-atom label atom)
     (newline)(display label)(display ": \n")(display atom))
 
 (define (display-label label value)
-    (newline)(display label)(display ": \n")(display value)(newline))
+    (newline)(display label)(display ": ")(display value)(newline))
 
 
 (define (incoming atom)
@@ -19,6 +23,4 @@
 
 ; Question: why not use (Eval (Pred "overexpresed-in") (List gene person/organ))
 ; rather than gene specific predicates
-
-
 

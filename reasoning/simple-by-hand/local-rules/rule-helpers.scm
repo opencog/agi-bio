@@ -6,6 +6,8 @@
  (cog-apply-rule rule atoms #:optional no-focus-set)
  (define (create-not-gene-set A)
 
+ (cog-define-name rule-symbol-name)
+
  ; apply AttractionRule with no VariableNodes
  (define (pln-attraction-rule-no-variables subsetAB subsetNotAB)
 
@@ -14,6 +16,30 @@
 (use-modules (opencog))
 (use-modules (opencog query))
 (use-modules (opencog rule-engine))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; (cog-define-name rule-symbol-name)
+;
+; Helper function for naming rules
+;
+; Usage:
+;   (cog-define-name "pln-rule-deduction")
+; produces the same result as:
+;   (define pln-rule-deduction-name (Node "pln-rule-deduction"))
+;   (DefineLink pln-rule-deduction-name pln-rule-deduction)
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define (cog-name-rule rule-symbol-name)
+    (define name-append (string-append rule-symbol-name "-name"))
+    (eval `(define ,(string->symbol name-append) ,(Node rule-symbol-name))
+        (interaction-environment))
+    (DefineLink
+        (Node rule-symbol-name)
+        (eval-string rule-symbol-name)))
+
+
+
 
 ;-------------------------------------------------------------------------------
 (define* (cog-apply-rule rule atoms #:optional no-focus-set)
@@ -25,9 +51,9 @@
       individual Atom. By default, these atoms will also serve as the focus set
       of the chainer, unless the optional no-focus-set parameter is set to #t.
 
-   rule - String representation of the rule name used in the rule definition
-      file, e.g., "pln-rule-deduction". Aternatively, can also pass the rule
-      name Node defined in the rule file, e.g., (Node "pln-rule-deduction")
+   rule - String representation of the rule symbol name used in the rule
+      definition file, e.g., "pln-rule-deduction". Aternatively, can also pass
+      the rule name Node defined in the rule file, e.g., (Node "pln-rule-deduction")
 
    no-focus-set (optional) - Boolean that defaults to #f. When #t, no focus set
       is specified, and the whole atomspace is searched for additional premises
@@ -48,10 +74,6 @@
     (define focus-set)
 
     ; Do URE configuration for the rule
-    (load-from-path "utilities.scm")
-    (load-from-path "av-tv.scm")
-    (load-from-path "rule-engine-utils.scm")
-
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Define temporary PLN rule-based system ;;
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -76,7 +98,7 @@
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Associate rules to PLN ;;
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ; rule needs to eather be string with rule name or (Node "rule-name")
+    ; rule needs to either be string with rule name or (Node "rule-symbol-name")
     (if (string? rule)
         (set! rule (Node rule)))
 

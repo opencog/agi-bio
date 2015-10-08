@@ -1,7 +1,11 @@
 #!
 Simple example of bio-inference using PLN by hand.
 
-We start with this background knowledge:
+Usage:
+cd to this file's directory, run guile, and then in guile scheme:
+scheme@(guile-user)> (load "simple-inference.scm")
+
+Background Knowledge:
 
     (IntensionalImplicationLink
         (PredicateNode "Gene-PLAU-overexpressed-in")
@@ -27,6 +31,14 @@ We start with this background knowledge:
         (GeneNode "PLAU")
         (ConceptNode "GO_C"))
 
+    (MemberLink (stv 1 1)
+        (GeneNode "Q")
+        (ConceptNode "GO_B"))
+
+    (MemberLink (stv 1 1)
+        (GeneNode "L")
+        (ConceptNode "GO_D"))
+
 And our target conclusion is:
 
     IntensionalImplicationLink
@@ -42,6 +54,7 @@ to longevity.
 (use-modules (opencog rule-engine))
 
 (load "utilities.scm")
+(load "local-rules/rule-helpers.scm")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load the atomspace and rules ;;
@@ -74,14 +87,16 @@ to longevity.
         (append-map cog-incoming-set (cog-get-atoms 'GeneNode))
     )
 )
-(display-label "gene-memberlinks" gene-memberlinks)
+
+(display-var "gene-memberlinks")
+
 (define m2s (map cog-apply-rule (make-list (length gene-memberlinks)
     "pln-rule-member-to-subset") gene-memberlinks))
-
+;(define m2s (list (ListLink (ConceptNode "blah"))))
 ; remove inner listlinks for nicer print formatting
 (set! m2s (map (lambda(x) (list-ref (cog-outgoing-set x) 0)) m2s))
 
-(display "m2s: ")(display m2s)
+(display-var "m2s")
 
 #!
         (SubsetLink (stv 1 0.99999982)
@@ -172,13 +187,13 @@ to longevity.
 (4) For each inverse relationship (LinkType A B), create (LinkType (Not A) b)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Todo:
-; One of the main issues to be resolved is how to define (Not ConceptNode S), in
+; One of the main issues to be resolved is how to define (Not ConceptNode S) in
 ; general, which seems to me to be domain specific. Perhaps different
 ; category/set types can specify formulas to used that define what
 ; (Not Category_of_Type_X) is.
 ;
-; In the present context, we are defining (Not Gene_Category_S) to be all the
-; genes in the system that are not members of S.
+; In the present context, we are defining (Not Gene_Category_S) to be the set of
+;  all the genes in the system that are not members of S.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     (SubsetLink (stv 0 0.99999982)
@@ -247,13 +262,13 @@ to longevity.
 
 (6) Create IntensionalSimilarityLink via direct evaluation based on
     AttractionLinks and # of members in the union of supersets
-    tv.s = average(ASSOC(A,L) OR ASSOC(B,L))
+    tv.s = average(ASSOC(A,L) AND ASSOC(B,L))
            over all relationships in the union of supersets
 !#
 (define is-l-plau (cog-create-intensional-links
                     (SetLink (GeneNode "L")) (SetLink (GeneNode "PLAU")))
 )
-(display-atom "is-l-plau" is-l-plau)
+(display-var "is-l-plau")
 
     ;(IntensionalSimilarityLink (stv 0.33333334 0.99999982)
     ;   (SetLink
@@ -271,7 +286,7 @@ to longevity.
 ; IntensionalSimilarityLink PLAU L
 
 (define is2-l-plau (cog-bind pln-rule-singleton-similarity))
-(display-atom "is2-l-plau" is2-l-plau)
+(display-var "is2-l-plau")
 
         ;   (IntensionalSimilarityLink (stv 0.33333334 0.99999982)
         ;      (GeneNode "PLAU" (stv 9.9999997e-06 0.99999982))
@@ -286,7 +301,7 @@ to longevity.
 ;    Pred "Gene-L-overexpressed-in"
 
 (define IE (cog-bind gene-similarity2overexpression-equivalence))
-(display-atom "IE" IE)
+(display-var "IE")
 
     ;   (IntensionalEquivalenceLink (stv 0.33333334 0.99999982)
     ;      (PredicateNode "Gene-PLAU-overexpressed-in")
@@ -309,14 +324,14 @@ to longevity.
 
 ; (9) Apply intensional-equivalence-transformation to get
 ;
-; IntensionalImplication PredNode
+; IntensionalImplication
 ;    PredNode "Gene-PLAU-overexpressed-in"
 ;    PredNode "Gene-L-overexpressed-in"
 ;
 ;Todo: check with Ben re sim2inh rule referenced in the word doc
 
 (define II (cog-bind pln-rule-intensional-equivalence-transformation))
-(display-atom "II" II)
+(display-var "II")
 
 ;      (IntensionalImplicationLink (stv 0.33333334 0.99999982)
 ;         (PredicateNode "Gene-L-overexpressed-in")
@@ -335,7 +350,7 @@ to longevity.
 ; IntensionalImplication PredNode "Gene-L-overexpressed"  PredNode "LongLived"
 
 (define to-long-life (cog-bind pln-rule-deduction-intensional-implication))
-(display-atom "to-long-life" to-long-life)
+(display-var "to-long-life")
 
     ;   (IntensionalImplicationLink (stv .25 0.69999999)
     ;      (PredicateNode "Gene-L-overexpressed-in")
@@ -354,7 +369,7 @@ to longevity.
         (list (cons (VariableNode "$B") (PredicateNode "LongLived")))))
 ;(define conclusion (cog-bind pln-rule-intensional-implication-conversion))
 (define conclusion (cog-bind grounded-conversion-rule))
-(display-atom "conclusion" conclusion)
+(display-var "conclusion")
 
     ;   (ImplicationLink (stv 0.25 0.48999998)
     ;      (PredicateNode "Gene-L-overexpressed-in")

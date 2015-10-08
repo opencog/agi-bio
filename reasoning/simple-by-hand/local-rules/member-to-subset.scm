@@ -42,5 +42,6 @@
 ; =============================================================================
 
 ; Name the rule
-(define pln-rule-member-to-subset-name (Node "pln-rule-member-to-subset"))
-(DefineLink pln-rule-member-to-subset-name pln-rule-member-to-subset)
+(cog-name-rule "pln-rule-member-to-subset")
+;(define pln-rule-member-to-subset-name (Node "pln-rule-member-to-subset"))
+;(DefineLink pln-rule-member-to-subset-name pln-rule-member-to-subset)

@@ -63,8 +63,9 @@
 
 
 ; Name the rule
-(define pln-rule-subset-direct-evaluation-name (Node "pln-rule-subset-direct-evaluation"))
-(DefineLink pln-rule-subset-direct-evaluation-name pln-rule-subset-direct-evaluation)
+(cog-name-rule "pln-rule-subset-direct-evaluation")
+;(define pln-rule-subset-direct-evaluation-name (Node "pln-rule-subset-direct-evaluation"))
+;(DefineLink pln-rule-subset-direct-evaluation-name pln-rule-subset-direct-evaluation)
 
 ; Direct function to call when evaluating for specific sets (because can't use
 ; the PM when no variables in the pattern)

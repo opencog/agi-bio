@@ -45,5 +45,6 @@
     (stv (cog-stv-strength singletonAB) (cog-stv-confidence singletonAB)))
 
 ; Name the rule
-(define pln-rule-singleton-similarity-name (Node "pln-rule-singleton-similarity"))
-(DefineLink pln-rule-singleton-similarity-name pln-rule-singleton-similarity)
+(cog-name-rule "pln-rule-singleton-similarity")
+;(define pln-rule-singleton-similarity-name (Node "pln-rule-singleton-similarity"))
+;(DefineLink pln-rule-singleton-similarity-name pln-rule-singleton-similarity)

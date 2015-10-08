@@ -11,13 +11,13 @@
 ;       C
 ; |-
 ; LinkType
-;   B
+;   A
 ;   C
 ;
 ; (looks a similar pattern as inference or abduction depending on which var in subset is used)
 
 ; i think this pattern will work for notlinks as well
-(define equivalence-subset-substitution-rule
+(define pln-rule-equivalence-subset-substitution
     (BindLink
         (VariableList
             (VariableNode "$A")
@@ -80,3 +80,6 @@
         (stv (* sAB sBC) (* cAB cBC))
     )
 )
+
+; Name the rule
+(cog-name-rule "pln-rule-equivalance-subset-substitution")

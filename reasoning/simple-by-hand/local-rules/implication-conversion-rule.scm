@@ -44,6 +44,7 @@
     (stv (cog-stv-strength iiAB) (* .7 (cog-stv-confidence iiAB))))
 
 ; Name the rule
+(cog-name-rule "pln-rule-intensional-implication-conversion")
 (define pln-rule-intensional-implication-conversion-name
     (Node "pln-rule-intensional-implication-conversion"))
 (DefineLink pln-rule-intensional-implication-conversion-name
