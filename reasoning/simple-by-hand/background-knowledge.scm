@@ -60,6 +60,20 @@
     (GeneNode "PLAU")
     (ConceptNode "GO_C"))
 
+ (MemberLink (stv 1 1)
+    (GeneNode "Q")
+    (ConceptNode "GO_B"))
+
+  (MemberLink (stv 1 1)
+      (GeneNode "L")
+      (ConceptNode "GO_D"))
+
+
+; GO_A: PLAU, L
+; GO_B: PLAU, L, Q
+; GO_C: PLAU
+; GO_D: L
+
 
 ; todo: no IntensionalEquivalenceLink - add to atomspace/opencog/atomspace/atom_types.script ?
 
