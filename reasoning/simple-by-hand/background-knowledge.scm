@@ -16,7 +16,7 @@
 
 ;(PredicateNode "Gene-PLAU-overexpressed-in" (stv .5  1))
 ;(PredicateNode "Gene-L-overexpressed-in" (stv .5  1))
-(make-overexpression-predicate (GeneNode "PLAU"))
+;(make-overexpression-predicate (GeneNode "PLAU"))
 ;(make-overexpression-predicate (GeneNode "L"))  ; don't need this here i think
 
 ; overexpression of members of LifespanObservationIncrease imply longlived
@@ -25,13 +25,18 @@
 
 (PredicateNode "LongLived" (stv .25  9))
 
+; Todo: Should the following be intensional or mixed?
 ;(ImplicationLink
-;    (PredicateNode "Gene-PLAU-overexpressed-in")
-;    (PredicateNode "LongLived") (stv .2 .7))
+;      (ExecutionOutputLink
+;          (GroundedSchemaNode "scm: make-over-expression-predicate")
+;          (GeneNode "PLAU"))
+;      (PredicateNode "LongLived") (stv .2 .7))
 
 ; todo: What should the tv for these implications be
 (IntensionalImplicationLink
-    (PredicateNode "Gene-PLAU-overexpressed-in")
+    (QuoteLink (ExecutionOutputLink
+        (GroundedSchemaNode "scm: make-over-expression-predicate")
+        (GeneNode "PLAU")))
     (PredicateNode "LongLived") (stv .2 .7))
 
 (ConceptNode "GO_A" (stv gene-concept-strength gene-concept-confidence))
@@ -75,8 +80,6 @@
 ; GO_D: L
 
 
-; todo: no IntensionalEquivalenceLink - add to atomspace/opencog/atomspace/atom_types.script ?
-
 ; Domain particular knowledge/rule: If 2 genes are similar overexpression in one
 ; implies overexpression in the other.
 (define gene-similarity2overexpression-equivalence
@@ -102,8 +105,14 @@
 
 (define (create-overexpression-equivalance X Y XY)
     (IntensionalEquivalenceLink
-        (make-overexpression-predicate X)
-        (make-overexpression-predicate Y)
+        (QuoteLink (ExecutionOutputLink
+            (GroundedSchemaNode "scm: make-overexpression-predicate")
+            (ListLink
+                X)))
+        (QuoteLink (ExecutionOutputLink
+            (GroundedSchemaNode "scm: make-overexpression-predicate")
+            (ListLink
+                Y)))
         (stv (cog-stv-strength XY) (cog-stv-confidence XY))))
 
 ; can you use ExecutionOutputLink with bindlink conclusion not at top level???

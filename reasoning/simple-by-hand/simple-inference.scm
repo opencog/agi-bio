@@ -8,7 +8,9 @@ scheme@(guile-user)> (load "simple-inference.scm")
 Background Knowledge:
 
     (IntensionalImplicationLink
-        (PredicateNode "Gene-PLAU-overexpressed-in")
+        (ExecutionOutputLink
+            (GroundedSchemaNode "scm: make-over-expression-predicate")
+            (GeneNode "PLAU"))
         (PredicateNode "LongLived") (stv .2 .7))
 
     (MemberLink (stv 1 1)
@@ -42,7 +44,9 @@ Background Knowledge:
 And our target conclusion is:
 
     IntensionalImplicationLink
-        (PredicateNode "Gene-L-overexpressed-in")
+        (ExecutionOutputLink
+            (GroundedSchemaNode "scm: make-overexpression-predicate")
+            (GeneNode "L"))
         (PredicateNode "LongLived")
 
 In other words, we want to infer a relationship between Gene L and LongLived
@@ -92,7 +96,6 @@ to longevity.
 
 (define m2s (map cog-apply-rule (make-list (length gene-memberlinks)
     "pln-rule-member-to-subset") gene-memberlinks))
-;(define m2s (list (ListLink (ConceptNode "blah"))))
 ; remove inner listlinks for nicer print formatting
 (set! m2s (map (lambda(x) (list-ref (cog-outgoing-set x) 0)) m2s))
 

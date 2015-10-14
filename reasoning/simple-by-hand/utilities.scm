@@ -21,6 +21,13 @@
     (PredicateNode (string-append "Gene-" (cog-name gene) "-overexpressed-in")
         (stv .2 .5)))
 
+#!
 ; Question: why not use (Eval (Pred "overexpresed-in") (List gene person/organ))
 ; rather than gene specific predicates
+; Nil: Although it's probably hard to say which one is better, this depends on
+       the inference you're building. The curried form has the advantage that it
+       hides away the universal quantification, cause then you can use the
+       higher order version of the ImplicationLink (i.e. over predicates rather
+       than TVs).
+!#
 
