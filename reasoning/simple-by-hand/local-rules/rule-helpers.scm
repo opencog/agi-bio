@@ -99,50 +99,63 @@
     ;; Associate rules to PLN ;;
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ; rule needs to either be string with rule name or (Node "rule-symbol-name")
-    (if (string? rule)
-        (set! rule (Node rule)))
+    (if (not (or (string? rule)
+                 (and (cog-atom? rule) (equal? (cog-type rule) 'Node))))
+        (begin
+            (display "\n    Usage: cog-apply-rule \"quoted-rule-name\" ")
+            (display "(list atom1 atom2 ...)\n\n")
+            (exit)
+        )
+        (begin
+            (if (string? rule)
+                (set! rule (Node rule)))
 
-    ; List the rules and their weights.
-    (set! rules (list (list rule 1)))
+            ; List the rules and their weights.
+            (set! rules (list (list rule 1)))
 
-    ; Associate rules to PLN
-    (ure-add-rules temp-rbs rules)
+            ; Associate rules to PLN
+            (ure-add-rules temp-rbs rules)
 
-    ;;;;;;;;;;;;;;;;;;;;;
-    ;; Other paramters ;;
-    ;;;;;;;;;;;;;;;;;;;;;
+            ;;;;;;;;;;;;;;;;;;;;;
+            ;; Other paramters ;;
+            ;;;;;;;;;;;;;;;;;;;;;
 
-    ; Termination criteria parameters
-    (ure-set-num-parameter temp-rbs "URE:maximum-iterations" 1)
+            ; Termination criteria parameters
+            (ure-set-num-parameter temp-rbs "URE:maximum-iterations" 1)
 
-    ; Attention allocation (0 to disable it, 1 to enable it)
-    (ure-set-fuzzy-bool-parameter temp-rbs "URE:attention-allocation" 0)
+            ; Attention allocation (0 to disable it, 1 to enable it)
+            (ure-set-fuzzy-bool-parameter temp-rbs "URE:attention-allocation" 0)
 
-    ; atoms variable needs to be a SetLink
-    (if (list? atoms)
-        (set! atoms (SetLink atoms)))
-    (if (not (equal? (cog-type atoms) 'SetLink))
-        (set! atoms (SetLink atoms)))
+            ; atoms variable needs to be a SetLink
+            (if (list? atoms)
+                (set! atoms (SetLink atoms)))
+            (if (not (equal? (cog-type atoms) 'SetLink))
+                (set! atoms (SetLink atoms)))
 
-    (if no-focus-set
-        (set! focus-set (SetLink))
-        (set! focus-set atoms))
-    ;(display-atom "focus-set" focus-set)
+            (if no-focus-set
+                (set! focus-set (SetLink))
+                (set! focus-set atoms))
+            ;(display-atom "focus-set" focus-set)
 
-    (cog-fc atoms temp-rbs focus-set)
+            (cog-fc atoms temp-rbs focus-set)
+        )
+    )
 )
 
-#;(define (cog-apply-rule-test)
+#;
+(define (cog-apply-rule-test)
+
     (define atoms (list
         (InheritanceLink (ConceptNode "A" (stv .3 1))
             (ConceptNode "B" (stv .3 1)))
         (InheritanceLink (ConceptNode "B") (ConceptNode "C" (stv .3 1)))))
     (load-from-path "rules/deduction.scm")
+    (load-from-path "av-tv.scm")
     (display "Doing deduction rule\n")
-    (display (cog-apply-rule "pln-rule-deduction" atoms))
+    (display (cog-apply-rule "deduction-rule" atoms))
     (load-from-path "rules/induction-rule.scm")
     (display "Doing irrelevant rule\n")
-    (display (cog-apply-rule "pln-rule-induction-inheritance" atoms))
+    (display (cog-apply-rule "induction-inheritance-rule" atoms))
 )
 ;(cog-apply-rule-test)
 
@@ -209,6 +222,7 @@
 ; Assumed here is that A is a set that contains GeneNode members via MemberLinks
 ; TODO: this creates very large sets (about 26K?), any way to get around that?
 ;       or maybe it's not really a problem
+;       (See Ben had a suggestion to do a new link type(?)
 ;
 (define (create-not-gene-set A)
     ;(display-atom "(create-not-gene-set A)" A)
@@ -223,5 +237,5 @@
     (set! attractionAB (AttractionLink
                             (list-ref (cog-outgoing-set subsetAB) 0)
                             (list-ref (cog-outgoing-set subsetAB) 1)))
-    (pln-formula-attraction attractionAB subsetAB subsetNotAB))
+    (attraction-formula attractionAB subsetAB subsetNotAB))
 

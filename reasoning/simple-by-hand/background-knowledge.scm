@@ -23,7 +23,7 @@
 ; todo: implement general rule to specify LSObserv members imply longlived
 ; implementing specifically for PLAU for the demo
 
-(PredicateNode "LongLived" (stv .25  9))
+(PredicateNode "LongLived" (stv .25  .8))
 
 ; Todo: Should the following be intensional or mixed?
 ;(ImplicationLink
@@ -33,11 +33,17 @@
 ;      (PredicateNode "LongLived") (stv .2 .7))
 
 ; todo: What should the tv for these implications be
-(IntensionalImplicationLink
-    (QuoteLink (ExecutionOutputLink
-        (GroundedSchemaNode "scm: make-over-expression-predicate")
-        (GeneNode "PLAU")))
-    (PredicateNode "LongLived") (stv .2 .7))
+(define plau-implies-ll (IntensionalImplicationLink
+    ;(QuoteLink
+        (ExecutionOutputLink
+            (GroundedSchemaNode "scm: make-overexpression-predicate")
+            (ListLink
+                (GeneNode "PLAU")))
+
+     ;(stv .5 .7))
+    (PredicateNode "LongLived") (stv .2 .7)))
+
+(display-var "plau-implies-ll")
 
 (ConceptNode "GO_A" (stv gene-concept-strength gene-concept-confidence))
 (ConceptNode "GO_B" (stv gene-concept-strength gene-concept-confidence))
@@ -105,14 +111,22 @@
 
 (define (create-overexpression-equivalance X Y XY)
     (IntensionalEquivalenceLink
-        (QuoteLink (ExecutionOutputLink
-            (GroundedSchemaNode "scm: make-overexpression-predicate")
-            (ListLink
-                X)))
-        (QuoteLink (ExecutionOutputLink
-            (GroundedSchemaNode "scm: make-overexpression-predicate")
-            (ListLink
-                Y)))
+        ;(QuoteLink
+
+            (ExecutionOutputLink
+                (GroundedSchemaNode "scm: make-overexpression-predicate")
+                (ListLink
+                    X))
+
+        ;(stv .5 .7));
+        ;(QuoteLink
+
+            (ExecutionOutputLink
+                (GroundedSchemaNode "scm: make-overexpression-predicate")
+                (ListLink
+                    Y))
+
+        ;(stv .5 .7))
         (stv (cog-stv-strength XY) (cog-stv-confidence XY))))
 
 ; can you use ExecutionOutputLink with bindlink conclusion not at top level???

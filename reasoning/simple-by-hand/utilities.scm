@@ -18,9 +18,16 @@
 
 
 (define (make-overexpression-predicate gene)
-    (PredicateNode (string-append "Gene-" (cog-name gene) "-overexpressed-in")
-        (stv .2 .5)))
+    ; Temp workaround because PM is executing ExOut links within grounded terms
+    ; Returning the identical ExoutLink
+    (ExecutionOutputLink
+        (GroundedSchemaNode "scm: make-overexpression-predicate")
+        (ListLink
+            gene) (stv .5 .7))
 
+    ;(PredicateNode (string-append "Gene-" (cog-name gene) "-overexpressed-in")
+    ;    (stv .5 .7))
+)
 #!
 ; Question: why not use (Eval (Pred "overexpresed-in") (List gene person/organ))
 ; rather than gene specific predicates

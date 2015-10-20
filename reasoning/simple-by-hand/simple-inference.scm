@@ -94,8 +94,11 @@ to longevity.
 
 (display-var "gene-memberlinks")
 
-(define m2s (map cog-apply-rule (make-list (length gene-memberlinks)
-    "pln-rule-member-to-subset") gene-memberlinks))
+(define m2s (map cog-apply-rule
+    (make-list (length gene-memberlinks) "pln-rule-member-to-subset")
+    gene-memberlinks
+    (make-list (length gene-memberlinks) #t))
+)
 ; remove inner listlinks for nicer print formatting
 (set! m2s (map (lambda(x) (list-ref (cog-outgoing-set x) 0)) m2s))
 
@@ -188,7 +191,6 @@ to longevity.
 
 
 (4) For each inverse relationship (LinkType A B), create (LinkType (Not A) b)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Todo:
 ; One of the main issues to be resolved is how to define (Not ConceptNode S) in
 ; general, which seems to me to be domain specific. Perhaps different
@@ -197,7 +199,6 @@ to longevity.
 ;
 ; In the present context, we are defining (Not Gene_Category_S) to be the set of
 ;  all the genes in the system that are not members of S.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     (SubsetLink (stv 0 0.99999982)
        (NotLink
@@ -314,15 +315,6 @@ to longevity.
     ;      (PredicateNode "Gene-L-overexpressed-in")
     ;      (PredicateNode "Gene-PLAU-overexpressed-in")
     ;   )
-
-; Todo: Ben suggest doing this step by applying Modus rule, but can that be done
-; with an implication link with vars?
-
-; Todo: Would it work to use a general (Predicate "overexpressed-in" gene $X)
-; rather than gene specific predicates?
-
-; Question: are the results of this step supposed to contain ExecutionOutLinks
-; rather than the Predicates themselves?
 
 
 ; (9) Apply intensional-equivalence-transformation to get

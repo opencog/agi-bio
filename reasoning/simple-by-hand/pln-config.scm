@@ -53,7 +53,8 @@
                          "local-rules/subset-direct-evaluation-rule.scm"
                          "local-rules/singleton-similarity-rule.scm"
                          "local-rules/implication-conversion-rule.scm"
-                         "rules/deduction.scm"
+                         ;"rules/deduction.scm"
+                         "rules/deduction-rule.scm"
                          "rules/modus-ponens.scm"
                          "rules/attraction-rule.scm"
                          "rules/equivalence-transformation-rule.scm"))
@@ -68,10 +69,10 @@
                     (list pln-rule-subset-direct-evaluation-name 1)
                     (list pln-rule-singleton-similarity-name 1)
                     (list pln-rule-intensional-implication-conversion-name 1)
-                    (list pln-rule-deduction-name 1)
+                    ;(list pln-rule-deduction-name 1)
                     (list pln-rule-deduction-intensional-implication-name 1)
-                    (list pln-rule-modus-ponens-name 1)
-                    (list pln-rule-attraction-name 1)
+                    (list modus-ponens-rule-name 1)
+                    (list attraction-rule-name 1)
                     (list pln-rule-intensional-equivalence-transformation-name
                         1)
               )

@@ -112,7 +112,7 @@
     ;; Use the AttractionRule to create the AttractionLink
     ; Todo: ground the vars here -
     ;(set! grounded-attraction-rule
-    ;    (substitute pln-rule-attraction (list (cons (VariableNode "$B") B))))
+    ;    (substitute attraction-rule (list (cons (VariableNode "$B") B))))
     ;(display-atom "grounded-attraction-rule" grounded-attraction-rule)
     ;;(cog-bind pln-rule-attraction)
     ;(cog-bind grounded-attraction-rule)
