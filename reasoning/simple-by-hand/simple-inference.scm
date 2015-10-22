@@ -301,41 +301,62 @@ to longevity.
 ; (8) Apply gene-similarity2overexpression-equivalence knowledge rule to get
 ;
 ; IntensionalEquivalenceLink
-;    Pred "Gene-PLAU-overexpressed-in"
-;    Pred "Gene-L-overexpressed-in"
+;    Exout
+;        SchemaNode "make-overexperssion-predicate"
+;        GeneNode "L"
+;     Exout
+;        SchemaNode "make-overexperssion-predicate"
+;        GeneNode "PLAU"
+
 
 (define IE (cog-bind gene-similarity2overexpression-equivalence))
 (display-var "IE")
 
-    ;   (IntensionalEquivalenceLink (stv 0.33333334 0.99999982)
-    ;      (PredicateNode "Gene-PLAU-overexpressed-in")
-    ;      (PredicateNode "Gene-L-overexpressed-in")
-    ;   )
-    ;   (IntensionalEquivalenceLink (stv 0.33333334 0.99999982)
-    ;      (PredicateNode "Gene-L-overexpressed-in")
-    ;      (PredicateNode "Gene-PLAU-overexpressed-in")
+    ;   (IntensionalEquivalenceLink (stv 0.20833334 0.99999982)
+    ;      (ExecutionOutputLink
+    ;         (GroundedSchemaNode "scm: make-overexpression-predicate")
+    ;         (ListLink
+    ;            (GeneNode "L" (stv 9.9999997e-06 0.89999998))
+    ;         )
+    ;      )
+    ;      (ExecutionOutputLink
+    ;         (GroundedSchemaNode "scm: make-overexpression-predicate")
+    ;         (ListLink
+    ;            (GeneNode "PLAU" (stv 9.9999997e-06 0.89999998))
+    ;         )
+    ;      )
     ;   )
 
 
 ; (9) Apply intensional-equivalence-transformation to get
 ;
 ; IntensionalImplication
-;    PredNode "Gene-PLAU-overexpressed-in"
-;    PredNode "Gene-L-overexpressed-in"
+;    Exout
+;        SchemaNode "make-overexperssion-predicate"
+;        GeneNode "L"
+;     Exout
+;        SchemaNode "make-overexperssion-predicate"
+;        GeneNode "PLAU"
 ;
 ;Todo: check with Ben re sim2inh rule referenced in the word doc
 
 (define II (cog-bind pln-rule-intensional-equivalence-transformation))
 (display-var "II")
 
-;      (IntensionalImplicationLink (stv 0.33333334 0.99999982)
-;         (PredicateNode "Gene-L-overexpressed-in")
-;         (PredicateNode "Gene-PLAU-overexpressed-in")
-;      )
-;      (IntensionalImplicationLink (stv 0.33333334 0.99999982)
-;         (PredicateNode "Gene-PLAU-overexpressed-in")
-;         (PredicateNode "Gene-L-overexpressed-in")
-
+    ;      (IntensionalImplicationLink
+    ;         (ExecutionOutputLink (stv 0.5 0.69999999)
+    ;            (GroundedSchemaNode "scm: make-overexpression-predicate")
+    ;            (ListLink
+    ;               (GeneNode "L" (stv 9.9999997e-06 0.89999998))
+    ;            )
+    ;         )
+    ;         (ExecutionOutputLink (stv 0.5 0.69999999)
+    ;            (GroundedSchemaNode "scm: make-overexpression-predicate")
+    ;            (ListLink
+    ;               (GeneNode "PLAU" (stv 9.9999997e-06 0.89999998))
+    ;            )
+    ;         )
+    ;      )
 
 ; ** first either need to convert first Implication to IntensionalImplication
 ; or 2nd IntensionalImplication to Implication
@@ -347,11 +368,15 @@ to longevity.
 (define to-long-life (cog-bind pln-rule-deduction-intensional-implication))
 (display-var "to-long-life")
 
-    ;   (IntensionalImplicationLink (stv .25 0.69999999)
-    ;      (PredicateNode "Gene-L-overexpressed-in")
-    ;      (PredicateNode "LongLived")
+    ;   (IntensionalImplicationLink (stv 0.2 0)
+    ;      (ExecutionOutputLink (stv 0.5 0.69999999)
+    ;         (GroundedSchemaNode "scm: make-overexpression-predicate")
+    ;         (ListLink
+    ;            (GeneNode "L" (stv 9.9999997e-06 0.89999998))
+    ;         )
+    ;      )
+    ;      (PredicateNode "LongLived" (stv 0.25 0.80000001))
     ;   )
-
 
 ; (11) Apply implication-conversion to get
 ;
@@ -366,7 +391,12 @@ to longevity.
 (define conclusion (cog-bind grounded-conversion-rule))
 (display-var "conclusion")
 
-    ;   (ImplicationLink (stv 0.25 0.48999998)
-    ;      (PredicateNode "Gene-L-overexpressed-in")
-    ;      (PredicateNode "LongLived")
+    ;   (ImplicationLink (stv 0.2 0)
+    ;      (ExecutionOutputLink (stv 0.5 0.69999999)
+    ;         (GroundedSchemaNode "scm: make-overexpression-predicate")
+    ;         (ListLink
+    ;            (GeneNode "L" (stv 9.9999997e-06 0.89999998))
+    ;         )
+    ;      )
+    ;      (PredicateNode "LongLived" (stv 0.25 0.80000001))
     ;   )
