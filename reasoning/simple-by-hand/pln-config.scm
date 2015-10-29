@@ -55,6 +55,7 @@
                          "local-rules/implication-conversion-rule.scm"
                          ;"rules/deduction.scm"
                          "rules/deduction-rule.scm"
+                         "rules/implication-instantiation-rule.scm"
                          "rules/modus-ponens.scm"
                          "rules/attraction-rule.scm"
                          "rules/equivalence-transformation-rule.scm"))
@@ -71,6 +72,7 @@
                     (list pln-rule-intensional-implication-conversion-name 1)
                     ;(list pln-rule-deduction-name 1)
                     (list pln-rule-deduction-intensional-implication-name 1)
+                    (list implication-full-instantiation-rule-name 1)
                     (list modus-ponens-rule-name 1)
                     (list attraction-rule-name 1)
                     (list pln-rule-intensional-equivalence-transformation-name

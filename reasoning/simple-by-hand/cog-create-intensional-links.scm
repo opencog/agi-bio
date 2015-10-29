@@ -100,12 +100,17 @@
     (set! subsetAB (subset-direct-evaluation A B))
     ;(display-atom "subsetAB" subsetAB)
     (display subsetAB)
+
     ; Todo: calc of (NOT A) could be refactored outside of this function, so
     ; it's not repeated twice
-    (set! NotA (create-not-gene-set A))
-
-    (set! subsetNotAB (SubsetLink (NotLink A) B
-        (pln-formula-subset-direct-evaluation-side-effect-free NotA B)))
+    ; Hack: Since if B is a member of A, we know that (Subset NotA B) will have
+    ; tv = 0 since we know B will not be a member of NotA. So instead of the
+    ; 2 lines, which are taking a lot of time, we can directly set
+    ; (Subset NotA B) to tv 0
+    ;(set! NotA (create-not-gene-set A))
+    ;(set! subsetNotAB (SubsetLink (NotLink A) B
+    ;    (pln-formula-subset-direct-evaluation-side-effect-free NotA B)))
+    (set! subsetNotAB (SubsetLink (NotLink A) B (stv 0 1)))
     ;(display-atom "subsetNotAB" subsetNotAB)
     (display subsetNotAB)
 

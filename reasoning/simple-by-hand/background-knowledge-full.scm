@@ -1,18 +1,18 @@
-; Background knowledge for simple bio inference example
+; Background knowledge for simple bio inference on full biospace
 
+""
 (define gene-strength .00001)
 (define gene-confidence .9)
 (define gene-concept-strength .001)
 (define gene-concept-confidence .9)
+""
 
-(GeneNode "PLAU" (stv gene-strength gene-confidence))
-(GeneNode "L" (stv gene-strength gene-confidence))
-(GeneNode "Q" (stv gene-strength gene-confidence))
 
 (define PLAU (GeneNode "PLAU"))
-(define L (GeneNode "L"))
 (define setPLAU (SetLink PLAU))
-(define setL (SetLink L))
+
+;(define target (GeneNode "MOCOS"))
+(define target (GeneNode "RYR1"))
 
 ; overexpression of members of LifespanObservationIncrease imply longlived
 ; todo: implement general rule to specify LSObserv members imply longlived
@@ -27,6 +27,7 @@
 ;          (GeneNode "PLAU"))
 ;      (PredicateNode "LongLived") (stv .2 .7))
 
+; Intensional version of the above
 ; todo: What should the tv for these implications be
 (define plau-implies-ll (IntensionalImplicationLink
     ;(QuoteLink
@@ -39,46 +40,6 @@
     (PredicateNode "LongLived") (stv .2 .7)))
 
 (display-var "plau-implies-ll")
-
-(ConceptNode "GO_A" (stv gene-concept-strength gene-concept-confidence))
-(ConceptNode "GO_B" (stv gene-concept-strength gene-concept-confidence))
-(ConceptNode "GO_C" (stv gene-concept-strength gene-concept-confidence))
-
-(define GO_A (ConceptNode "GO_A"))
-
-(MemberLink (stv 1 1)
-    (GeneNode "PLAU")
-    (ConceptNode "GO_A"))
-
-(MemberLink (stv 1 1)
-    (GeneNode "L")
-    (ConceptNode "GO_A"))
-
-(MemberLink (stv 1 1)
-    (GeneNode "L")
-    (ConceptNode "GO_B"))
-
-(MemberLink (stv 1 1)
-    (GeneNode "PLAU")
-    (ConceptNode "GO_B"))
-
-(MemberLink (stv 1 1)
-    (GeneNode "PLAU")
-    (ConceptNode "GO_C"))
-
- (MemberLink (stv 1 1)
-    (GeneNode "Q")
-    (ConceptNode "GO_B"))
-
-  (MemberLink (stv 1 1)
-      (GeneNode "L")
-      (ConceptNode "GO_D"))
-
-
-; GO_A: PLAU, L
-; GO_B: PLAU, L, Q
-; GO_C: PLAU
-; GO_D: L
 
 
 ; Domain particular knowledge/rule: If 2 genes are similar overexpression in one
@@ -106,10 +67,9 @@
                     (VariableNode "$Y"))))))
 
 
-
+; IMPLICATIONLINK VERSION FOR INSTANTIATION RULE
 ; Domain particular knowledge/rule: If 2 genes are similar overexpression in one
 ; implies overexpression in the other.
-; IMPLICATIONLINK VERSION FOR INSTANTIATION RULE
 (define gene-similarity2overexpression-equivalence-impl
     (ImplicationLink
         (VariableList

@@ -60,9 +60,9 @@ to longevity.
 (load "utilities.scm")
 (load "local-rules/rule-helpers.scm")
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Load the atomspace and rules ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Load the atomspace knowledge and rules ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;(loadf "Lifespan-observations_2015-02-21.scm")
 ;(set_bio_tvs)
@@ -310,6 +310,9 @@ to longevity.
 
 
 (define IE (cog-bind gene-similarity2overexpression-equivalence))
+; Hold off on using the full instantiation rule until the tv formula is
+; implemented
+;(define IE (cog-bind implication-full-instantiation-rule))
 (display-var "IE")
 
     ;   (IntensionalEquivalenceLink (stv 0.20833334 0.99999982)
@@ -343,20 +346,21 @@ to longevity.
 (define II (cog-bind pln-rule-intensional-equivalence-transformation))
 (display-var "II")
 
-    ;      (IntensionalImplicationLink
-    ;         (ExecutionOutputLink (stv 0.5 0.69999999)
-    ;            (GroundedSchemaNode "scm: make-overexpression-predicate")
-    ;            (ListLink
-    ;               (GeneNode "L" (stv 9.9999997e-06 0.89999998))
-    ;            )
-    ;         )
-    ;         (ExecutionOutputLink (stv 0.5 0.69999999)
-    ;            (GroundedSchemaNode "scm: make-overexpression-predicate")
-    ;            (ListLink
-    ;               (GeneNode "PLAU" (stv 9.9999997e-06 0.89999998))
-    ;            )
-    ;         )
-    ;      )
+;      (IntensionalImplicationLink (stv 0.20833334 0.99999982)
+;         (ExecutionOutputLink (stv 0.5 0.69999999)
+;            (GroundedSchemaNode "scm: make-overexpression-predicate")
+;            (ListLink
+;               (GeneNode "L" (stv 9.9999997e-06 0.89999998))
+;            )
+;         )
+;         (ExecutionOutputLink (stv 0.5 0.69999999)
+;            (GroundedSchemaNode "scm: make-overexpression-predicate")
+;            (ListLink
+;               (GeneNode "PLAU" (stv 9.9999997e-06 0.89999998))
+;            )
+;         )
+;      )
+
 
 ; ** first either need to convert first Implication to IntensionalImplication
 ; or 2nd IntensionalImplication to Implication

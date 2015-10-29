@@ -46,14 +46,14 @@
 #!
  Do a one-step inference via the URE using a particular rule on specified atoms
 
+   rule - String representation of the rule symbol name used in the rule
+      definition file, e.g., "pln-rule-deduction". Aternatively, can also pass
+      the rule name Node defined in the rule file, e.g., (Node "pln-rule-deduction")
+
    atoms - The source atom(s) used by the forward chainer for applying the rule.
       Can be a scheme list of Atoms, a SetLink containing Atoms, or an
       individual Atom. By default, these atoms will also serve as the focus set
       of the chainer, unless the optional no-focus-set parameter is set to #t.
-
-   rule - String representation of the rule symbol name used in the rule
-      definition file, e.g., "pln-rule-deduction". Aternatively, can also pass
-      the rule name Node defined in the rule file, e.g., (Node "pln-rule-deduction")
 
    no-focus-set (optional) - Boolean that defaults to #f. When #t, no focus set
       is specified, and the whole atomspace is searched for additional premises
