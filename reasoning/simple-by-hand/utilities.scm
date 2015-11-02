@@ -38,3 +38,66 @@
        than TVs).
 !#
 
+
+
+(define (common-GO-categories A B)
+    ;(display "\nCommon Categories:\n")(display A)(display B)(newline)
+    (let*
+        ((superA (cog-get-supersets A))
+         (superB (cog-get-supersets B))
+         (superA-length (length superA))
+         (superB-length (length superB))
+         (superUnion-length (length (lset-union equal? superA superB)))
+         (superIntersection (lset-intersection equal? superA superB))
+         (superIntersection-length (length superIntersection))
+        )
+        ;(display superIntersection)
+        ;(display "length: ")(display superIntersection-length)(newline)
+        ;(map get-GO-name superIntersection)
+
+        (if (> superIntersection-length 3)
+            (begin
+                (display "\nCommon Categories:\n")(display A)(display B)(newline)
+                (for-each (lambda (x)
+                                (begin
+                                    (display (cog-name x))(display " ")
+                                    (display (get-GO-name x))(newline)))
+                           superIntersection)))
+
+        ))
+
+
+
+
+(define (get-GO-name A)
+    (define name-node
+        (cog-bind
+            (BindLink
+                (VariableList
+                    (VariableNode "$GO_name"))
+                (EvaluationLink
+                         (PredicateNode "GO_name")
+                         (ListLink
+                                 A
+                                 (VariableNode "$GO_name")
+                         )
+                )
+                (VariableNode "$GO_name"))))
+    (if (> (length (cog-outgoing-set name-node)) 0)
+        (cog-name (gar name-node))
+        ""))
+
+(define (lifespan-observation-increased-members)
+    (cog-outgoing-set
+        (cog-bind
+            (BindLink
+                (MemberLink
+                    (VariableNode "$A")
+                    (ConceptNode "Lifespan_Observations_Increased_GeneSet"))
+                (VariableNode "$A")))))
+
+
+
+
+(define (common-with-lifespan-observation-genes A)
+    (for-each common-GO-categories los (make-list (length los) A)))

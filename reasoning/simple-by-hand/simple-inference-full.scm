@@ -12,7 +12,7 @@ This needs to be reworked to reflect the whole atomspace
         (ExecutionOutputLink
             (GroundedSchemaNode "scm: make-over-expression-predicate")
             (GeneNode "PLAU"))
-        (PredicateNode "LongLived") (stv .2 .7))
+        (PredicateNode "LongLived") (stv .8 .8))
 
     ((MemberLink
        (GeneNode "PLAU" (stv 9.9999997e-06 0.89999998))
@@ -27,7 +27,7 @@ This needs to be reworked to reflect the whole atomspace
 We want to infer how well gene RYR1 is related to longevity based on background
 knowledge. Our target conclusion is:
 
-    IntensionalImplicationLink
+    ImplicationLink
         (ExecutionOutputLink
             (GroundedSchemaNode "scm: make-overexpression-predicate")
             (GeneNode "RYR1"))
