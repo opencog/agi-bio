@@ -155,7 +155,7 @@ to longevity.
     )
     ...
 
-(4) For each inverse relationship (LinkType A B), create (LinkType (Not A) b)
+(4) For each inverse relationship (LinkType A B), create (LinkType (Not A) B)
 ; Todo:
 ; One of the main issues to be resolved is how to define (Not ConceptNode S) in
 ; general, which seems to me to be domain specific. Perhaps different
@@ -374,6 +374,10 @@ to longevity.
 ;    (ExecutionOutputLink
 ;        (GroundedSchemaNode "scm: make-overexpression-predicate")
 ;        (ListLink target)))
+
+(display "LongLife incoming: " )
+(display (cog-incoming-set (PredicateNode "LongLived")))
+
 (define to-long-life (cog-apply-rule
                         "pln-rule-deduction-intensional-implication"
                         (PredicateNode "LongLived")

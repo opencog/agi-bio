@@ -18,7 +18,7 @@
 ; todo: implement general rule to specify LSObserv members imply longlived
 ; implementing specifically for PLAU for the demo
 
-(PredicateNode "LongLived" (stv .25  .8))
+(PredicateNode "LongLived" (stv .1  .8))
 
 ; Todo: Should the following be intensional or mixed?
 ;(ImplicationLink
@@ -37,7 +37,7 @@
                 (GeneNode "PLAU")))
 
      ;(stv .5 .7))
-    (PredicateNode "LongLived") (stv .2 .7)))
+    (PredicateNode "LongLived") (stv .5 .7)))
 
 (display-var "plau-implies-ll")
 
