@@ -53,6 +53,7 @@
     (let*
          ((membersA (get-set-members A))
           (membersB (get-set-members B))
+          (display-var "membersB")
           ; todo: We could filter out low tv members of the sets above
           (intersectionAB (lset-intersection equal? membersA membersB))
           (sizeA (length membersA))

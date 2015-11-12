@@ -81,7 +81,7 @@
 ; GO_D: L
 
 
-; Domain particular knowledge/rule: If 2 genes are similar overexpression in one
+; Domain particular knowledge/rule: If 2 genes are similar, overexpression in one
 ; implies overexpression in the other.
 ; BINDLINK VERSION FOR PATTERN MATCHER
 (define gene-similarity2overexpression-equivalence
@@ -104,8 +104,6 @@
                 (IntensionalSimilarityLink
                     (VariableNode "$X")
                     (VariableNode "$Y"))))))
-
-
 
 ; Domain particular knowledge/rule: If 2 genes are similar overexpression in one
 ; implies overexpression in the other.
@@ -132,8 +130,6 @@
                     (VariableNode "$Y"))))))
 
 
-
-
 (define (create-overexpression-equivalance X Y XY)
     (IntensionalEquivalenceLink
         ;(QuoteLink
@@ -155,4 +151,51 @@
         (stv (cog-stv-strength XY) (cog-stv-confidence XY))))
 
 ; can you use ExecutionOutputLink with bindlink conclusion not at top level???
+
+
+
+; Gene Similarity Variant Rule
+; Todo: create ImplicationLink version to use when InstantiationRule is ready
+; Domain particular knowledge/rule: If 2 genes are similar and one has a variant
+; that implies a phenotype, then the other has a variant that implies the
+; phenotype.
+; BINDLINK VERSION FOR PATTERN MATCHER
+(define gene-similarity-variant-rule
+    (BindLink
+        (VariableList
+            (TypedVariableLink
+                (VariableNode "$X")
+                (TypeNode "GeneNode"))
+            (TypedVariableLink
+                (VariableNode "$Y")
+                (TypeNode "GeneNode"))
+            (VariableNode "$P")) ;the phenotype
+        (AndLink
+            (IntensionalSimilarityLink
+                (VariableNode "$X")
+                (VariableNode "$Y"))
+            (IntensionalImplicationLink
+                (ExecutionOutputLink
+                    (GroundedSchemaNode "scm: make-contains-significant-variant-predicate")
+                    (ListLink
+                        (VariableNode "$X")))
+                (VariableNode "$P")))
+        (ExecutionOutputLink
+            (GroundedSchemaNode "scm: create-variant-implies-phenotype")
+            (ListLink
+                (VariableNode "$X")
+                (VariableNode "$Y")
+                (IntensionalSimilarityLink
+                    (VariableNode "$X")
+                    (VariableNode "$Y"))
+                (VariableNode "$P")))))
+
+(define (create-variant-implies-phenotype X Y XY P)
+    (ImplicationLink
+        (ExecutionOutputLink
+            (GroundedSchemaNode "scm: make-contains-significant-variant-predicate")
+            (ListLink Y))
+        P
+        (stv (cog-stv-strength XY) (* .8 cog-stv-confidence XY))))
+
 

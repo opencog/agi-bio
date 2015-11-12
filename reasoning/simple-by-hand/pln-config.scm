@@ -56,7 +56,7 @@
                          ;"rules/deduction.scm"
                          "rules/deduction-rule.scm"
                          "rules/implication-instantiation-rule.scm"
-                         "rules/modus-ponens.scm"
+                         "rules/modus-ponens-rule.scm"
                          "rules/attraction-rule.scm"
                          "rules/equivalence-transformation-rule.scm"))
 (for-each load-from-path rule-files)
@@ -71,9 +71,9 @@
                     (list pln-rule-singleton-similarity-name 1)
                     (list pln-rule-intensional-implication-conversion-name 1)
                     ;(list pln-rule-deduction-name 1)
-                    (list pln-rule-deduction-intensional-implication-name 1)
+                    (list deduction-intensional-implication-rule-name 1)
                     (list implication-full-instantiation-rule-name 1)
-                    (list modus-ponens-rule-name 1)
+                    (list modus-ponens-implication-rule-name 1)
                     (list attraction-rule-name 1)
                     (list pln-rule-intensional-equivalence-transformation-name
                         1)

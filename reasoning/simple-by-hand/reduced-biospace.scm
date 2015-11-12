@@ -116,6 +116,57 @@ cat-members
 )
 
 
+
+;;;;;;;;;;;; C1QC ;;;;;;;;;;;;;;;;;;;;
+(MemberLink
+   (GeneNode "C1QC" (stv 9.9999997e-06 0.89999998))
+   (ConceptNode "GO:0072562" (stv 0.001 0.89999998))
+)
+ (MemberLink
+   (GeneNode "C1QC" (stv 9.9999997e-06 0.89999998))
+   (ConceptNode "GO:0070062" (stv 0.001 0.89999998))
+)
+ (MemberLink
+   (GeneNode "C1QC" (stv 9.9999997e-06 0.89999998))
+   (ConceptNode "GO:0045650" (stv 0.001 0.89999998))
+)
+ (MemberLink
+   (GeneNode "C1QC" (stv 9.9999997e-06 0.89999998))
+   (ConceptNode "GO:0045087" (stv 0.001 0.89999998))
+)
+ (MemberLink
+   (GeneNode "C1QC" (stv 9.9999997e-06 0.89999998))
+   (ConceptNode "GO:0030853" (stv 0.001 0.89999998))
+)
+ (MemberLink
+   (GeneNode "C1QC" (stv 9.9999997e-06 0.89999998))
+   (ConceptNode "GO:0006958" (stv 0.001 0.89999998))
+)
+ (MemberLink
+   (GeneNode "C1QC" (stv 9.9999997e-06 0.89999998))
+   (ConceptNode "GO:0006956" (stv 0.001 0.89999998))
+)
+ (MemberLink
+   (GeneNode "C1QC" (stv 9.9999997e-06 0.89999998))
+   (ConceptNode "GO:0006955" (stv 0.001 0.89999998))
+)
+ (MemberLink
+   (GeneNode "C1QC" (stv 9.9999997e-06 0.89999998))
+   (ConceptNode "GO:0005615" (stv 0.001 0.89999998))
+)
+ (MemberLink
+   (GeneNode "C1QC" (stv 9.9999997e-06 0.89999998))
+   (ConceptNode "GO:0005581" (stv 0.001 0.89999998))
+)
+ (MemberLink
+   (GeneNode "C1QC" (stv 9.9999997e-06 0.89999998))
+   (ConceptNode "GO:0005576" (stv 0.001 0.89999998))
+)
+
+
+
+
+
 (MemberLink
    (GeneNode "RYR1" (stv 9.9999997e-06 0.89999998))
    (ConceptNode "GO:0071313" (stv 0.001 0.89999998))

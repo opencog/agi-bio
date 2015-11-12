@@ -23,7 +23,7 @@
     (ExecutionOutputLink
         (GroundedSchemaNode "scm: make-overexpression-predicate")
         (ListLink
-            gene) (stv .5 .7))
+            gene) (stv .2 .7))
 
     ;(PredicateNode (string-append "Gene-" (cog-name gene) "-overexpressed-in")
     ;    (stv .5 .7))
@@ -39,6 +39,7 @@
 !#
 
 
+(use-modules (srfi srfi-1))  ; for support of lset-union and lset-intersection
 
 (define (common-GO-categories A B)
     ;(display "\nCommon Categories:\n")(display A)(display B)(newline)
@@ -55,7 +56,7 @@
         ;(display "length: ")(display superIntersection-length)(newline)
         ;(map get-GO-name superIntersection)
 
-        (if (> superIntersection-length 3)
+        (if (> superIntersection-length 5)
             (begin
                 (display "\nCommon Categories:\n")(display A)(display B)(newline)
                 (for-each (lambda (x)
@@ -96,8 +97,10 @@
                     (ConceptNode "Lifespan_Observations_Increased_GeneSet"))
                 (VariableNode "$A")))))
 
-
-
+# put in background knowledge file
+(define los (lifespan-observation-increased-members))
+(define known-longevity-genes '(CETP))
+(define long-genes (append los known-longevity-genes))
 
 (define (common-with-lifespan-observation-genes A)
     (for-each common-GO-categories los (make-list (length los) A)))

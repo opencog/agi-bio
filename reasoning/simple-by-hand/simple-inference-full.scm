@@ -76,7 +76,7 @@ to longevity.
 ;    )
 ;)
 
-(display "Applying Member2Subset rule to PLAU and target gene...\n")
+(display "Applying Member2Subset rule to longevity gene and target gene...\n")
 (define gene-memberlinks
     (cog-filter 'MemberLink
     (append-map cog-incoming-set (list PLAU target))))
@@ -137,7 +137,7 @@ to longevity.
 
     superUnion-length: 53
 
-
+;Don't think we need to do this b/c the AttractionLink args were reversed before
 (3) For each common relationship (IOW for each relationship in the supersets
     intersection), create the same inverse relationship.
 
@@ -155,8 +155,11 @@ to longevity.
     )
     ...
 
-(4) For each inverse relationship (LinkType A B), create (LinkType (Not A) B)
+;
+(4) For each common relationship (LinkType {Gene} B), create (LinkType (Not {Gene}) B)
 ; Todo:
+; I think the following may no longer be an issue since we had Attraction args
+; reversed before.
 ; One of the main issues to be resolved is how to define (Not ConceptNode S) in
 ; general, which seems to me to be domain specific. Perhaps different
 ; category/set types can specify formulas to used that define what
@@ -288,6 +291,7 @@ to longevity.
 ;(define IE (cog-bind implication-full-instantiation-rule))
 (display-var "IE")
 
+#!
    (IntensionalEquivalenceLink (stv 0.00014005332 0.99999982)
       (ExecutionOutputLink
          (GroundedSchemaNode "scm: make-overexpression-predicate")
@@ -316,6 +320,8 @@ to longevity.
          )
       )
    )
+!#
+
 
 ; (9) Apply intensional-equivalence-transformation to get
 ;
@@ -328,6 +334,9 @@ to longevity.
 ;        GeneNode "PLAU"
 ;
 ;Todo: check with Ben re sim2inh rule referenced in the word doc
+
+(display "-----------------\nPre-equivalence-transformation\nIE atoms:\n")
+(display (cog-get-atoms 'IntensionalEquivalenceLink))
 
 (define II (cog-bind pln-rule-intensional-equivalence-transformation))
 (display-var "II")
@@ -375,11 +384,11 @@ to longevity.
 ;        (GroundedSchemaNode "scm: make-overexpression-predicate")
 ;        (ListLink target)))
 
-(display "LongLife incoming: " )
-(display (cog-incoming-set (PredicateNode "LongLived")))
+;(display "LongLife incoming: " )
+;(display (cog-incoming-set (PredicateNode "LongLived")))
 
 (define to-long-life (cog-apply-rule
-                        "pln-rule-deduction-intensional-implication"
+                        "deduction-intensional-implication-rule"
                         (PredicateNode "LongLived")
                         #t))
 (display-var "to-long-life")

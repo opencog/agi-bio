@@ -8,11 +8,15 @@
 ""
 
 
-(define PLAU (GeneNode "PLAU"))
-(define setPLAU (SetLink PLAU))
+;(define PLAU (GeneNode "PLAU"))
+;(define setPLAU (SetLink PLAU))
+
+(define long-gene (GeneNode "TBK1"))
+(define long-set (SetLink long-gene))
 
 ;(define target (GeneNode "MOCOS"))
-(define target (GeneNode "RYR1"))
+;(define target (GeneNode "RYR1"))
+(define target (GeneNode "LY96"))
 
 ; overexpression of members of LifespanObservationIncrease imply longlived
 ; todo: implement general rule to specify LSObserv members imply longlived
@@ -29,17 +33,17 @@
 
 ; Intensional version of the above
 ; todo: What should the tv for these implications be
-(define plau-implies-ll (IntensionalImplicationLink
+(define long-gene-implies-ll (IntensionalImplicationLink
     ;(QuoteLink
         (ExecutionOutputLink
             (GroundedSchemaNode "scm: make-overexpression-predicate")
             (ListLink
-                (GeneNode "PLAU")))
+                long-gene))
 
      ;(stv .5 .7))
-    (PredicateNode "LongLived") (stv .5 .7)))
+    (PredicateNode "LongLived") (stv .3 .7)))
 
-(display-var "plau-implies-ll")
+(display-var "long-gene-implies-ll")
 
 
 ; Domain particular knowledge/rule: If 2 genes are similar overexpression in one

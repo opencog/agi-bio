@@ -1,5 +1,7 @@
 (use-modules (opencog))
 
+(define REDUCED_BIOSPACE_FILE "reduced-biospace-LY96-TBK1.scm")
+
 ;(define knowledge-dir "/home/eddie/opencog/bio-data/scheme-representations/")
 ;(define subgraph-dir (string-append knowledge-dir "subgraphs/"))
 
@@ -28,10 +30,24 @@
 (define (set-default-gene-tvs) (set-gene-tvs .00001 .9))
 (define (set-default-concept-tvs) (set-concept-tvs .001 .9))
 
+;compute gene tvs
+(define (set-computed-gene-tvs)
+    ;(define num-genes (length (cog-get-atoms 'GeneNode)))
+    ;(set-gene-tvs (/ 1 num-genes) .9))
+    ; Just use estimate since we are not loading the whle biospace
+    (set-gene-tvs (/ 1 24000) .9))
+
 (define (set-bio-tvs)
     (set-default-gene-tvs)
+    (set-computed-gene-tvs)
     (set-default-concept-tvs))
 
-(load "reduced-biospace.scm")
+;(load "reduced-biospace.scm")
+(display "Reduced Biospace File: ")(display REDUCED_BIOSPACE_FILE)(newline)
+(load REDUCED_BIOSPACE_FILE)
 
 (set-bio-tvs)
+
+;(define num-genes (length (cog-get-atoms 'GeneNode)))
+(define num-genes 24000)
+(display-var "num-genes")

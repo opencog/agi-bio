@@ -45,15 +45,18 @@
         (display-label "superUnion-length" superUnion-length)
 
         (display
-            "\nCreating inverse relationships SubsetAB and SubsetNotAB\n\n")
+        ;    "\nCreating inverse relationships SubsetAB and SubsetNotAB\n\n")
+            "\nCreating relationships SubsetAB and SubsetNotAB\n\n")
         (set! attractionLinksA
             (map-in-order make-attraction-via-subsets
-                 superIntersection (make-list superIntersection-length A)
+                 ;superIntersection (make-list superIntersection-length A)
+                 (make-list superIntersection-length A) superIntersection
             )
         )
         (set! attractionLinksB
             (map-in-order make-attraction-via-subsets
-                 superIntersection (make-list superIntersection-length B)
+                 ;superIntersection (make-list superIntersection-length B)
+                 (make-list superIntersection-length B) superIntersection
             )
         )
         (display-atom "attractionLinksA" attractionLinksA)
@@ -88,6 +91,10 @@
     (define NotA)
     (define subsetNotAB)
     (define grounded-attraction-rule)
+    (define all-genes)
+    ;(define num-genes)
+    (define sizeB)
+    (define sNotAB)
 
     ;(display "(make-attraction-via-subsets A B)")
     ;(display-atom "A" A)
@@ -101,6 +108,7 @@
     ;(display-atom "subsetAB" subsetAB)
     (display subsetAB)
 
+#!  ; i believe below from previous arg order is no longer relevant
     ; Todo: calc of (NOT A) could be refactored outside of this function, so
     ; it's not repeated twice
     ; Hack: Since if B is a member of A, we know that (Subset NotA B) will have
@@ -113,6 +121,38 @@
     (set! subsetNotAB (SubsetLink (NotLink A) B (stv 0 1)))
     ;(display-atom "subsetNotAB" subsetNotAB)
     (display subsetNotAB)
+!#
+
+    ; Create Subset notA B
+    ; plan a - compute directly based on category membership size
+    ; For present purposes where subsetNotAB is (Subset (Not {Gene}) GO), this
+    ; would be the % of all genes-1 that are in the GO cat, or P(GO|~Gene), or
+    ; (|GO|-1) / (|all genes|-1)
+    ; Todo: this should only be done once and stored/cached somewhere - perhaps
+    ; in the atomspace?
+    ; num-genes is now set when biospace is loaded
+    ;(set! num-genes (length (cog-get-atoms 'GeneNode)))
+    (set! sizeB (length (get-set-members B)))
+    (display-label "sizeB" sizeB)
+    (set! sNotAB (/ (- sizeB 1.0) (- num-genes 1)))
+    (display-label "sNotAB" sNotAB)
+    ; Since we are using a reduced atomspace, I will use P(B) for the
+    ; strength value, so it will be closer to what we will expect with the whole
+    ; atomspace.
+    (set! subsetNotAB (SubsetLink (NotLink A) B (stv sNotAB 1)))
+    ;(set! subsetNotAB (SubsetLink (NotLink A) B (cog-tv B)))
+    (display subsetNotAB)
+
+    #! ;--------------
+    ; plan b - use the subset-direct-eval-rule
+    ; Thhis approach is more compute expensive but perhaps more generalizable
+    ; okay def too expensive, going back to plan a
+    ; Todo: getting all genes should be done once and stored/cached:
+    (set! all-genes (SetLink (cog-get-atoms 'GeneNode)))
+    (set! NotA (SetLink (delete A (cog-outgoing-set all-genes))))
+    (set! subsetNotAB (subset-direct-evaluation NotA B))
+    (display subsetNotAB)
+    !#
 
     ;; Use the AttractionRule to create the AttractionLink
     ; Todo: ground the vars here -
