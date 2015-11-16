@@ -79,7 +79,7 @@ to longevity.
 (display "Applying Member2Subset rule to longevity gene and target gene...\n")
 (define gene-memberlinks
     (cog-filter 'MemberLink
-    (append-map cog-incoming-set (list PLAU target))))
+    (append-map cog-incoming-set (list long-gene target))))
 
 (display-var "gene-memberlinks")
 
@@ -246,7 +246,7 @@ to longevity.
            over all relationships in the union of supersets
 !#
 (define is-l-plau (cog-create-intensional-links
-                    (SetLink target) (SetLink (GeneNode "PLAU")))
+                    (SetLink target) (SetLink long-gene))
 )
 (display-var "is-l-plau")
 
@@ -278,17 +278,17 @@ to longevity.
     )
 !#
 
-; (8) Apply gene-similarity2overexpression-equivalence knowledge rule to get
+; (8) Apply gene-similarity-variant-rule knowledge rule to get
 ;
 ; IntensionalEquivalenceLink
 ;    PLAU-over-expressed
 ;    RYR1-over-expressed
 
 
-(define IE (cog-bind gene-similarity2overexpression-equivalence))
+; (define IE (cog-bind gene-similarity-variant-rule))
 ; Hold off on using the full instantiation rule until the tv formula is
 ; implemented
-;(define IE (cog-bind implication-full-instantiation-rule))
+(define IE (cog-bind implication-full-instantiation-rule))
 (display-var "IE")
 
 #!

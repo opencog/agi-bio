@@ -39,6 +39,21 @@
 !#
 
 
+(define (make-contains-significant-variant-predicate gene)
+    ; Temp workaround because PM is executing ExOut links within grounded terms
+    ; Returning the identical ExoutLink
+    (ExecutionOutputLink
+        (GroundedSchemaNode "scm: make-contains-significant-variant-predicate")
+        (ListLink
+            gene) (stv .2 .7))
+
+    ;(PredicateNode (string-append "Gene-" (cog-name gene) "-overexpressed-in")
+    ;    (stv .5 .7))
+)
+
+
+
+
 (use-modules (srfi srfi-1))  ; for support of lset-union and lset-intersection
 
 (define (common-GO-categories A B)
@@ -97,10 +112,8 @@
                     (ConceptNode "Lifespan_Observations_Increased_GeneSet"))
                 (VariableNode "$A")))))
 
-# put in background knowledge file
-(define los (lifespan-observation-increased-members))
-(define known-longevity-genes '(CETP))
-(define long-genes (append los known-longevity-genes))
+
 
 (define (common-with-lifespan-observation-genes A)
     (for-each common-GO-categories los (make-list (length los) A)))
+
