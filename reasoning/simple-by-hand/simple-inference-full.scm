@@ -47,7 +47,7 @@ to longevity.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load the atomspace knowledge and rules ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(display "Loading reduced biospace... \n")
+(display "Loading reduced biospace... ")
 (load "load-reduced-biospace.scm")
 (load "background-knowledge-full.scm")
 (load "pln-config.scm")
@@ -79,7 +79,7 @@ to longevity.
 (display "Applying Member2Subset rule to longevity gene and target gene...\n")
 (define gene-memberlinks
     (cog-filter 'MemberLink
-    (append-map cog-incoming-set (list PLAU target))))
+    (append-map cog-incoming-set (list long-gene target))))
 
 (display-var "gene-memberlinks")
 
@@ -246,7 +246,7 @@ to longevity.
            over all relationships in the union of supersets
 !#
 (define is-l-plau (cog-create-intensional-links
-                    (SetLink target) (SetLink (GeneNode "PLAU")))
+                    (SetLink target) (SetLink long-gene))
 )
 (display-var "is-l-plau")
 

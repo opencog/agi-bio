@@ -22,7 +22,7 @@
 ; todo: implement general rule to specify LSObserv members imply longlived
 ; implementing specifically for PLAU for the demo
 
-(PredicateNode "LongLived" (stv .1  .8))
+(PredicateNode "LongLived" (stv .15  .8))
 
 ; Todo: Should the following be intensional or mixed?
 ;(ImplicationLink
