@@ -8,11 +8,15 @@
 
 (add-to-load-path "/home/eddie/opencog/opencog/opencog/reasoning/pln/")
 
+(add-to-load-path "/home/eddie/opencog/agi-bio/eddie/visualizer-dev/")
+(add-to-load-path "/home/eddie/opencog/bio-data/scheme-representations/")
+
 
 ; pln rule configuration file
 (load "../../opencog/bio-ure-config.scm")
 
-(load-from-path "pln-config.scm")
+; Todo: removing because of issue in pln-config, but this might be needed
+;(load-from-path "pln-config.scm")
 
 (define dkc1 (GeneNode "DKC1"))
 

@@ -12,7 +12,8 @@ import os
 
 os.system('export GUILE_AUTO_COMPILE=0')
 time.sleep(5)
-os.chdir('/home/opencog/build')
+#os.chdir('/home/opencog/build')
+os.chdir('~/opencog/opencog/build')
 os.system('./opencog/server/cogserver &')
 time.sleep(30)
 
