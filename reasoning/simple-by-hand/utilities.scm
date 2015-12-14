@@ -2,9 +2,19 @@
 ;; Utility Functions ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (display-var label)
-    (newline)(display label)(display ": \n")(display (eval-string label)))
-    ;(newline))
+
+
+(define (display-var name value)
+    (newline)(display name)(display ":\n")(display value))
+
+;(define (display-var var)
+;    (newline)(display (symbol->string var))(display": \n")
+;    (display (eval var (interaction-environment))))
+;    (newline)
+
+;(define (display-var label)
+;    (newline)(display label)(display ": \n")(display (eval-string label)))
+;    ;(newline))
 
 (define (display-atom label atom)
     (newline)(display label)(display ": \n")(display atom))

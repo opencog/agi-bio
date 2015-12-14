@@ -47,8 +47,8 @@ to longevity.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load the atomspace knowledge and rules ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(display "Loading reduced biospace... \n")
-(load "load-reduced-biospace.scm")
+;(display "Loading reduced biospace... \n")
+;(load "load-reduced-biospace.scm")
 (load "background-knowledge-full.scm")
 (load "pln-config.scm")
 (load "substitute.scm")
@@ -59,6 +59,7 @@ to longevity.
 ;;                 Inference Chain Steps                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define (similarity-to-implies-longevity target long-gene)
 
 ; (1) Apply Member2SubsetRule, to get:
 ;
@@ -66,34 +67,39 @@ to longevity.
 ;  Subset (SetLink (GeneNode "PLAU"))  (ConceptNode "GO_ABC")
 ;  ...
 
-;(display "Applying Member2Subset rule to all gene memberlinks...\n")
-; this was taking too long against the full biospace (for develpment at least)
-; Apply rule just to the gene MemberLinks
-;(define gene-memberlinks
-;    (cog-filter
-;        'MemberLink
-;        (append-map cog-incoming-set (cog-get-atoms 'GeneNode))
-;    )
-;)
+    ;(display "Applying Member2Subset rule to all gene memberlinks...\n")
+    ; this was taking too long against the full biospace (for develpment at least)
+    ; Apply rule just to the gene MemberLinks
+    ;(define gene-memberlinks
+    ;    (cog-filter
+    ;        'MemberLink
+    ;        (append-map cog-incoming-set (cog-get-atoms 'GeneNode))
+    ;    )
+    ;)
 
-(display "Applying Member2Subset rule to longevity gene and target gene...\n")
-(define gene-memberlinks
-    (cog-filter 'MemberLink
-    (append-map cog-incoming-set (list long-gene target))))
+    (display "Applying Member2Subset rule to longevity gene and target gene...\n")
+    (let* ((gene-memberlinks
+                (cog-filter 'MemberLink
+                    (append-map cog-incoming-set (list long-gene target))))
 
-(display-var "gene-memberlinks")
+           (m2s (map cog-apply-rule
+              (make-list (length gene-memberlinks) "pln-rule-member-to-subset")
+              gene-memberlinks
+              (make-list (length gene-memberlinks) #t))
+           )
+          )
 
-(define m2s (map cog-apply-rule
-    (make-list (length gene-memberlinks) "pln-rule-member-to-subset")
-    gene-memberlinks
-    (make-list (length gene-memberlinks) #t))
-)
-; remove inner listlinks for nicer print formatting
-(set! m2s (map (lambda(x) (list-ref (cog-outgoing-set x) 0)) m2s))
-(display-var "m2s")
+        (display-var "gene-memberlinks" gene-memberlinks)
 
-;(define m2s-target (cog-incoming-set target))
-;(display-var "m2s-target")
+
+
+        ; remove inner listlinks for nicer print formatting
+        (set! m2s (map (lambda(x) (list-ref (cog-outgoing-set x) 0)) m2s))
+        (display-var "m2s" m2s)
+
+        ;(define m2s-target (cog-incoming-set target))
+        ;(display-var "m2s-target" m2s-target)
+    )
 
 #!
     (SubsetLink
@@ -245,10 +251,11 @@ to longevity.
     tv.s = average(ASSOC(A,L) AND ASSOC(B,L))
            over all relationships in the union of supersets
 !#
-(define is-l-plau (cog-create-intensional-links
-                    (SetLink target) (SetLink long-gene))
-)
-(display-var "is-l-plau")
+
+    (let ((is-l-plau (cog-create-intensional-links
+                        (SetLink target) (SetLink long-gene))))
+        (display-var "is-l-plau" is-l-plau)
+    )
 
 #!
     (IntensionalSimilarityLink (stv 0.00014005332 0.99999982)
@@ -266,8 +273,10 @@ to longevity.
 ;
 ; IntensionalSimilarityLink PLAU L
 
-(define is2-l-plau (cog-bind pln-rule-singleton-similarity))
-(display-var "is2-l-plau")
+    (let ((is2-l-plau (cog-bind pln-rule-singleton-similarity)))
+        (display-var "is2-l-plau" is2-l-plau)
+    )
+
 
 #!
     (SetLink
@@ -284,16 +293,16 @@ to longevity.
 ;    PLAU-over-expressed
 ;    RYR1-over-expressed
 
-; Hold off on using the full instantiation rule until the tv formula is
-; implemented
-;(define IE (cog-bind implication-full-instantiation-rule))
+    ; Hold off on using the full instantiation rule until the tv formula is
+    ; implemented
+    ;(define IE (cog-bind implication-full-instantiation-rule))
 
-(define IE (cog-bind gene-similarity2overexpression-equivalence))
+    ; for potential variant version
+    ;(define IE (cog-bind gene-similarity-variant-rule))
 
-; for potential variant version
-;(define IE (cog-bind gene-similarity-variant-rule))
-
-(display-var "IE")
+    (let ((IE (cog-bind gene-similarity2overexpression-equivalence)))
+        (display-var "IE" IE)
+    )
 
 #!
    (IntensionalEquivalenceLink (stv 0.00014005332 0.99999982)
@@ -339,11 +348,13 @@ to longevity.
 ;
 ;Todo: check with Ben re sim2inh rule referenced in the word doc
 
-(display "-----------------\nPre-equivalence-transformation\nIE atoms:\n")
-(display (cog-get-atoms 'IntensionalEquivalenceLink))
 
-(define II (cog-bind pln-rule-intensional-equivalence-transformation))
-(display-var "II")
+    (display "-----------------\nPre-equivalence-transformation\nIE atoms:\n")
+    (display (cog-get-atoms 'IntensionalEquivalenceLink))
+
+    (let ((II (cog-bind pln-rule-intensional-equivalence-transformation)))
+        (display-var "II" II)
+    )
 #!
       (IntensionalImplicationLink (stv 0.00028006741 0.99999982)
          (ExecutionOutputLink (stv 0.5 0.69999999)
@@ -382,20 +393,22 @@ to longevity.
 ;
 ; IntensionalImplication PredNode "Gene-L-overexpressed"  PredNode "LongLived"
 
-;(define to-long-life (cog-bind pln-rule-deduction-intensional-implication))
-;(define target-overexpressed
-;    (ExecutionOutputLink
-;        (GroundedSchemaNode "scm: make-overexpression-predicate")
-;        (ListLink target)))
+    ;(define to-long-life (cog-bind pln-rule-deduction-intensional-implication))
+    ;(define target-overexpressed
+    ;    (ExecutionOutputLink
+    ;        (GroundedSchemaNode "scm: make-overexpression-predicate")
+    ;        (ListLink target)))
 
-(display "LongLife incoming: " )
-(display (cog-incoming-set (PredicateNode "LongLived")))
+    (display "LongLife incoming: " )
+    (display (cog-incoming-set (PredicateNode "LongLived")))
 
-(define to-long-life (cog-apply-rule
-                        "deduction-intensional-implication-rule"
-                        (PredicateNode "LongLived")
-                        #t))
-(display-var "to-long-life")
+    (let ((to-long-life (cog-apply-rule
+                            "deduction-intensional-implication-rule"
+                            (PredicateNode "LongLived")
+                            #t)))
+        (display-var "to-long-life" to-long-life)
+    )
+
 #!
    (IntensionalImplicationLink (stv 0.299972 0.69999999)
       (ExecutionOutputLink (stv 0.5 0.69999999)
@@ -414,12 +427,15 @@ to longevity.
 ;   ExOut Schema "make-overexpression" (GeneNode L)
 ;   PredNode "LongLived"
 
-(define grounded-conversion-rule
-    (substitute pln-rule-intensional-implication-conversion
-        (list (cons (VariableNode "$B") (PredicateNode "LongLived")))))
-;(define conclusion (cog-bind pln-rule-intensional-implication-conversion))
-(define conclusion (cog-bind grounded-conversion-rule))
-(display-var "conclusion")
+    (let* ((grounded-conversion-rule
+            (substitute pln-rule-intensional-implication-conversion
+                (list (cons (VariableNode "$B") (PredicateNode "LongLived")))))
+          ;(define conclusion (cog-bind pln-rule-intensional-implication-conversion))
+          (conclusion (cog-bind grounded-conversion-rule))
+         )
+        (display-var "conclusion" conclusion)
+    )
+
 #!
    (ImplicationLink (stv 0.299972 0.48999998)
       (ExecutionOutputLink (stv 0.5 0.69999999)
@@ -431,3 +447,7 @@ to longevity.
       (PredicateNode "LongLived" (stv 0.25 0.80000001))
    )
 !#
+
+)
+(similarity-to-implies-longevity target long-gene)
+

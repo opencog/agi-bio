@@ -51,4 +51,4 @@
 
 ;(define num-genes (length (cog-get-atoms 'GeneNode)))
 (define num-genes 24000)
-(display-var "num-genes")
+(display-var "num-genes" num-genes)

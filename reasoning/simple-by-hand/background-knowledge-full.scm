@@ -45,7 +45,7 @@
      ;(stv .5 .7))
     (PredicateNode "LongLived") (stv .3 .7)))
 
-(display-var "long-gene-implies-ll")
+(display-var "long-gene-implies-ll" long-gene-implies-ll)
 
 ; Gene similarity to overexpression rule
 ; Domain particular knowledge/rule: If 2 genes are similar overexpression in one
