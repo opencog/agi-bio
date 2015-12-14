@@ -278,17 +278,21 @@ to longevity.
     )
 !#
 
-; (8) Apply gene-similarity-variant-rule knowledge rule to get
+; (8) Apply gene-similarity2overexpression-equivalence knowledge rule to get
 ;
 ; IntensionalEquivalenceLink
 ;    PLAU-over-expressed
 ;    RYR1-over-expressed
 
-
-; (define IE (cog-bind gene-similarity-variant-rule))
 ; Hold off on using the full instantiation rule until the tv formula is
 ; implemented
-(define IE (cog-bind implication-full-instantiation-rule))
+;(define IE (cog-bind implication-full-instantiation-rule))
+
+(define IE (cog-bind gene-similarity2overexpression-equivalence))
+
+; for potential variant version
+;(define IE (cog-bind gene-similarity-variant-rule))
+
 (display-var "IE")
 
 #!
@@ -384,8 +388,8 @@ to longevity.
 ;        (GroundedSchemaNode "scm: make-overexpression-predicate")
 ;        (ListLink target)))
 
-;(display "LongLife incoming: " )
-;(display (cog-incoming-set (PredicateNode "LongLived")))
+(display "LongLife incoming: " )
+(display (cog-incoming-set (PredicateNode "LongLived")))
 
 (define to-long-life (cog-apply-rule
                         "deduction-intensional-implication-rule"

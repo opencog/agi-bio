@@ -38,7 +38,7 @@
 (define long-gene-implies-ll (IntensionalImplicationLink
     ;(QuoteLink
         (ExecutionOutputLink
-            (GroundedSchemaNode "scm: make-contains-significant-variant-predicate")
+            (GroundedSchemaNode "scm: make-overexpression-predicate")
             (ListLink
                 long-gene))
 
@@ -47,7 +47,7 @@
 
 (display-var "long-gene-implies-ll")
 
-
+; Gene similarity to overexpression rule
 ; Domain particular knowledge/rule: If 2 genes are similar overexpression in one
 ; implies overexpression in the other.
 ; BINDLINK VERSION FOR PATTERN MATCHER
@@ -64,7 +64,7 @@
             (VariableNode "$X")
             (VariableNode "$Y"))
         (ExecutionOutputLink
-            (GroundedSchemaNode "scm: create-overexpression-equivalance")
+            (GroundedSchemaNode "scm: create-overexpression-equivalence")
             (ListLink
                 (VariableNode "$X")
                 (VariableNode "$Y")
@@ -76,7 +76,7 @@
 ; IMPLICATIONLINK VERSION FOR INSTANTIATION RULE
 ; Domain particular knowledge/rule: If 2 genes are similar overexpression in one
 ; implies overexpression in the other.
-(define gene-similarity2overexpression-equivalence-impl
+(define gene-similarity-implies-overexpression-equivalence
     (ImplicationLink
         (VariableList
             (TypedVariableLink
@@ -89,7 +89,7 @@
             (VariableNode "$X")
             (VariableNode "$Y"))
         (ExecutionOutputLink
-            (GroundedSchemaNode "scm: create-overexpression-equivalance")
+            (GroundedSchemaNode "scm: create-overexpression-equivalence")
             (ListLink
                 (VariableNode "$X")
                 (VariableNode "$Y")
@@ -100,7 +100,7 @@
 
 
 
-(define (create-overexpression-equivalance X Y XY)
+(define (create-overexpression-equivalence X Y XY)
     (IntensionalEquivalenceLink
         ;(QuoteLink
 
@@ -118,7 +118,8 @@
                     Y))
 
         ;(stv .5 .7))
-        (stv (cog-stv-strength XY) (cog-stv-confidence XY))))
+        (stv (cog-stv-strength XY) (cog-stv-confidence XY)))
+)
 
 ; can you use ExecutionOutputLink with bindlink conclusion not at top level???
 
