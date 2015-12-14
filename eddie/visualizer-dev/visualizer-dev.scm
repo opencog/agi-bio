@@ -26,6 +26,7 @@
 (define (collapse-atom-within-set atom atomset)
     (define neighbors
         (lset-union equal? (cog-incoming-set atom) (cog-outgoing-set atom)))
+    (display neighbors)
     (lset-difference equal? atomset neighbors))
 
 
@@ -42,7 +43,8 @@
 (define n1 (GeneNode "EDEM3"))
 (define n2 (ConceptNode "MSigDB_GeneSet: V$TEL2_Q6"))
 
-(define atomset (list n1))
+(define atomset '())
+;(define atomset (list n1))
 ;(write-atoms-to-file results RESULTS-FILE)
 
 (define (load-atomset-to-viz-atomspace)
@@ -73,10 +75,12 @@
 
 
 (define (step1)
-    (expand n1)
-    ;(define results (expand-atom-within-set n1 atomset 1))
-    ;(write-atoms results)
-    ;(set! atomset results)
+    ;(expand n1)
+    (define results (expand-atom-within-set n1 atomset 1))
+    (write-atoms results)
+    (set! atomset results)
+    (load-atomset-to-viz-atomspace)
+
 )
 
 (define (step2)
