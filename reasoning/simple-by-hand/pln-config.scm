@@ -53,6 +53,7 @@
                          "local-rules/subset-direct-evaluation-rule.scm"
                          "local-rules/singleton-similarity-rule.scm"
                          "local-rules/implication-conversion-rule.scm"
+                         "local-rules/gene-similarity2overexpression-equivalence-rule.scm"
                          ;"rules/deduction.scm"
                          "rules/deduction-rule.scm"
                          "rules/implication-instantiation-rule.scm"
@@ -70,6 +71,7 @@
                     (list pln-rule-subset-direct-evaluation-name 1)
                     (list pln-rule-singleton-similarity-name 1)
                     (list pln-rule-intensional-implication-conversion-name 1)
+                    (list gene-similarity2overexpression-equivalence-name 1)
                     ;(list pln-rule-deduction-name 1)
                     (list deduction-intensional-implication-rule-name 1)
                     (list implication-full-instantiation-rule-name 1)

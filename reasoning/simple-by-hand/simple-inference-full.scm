@@ -52,7 +52,7 @@ to longevity.
 (load "background-knowledge-full.scm")
 (load "pln-config.scm")
 (load "substitute.scm")
-(load "cog-create-intensional-links.scm")
+(load "cog-create-intensional-similarity-link.scm")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -60,6 +60,17 @@ to longevity.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (similarity-to-implies-longevity target long-gene)
+    (define is-set)
+    (define is2)
+    (define IE-over)
+    (define II-over)
+    (define II)
+    (define II-long)
+
+
+    (display (string-append "\nComputing " (cog-name target) " implies longevity based on "
+        "similarity to " (cog-name long-gene) "\n\n"))
+
 
 ; (1) Apply Member2SubsetRule, to get:
 ;
@@ -89,13 +100,13 @@ to longevity.
            )
           )
 
-        (display-var "gene-memberlinks" gene-memberlinks)
+        ;(display-var "gene-memberlinks" gene-memberlinks)
 
 
 
         ; remove inner listlinks for nicer print formatting
         (set! m2s (map (lambda(x) (list-ref (cog-outgoing-set x) 0)) m2s))
-        (display-var "m2s" m2s)
+        ;(display-var "m2s" m2s)
 
         ;(define m2s-target (cog-incoming-set target))
         ;(display-var "m2s-target" m2s-target)
@@ -111,7 +122,7 @@ to longevity.
     ...
 !#
 
-#! The following steps 2-6 occur in the cog-create-intensional-links command:
+#! The following steps 2-6 occur in the cog-create-intensional-similarity-link command:
 
 (2) Get the supersets of the target and of {PLAU} (IOW the categories they are
     members of), and the union and intersection of the supersets
@@ -252,10 +263,10 @@ to longevity.
            over all relationships in the union of supersets
 !#
 
-    (let ((is-l-plau (cog-create-intensional-links
-                        (SetLink target) (SetLink long-gene))))
-        (display-var "is-l-plau" is-l-plau)
-    )
+    (set! is-set (cog-create-intensional-similarity-link
+                        (SetLink target) (SetLink long-gene)))
+    (display-var "is-set" is-set)
+
 
 #!
     (IntensionalSimilarityLink (stv 0.00014005332 0.99999982)
@@ -273,9 +284,16 @@ to longevity.
 ;
 ; IntensionalSimilarityLink PLAU L
 
-    (let ((is2-l-plau (cog-bind pln-rule-singleton-similarity)))
-        (display-var "is2-l-plau" is2-l-plau)
+    (set! is2
+            ;(cog-bind pln-rule-singleton-similarity)
+            (cog-apply-rule
+                "pln-rule-singleton-similarity"
+                is-set
+                #t)
     )
+    ;(set! is2 (gar is2))
+    (display-var "is2" is2)
+
 
 
 #!
@@ -300,9 +318,12 @@ to longevity.
     ; for potential variant version
     ;(define IE (cog-bind gene-similarity-variant-rule))
 
-    (let ((IE (cog-bind gene-similarity2overexpression-equivalence)))
-        (display-var "IE" IE)
-    )
+    ;(set! IE-over (cog-bind gene-similarity2overexpression-equivalence))
+    (set! IE-over (cog-apply-rule
+                        "gene-similarity2overexpression-equivalence"
+                        (gar is2)
+                        #t))
+    (display-var "IE-over" IE-over)
 
 #!
    (IntensionalEquivalenceLink (stv 0.00014005332 0.99999982)
@@ -349,12 +370,20 @@ to longevity.
 ;Todo: check with Ben re sim2inh rule referenced in the word doc
 
 
-    (display "-----------------\nPre-equivalence-transformation\nIE atoms:\n")
-    (display (cog-get-atoms 'IntensionalEquivalenceLink))
+    ;(display "-----------------\nPre-equivalence-transformation\nIE atoms:\n")
+    ;(display (cog-get-atoms 'IntensionalEquivalenceLink))
 
-    (let ((II (cog-bind pln-rule-intensional-equivalence-transformation)))
-        (display-var "II" II)
-    )
+    ;(let ((II (cog-bind pln-rule-intensional-equivalence-transformation)))
+    ;    (display-var "II" II)
+    ;)
+
+    (set! II-over
+        (cog-apply-rule
+            "pln-rule-intensional-equivalence-transformation"
+            IE-over
+            #t))
+    (display-var "II-over" II-over)
+
 #!
       (IntensionalImplicationLink (stv 0.00028006741 0.99999982)
          (ExecutionOutputLink (stv 0.5 0.69999999)
@@ -399,15 +428,28 @@ to longevity.
     ;        (GroundedSchemaNode "scm: make-overexpression-predicate")
     ;        (ListLink target)))
 
-    (display "LongLife incoming: " )
-    (display (cog-incoming-set (PredicateNode "LongLived")))
+    ;(display "LongLife incoming: " )
+    ;(display (cog-incoming-set (PredicateNode "LongLived")))
 
-    (let ((to-long-life (cog-apply-rule
-                            "deduction-intensional-implication-rule"
-                            (PredicateNode "LongLived")
-                            #t)))
-        (display-var "to-long-life" to-long-life)
+    ; set up the source link to be (Implication target long-lived(gene) )
+    (let  ((slot-a-gene (gar (gdr (gar (gar (gar II-over))))) ))
+        ;(display-var "slot-a-gene" slot-a-gene)
+        (if (eq? slot-a-gene target)
+            (set! II-over (gar (gar II-over)))
+            (set! II-over (gdr (gar II-over))))
     )
+    ;(display-var "II-over (post choice)" II-over)
+
+    ; Using (PredicateNode "LongLived" as a workaround for now because using
+    ; II-over as the source atom leads to "throw RuntimeException(TRACE_INFO,
+    ; "Not implemented!!")"
+    (set! II-long (cog-apply-rule
+                        "deduction-intensional-implication-rule"
+                        (PredicateNode "LongLived")
+                        ;II-over
+                        #t))
+    (display-var "II-long" II-long)
+
 
 #!
    (IntensionalImplicationLink (stv 0.299972 0.69999999)
@@ -448,6 +490,9 @@ to longevity.
    )
 !#
 
-)
+) ; end main similarity-to-implies-longevity function
+
+
+
 (similarity-to-implies-longevity target long-gene)
 

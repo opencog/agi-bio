@@ -10,13 +10,13 @@
 (load "local-rules/subset-direct-evaluation-rule.scm")
 (load-from-path "rules/attraction-rule.scm")
 
-(define (cog-create-intensional-links A B)
+(define (cog-create-intensional-similarity-link A B)
     (define attractionLinksA)
     (define attractionLinksB)
     (define ASSOC_sum)
     (define tv-strength)
 
-    (display "cog-create-intensional-links")
+    (display "cog-create-intensional-similarity-link")
     (display-atom "A" A)
     (display-atom "B" B)
 
@@ -108,7 +108,7 @@
     ;(display-atom "subsetAB" subsetAB)
     (display subsetAB)
 
-#!  ; i believe below from previous arg order is no longer relevant
+#!  ; i believe the following from previous arg order is no longer relevant
     ; Todo: calc of (NOT A) could be refactored outside of this function, so
     ; it's not repeated twice
     ; Hack: Since if B is a member of A, we know that (Subset NotA B) will have
@@ -184,7 +184,7 @@
     (load "background-knowledge.scm")
     (load "local-rules/member-to-subset.scm")
     (cog-bind pln-rule-member-to-subset)
-    (cog-create-intensional-links setL setPLAU)
+    (cog-create-intensional-link setL setPLAU)
 )
 ;(test)
 

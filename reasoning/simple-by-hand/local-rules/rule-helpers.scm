@@ -126,9 +126,13 @@
             ; Attention allocation (0 to disable it, 1 to enable it)
             (ure-set-fuzzy-bool-parameter temp-rbs "URE:attention-allocation" 0)
 
+            ;(display-atom "cog-apply-rule source atoms input" atoms)
+
             ; atoms variable needs to be a SetLink
             (if (list? atoms)
                 (set! atoms (SetLink atoms)))
+            (if (equal? (cog-type atoms) 'ListLink)
+                (set! atoms (SetLink (cog-outgoing-set atoms))))
             (if (not (equal? (cog-type atoms) 'SetLink))
                 (set! atoms (SetLink atoms)))
 
@@ -136,6 +140,8 @@
                 (set! focus-set (SetLink))
                 (set! focus-set atoms))
             ;(display-atom "focus-set" focus-set)
+
+            (display-atom "cog-apply-rule source atoms" atoms)
 
             (cog-fc atoms temp-rbs focus-set)
         )

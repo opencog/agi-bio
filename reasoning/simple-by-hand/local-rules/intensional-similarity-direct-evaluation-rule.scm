@@ -1,6 +1,6 @@
 ;; ***** NOTE *****
 ;; I am switching over to do a batch mode scheme function/command rather than as
-;; a general pln rule.  cog-create-intensional-links.scm
+;; a general pln rule.  cog-create-intensional-similarity-link.scm
 
 ; =============================================================================
 ; IntensionalSimilarityEvaluationRule
