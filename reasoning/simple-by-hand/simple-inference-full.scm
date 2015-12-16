@@ -1,3 +1,5 @@
+(define VERBOSE #t)
+
 #!
 Simple example of bio-inference using PLN by hand using full biospace.
 
@@ -60,8 +62,8 @@ to longevity.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (similarity-to-implies-longevity target long-gene)
-    (define is-set)
-    (define is2)
+    (define IS-sets)
+    (define IS-genes)
     (define IE-over)
     (define II-over)
     (define II)
@@ -69,7 +71,7 @@ to longevity.
 
 
     (display (string-append "\nComputing " (cog-name target) " implies longevity based on "
-        "similarity to " (cog-name long-gene) "\n\n"))
+        "similarity to " (cog-name long-gene) "...\n\n"))
 
 
 ; (1) Apply Member2SubsetRule, to get:
@@ -88,7 +90,7 @@ to longevity.
     ;    )
     ;)
 
-    (display "Applying Member2Subset rule to longevity gene and target gene...\n")
+    (if VERBOSE (display "Applying Member2Subset rule to longevity gene and target gene...\n"))
     (let* ((gene-memberlinks
                 (cog-filter 'MemberLink
                     (append-map cog-incoming-set (list long-gene target))))
@@ -100,7 +102,7 @@ to longevity.
            )
           )
 
-        ;(display-var "gene-memberlinks" gene-memberlinks)
+        ;(if VERBOSE (display-var "gene-memberlinks" gene-memberlinks)
 
 
 
@@ -263,9 +265,9 @@ to longevity.
            over all relationships in the union of supersets
 !#
 
-    (set! is-set (cog-create-intensional-similarity-link
+    (set! IS-sets (cog-create-intensional-similarity-link
                         (SetLink target) (SetLink long-gene)))
-    (display-var "is-set" is-set)
+    (if VERBOSE (display-var "IS-sets" IS-sets))
 
 
 #!
@@ -284,15 +286,15 @@ to longevity.
 ;
 ; IntensionalSimilarityLink PLAU L
 
-    (set! is2
+    (set! IS-genes
             ;(cog-bind pln-rule-singleton-similarity)
             (cog-apply-rule
                 "pln-rule-singleton-similarity"
-                is-set
+                IS-sets
                 #t)
     )
-    ;(set! is2 (gar is2))
-    (display-var "is2" is2)
+    ;(set! IS-genes (gar IS-genes))
+    (if VERBOSE (display-var "IS-genes" IS-genes))
 
 
 
@@ -321,9 +323,9 @@ to longevity.
     ;(set! IE-over (cog-bind gene-similarity2overexpression-equivalence))
     (set! IE-over (cog-apply-rule
                         "gene-similarity2overexpression-equivalence"
-                        (gar is2)
+                        (gar IS-genes)
                         #t))
-    (display-var "IE-over" IE-over)
+    (if VERBOSE (display-var "IE-over" IE-over))
 
 #!
    (IntensionalEquivalenceLink (stv 0.00014005332 0.99999982)
@@ -382,7 +384,7 @@ to longevity.
             "pln-rule-intensional-equivalence-transformation"
             IE-over
             #t))
-    (display-var "II-over" II-over)
+    (if VERBOSE (display-var "II-over" II-over))
 
 #!
       (IntensionalImplicationLink (stv 0.00028006741 0.99999982)
@@ -448,7 +450,7 @@ to longevity.
                         (PredicateNode "LongLived")
                         ;II-over
                         #t))
-    (display-var "II-long" II-long)
+    (if VERBOSE (display-var "II-long" II-long))
 
 
 #!
@@ -476,6 +478,7 @@ to longevity.
           (conclusion (cog-bind grounded-conversion-rule))
          )
         (display-var "conclusion" conclusion)
+        conclusion
     )
 
 #!
@@ -494,5 +497,6 @@ to longevity.
 
 
 
-(similarity-to-implies-longevity target long-gene)
+(define round1 (similarity-to-implies-longevity target long-gene))
+;(display-var "round one: " round1)
 

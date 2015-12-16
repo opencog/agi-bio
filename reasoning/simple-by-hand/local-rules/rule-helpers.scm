@@ -141,7 +141,7 @@
                 (set! focus-set atoms))
             ;(display-atom "focus-set" focus-set)
 
-            (display-atom "cog-apply-rule source atoms" atoms)
+            ;(display-atom "cog-apply-rule source atoms" atoms)
 
             (cog-fc atoms temp-rbs focus-set)
         )
