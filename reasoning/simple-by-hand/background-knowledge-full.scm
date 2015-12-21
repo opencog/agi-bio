@@ -43,7 +43,7 @@
                 long-gene))
 
      ;(stv .5 .7))
-    (PredicateNode "LongLived") (stv .3 .7)))
+    (PredicateNode "LongLived") (stv .75 .7)))
 
 (display-var "long-gene-implies-ll" long-gene-implies-ll)
 

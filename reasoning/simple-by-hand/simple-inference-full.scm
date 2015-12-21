@@ -73,6 +73,8 @@ to longevity.
     (display (string-append "\nComputing " (cog-name target) " implies longevity based on "
         "similarity to " (cog-name long-gene) "...\n\n"))
 
+    (if VERBOSE (display-var "long-gene-implies-ll" long-gene-implies-ll))
+
 
 ; (1) Apply Member2SubsetRule, to get:
 ;
@@ -267,7 +269,7 @@ to longevity.
 
     (set! IS-sets (cog-create-intensional-similarity-link
                         (SetLink target) (SetLink long-gene)))
-    (if VERBOSE (display-var "IS-sets" IS-sets))
+    (if VERBOSE (display-var "IS-sets (via create-intensional-similarity-link)" IS-sets))
 
 
 #!
@@ -294,7 +296,7 @@ to longevity.
                 #t)
     )
     ;(set! IS-genes (gar IS-genes))
-    (if VERBOSE (display-var "IS-genes" IS-genes))
+    (if VERBOSE (display-var "IS-genes (via singleton-similarity)" IS-genes))
 
 
 
@@ -325,7 +327,7 @@ to longevity.
                         "gene-similarity2overexpression-equivalence"
                         (gar IS-genes)
                         #t))
-    (if VERBOSE (display-var "IE-over" IE-over))
+    (if VERBOSE (display-var "IE-over (via gene-similarity2overexpression-equivalence)" IE-over))
 
 #!
    (IntensionalEquivalenceLink (stv 0.00014005332 0.99999982)
@@ -384,7 +386,8 @@ to longevity.
             "pln-rule-intensional-equivalence-transformation"
             IE-over
             #t))
-    (if VERBOSE (display-var "II-over" II-over))
+    (if VERBOSE (display-var
+        "II-over (via intensional-equivalence-transformation)" II-over))
 
 #!
       (IntensionalImplicationLink (stv 0.00028006741 0.99999982)
@@ -450,7 +453,8 @@ to longevity.
                         (PredicateNode "LongLived")
                         ;II-over
                         #t))
-    (if VERBOSE (display-var "II-long" II-long))
+    (if VERBOSE (display-var
+        "II-long (via deduction-intensional-implication-rule)" II-long))
 
 
 #!
@@ -477,7 +481,8 @@ to longevity.
           ;(define conclusion (cog-bind pln-rule-intensional-implication-conversion))
           (conclusion (cog-bind grounded-conversion-rule))
          )
-        (display-var "conclusion" conclusion)
+        (display-var
+            "conclusion via intensional-implication-conversion)" conclusion)
         conclusion
     )
 
