@@ -7,6 +7,6 @@
 
 (display "Loading reduced biospace... \n")
 (load "load-reduced-biospace.scm")
-(load "reduced-biospace-LY96-TBK1.scm")
+;(load "reduced-biospace-LY96-TBK1.scm")
 
 (load "simple-inference-full.scm")
