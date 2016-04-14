@@ -1,6 +1,6 @@
 ;(load "../reasoning/simple-by-hand/local-rules/rule-helpers.scm")
 
-
+;; this is bio-utilities.scm now
 (define (cog-get-categories A)
 "
  Return the atoms that A is a member of through a MemberLink relationship.
