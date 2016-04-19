@@ -48,19 +48,23 @@
 ;                         "rules/modus-ponens.scm"))
 ;(for-each (lambda (fp) (load (prepend-config-dir fp))) rule-files)
 
-; Assumes that local dir and opencog/reasoning/pln are in load path
-(define rule-files (list "local-rules/member-to-subset.scm"
-                         "local-rules/subset-direct-evaluation-rule.scm"
-                         "local-rules/singleton-similarity-rule.scm"
-                         "local-rules/implication-conversion-rule.scm"
-                         "local-rules/gene-similarity2overexpression-equivalence-rule.scm"
+; Assumes that opencog/reasoning/pln is in load path
+(define rule-files (list
                          ;"rules/deduction.scm"
                          "rules/deduction-rule.scm"
                          "rules/implication-instantiation-rule.scm"
                          "rules/modus-ponens-rule.scm"
-                         "rules/attraction-rule.scm"
-                         "rules/equivalence-transformation-rule.scm"))
+                         "rules/attraction-rule.scm"))
 (for-each load-from-path rule-files)
+
+(define local-rule-files (list  "local-rules/member-to-subset.scm"
+                                "local-rules/subset-direct-evaluation-rule.scm"
+                                "local-rules/singleton-similarity-rule.scm"
+                                "local-rules/implication-conversion-rule.scm"
+                                "local-rules/gene-similarity2overexpression-equivalence-rule.scm"
+                                "local-rules/equivalence-transformation-rule.scm"))
+(for-each load local-rule-files)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Associate rules to PLN ;;
