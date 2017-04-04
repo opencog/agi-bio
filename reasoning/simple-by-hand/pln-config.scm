@@ -60,8 +60,8 @@
                          "rules/modus-ponens-rule.scm"
                          "rules/attraction-rule.scm"
                          ;"rules/equivalence-transformation-rule.scm"
-												 "rules/equivalence-to-implication-rule.scm"
-										))
+                         "rules/equivalence-to-implication-rule.scm"
+                         ))
 (for-each load-from-path rule-files)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;

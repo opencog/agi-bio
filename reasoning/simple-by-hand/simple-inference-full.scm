@@ -2,7 +2,8 @@
 Simple example of bio-inference using PLN by hand using full biospace.
 
 Usage:
-    cd to this file's directory, run guile, and then in guile scheme:
+    cd to this file's directory, run guile --no-auto-comile, 
+		and then in guile scheme:
     scheme@(guile-user)> (load "load-biospace.scm")
     scheme@(guile-user)> (load "simple-inference-full.scm")
 
