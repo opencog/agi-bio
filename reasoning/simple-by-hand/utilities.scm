@@ -122,8 +122,10 @@
                     (ConceptNode "Lifespan_Observations_Increased_GeneSet"))
                 (VariableNode "$A")))))
 
-
+;; put in background knowledge file
+;(define los (lifespan-observation-increased-members))
+;(define known-longevity-genes '(CETP))
+;(define long-genes (append los known-longevity-genes))
 
 (define (common-with-lifespan-observation-genes A)
     (for-each common-GO-categories los (make-list (length los) A)))
-

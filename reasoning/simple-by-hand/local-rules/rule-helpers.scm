@@ -32,10 +32,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (cog-name-rule rule-symbol-name)
     (define name-append (string-append rule-symbol-name "-name"))
-    (eval `(define ,(string->symbol name-append) ,(Node rule-symbol-name))
+    (eval `(define ,(string->symbol name-append) ,(DefinedSchema rule-symbol-name))
         (interaction-environment))
     (DefineLink
-        (Node rule-symbol-name)
+        (DefinedSchema rule-symbol-name)
         (eval-string rule-symbol-name)))
 
 
@@ -244,4 +244,3 @@
                             (list-ref (cog-outgoing-set subsetAB) 0)
                             (list-ref (cog-outgoing-set subsetAB) 1)))
     (attraction-formula attractionAB subsetAB subsetNotAB))
-

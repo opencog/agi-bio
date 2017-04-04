@@ -43,8 +43,9 @@
     (set-computed-gene-tvs)
     (set-default-concept-tvs))
 
-;(load "reduced-biospace.scm")
-(display "Reduced Biospace File: ")(display REDUCED_BIOSPACE_FILE)(newline)
+(load "utilities.scm")
+
+(display "\"")(display REDUCED_BIOSPACE_FILE)(display "\"")(newline)
 (load REDUCED_BIOSPACE_FILE)
 
 (set-bio-tvs)

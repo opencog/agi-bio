@@ -189,7 +189,8 @@
     (load "background-knowledge.scm")
     (load "local-rules/member-to-subset.scm")
     (cog-bind pln-rule-member-to-subset)
-    (cog-create-intensional-link setL setPLAU)
+    ;(cog-create-intensional-link setL setPLAU)
+    (cog-create-intensional-links setL long-set)
 )
 ;(test)
 

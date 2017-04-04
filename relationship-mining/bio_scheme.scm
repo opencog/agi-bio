@@ -9,7 +9,8 @@
 (add-to-load-path "/home/eddie/opencog/opencog/opencog/reasoning/pln/")
 
 (add-to-load-path "/home/eddie/opencog/agi-bio/eddie/visualizer-dev/")
-(add-to-load-path "/home/eddie/opencog/bio-data/scheme-representations/")
+;(add-to-load-path "/home/eddie/opencog/bio-data/scheme-representations/")
+
 
 
 ; pln rule configuration file
@@ -153,6 +154,3 @@
 
 ;(define (set-genenode-tvs)
 ;    (define genenodes (cog-get-atoms 'GeneNode))
-
-
-

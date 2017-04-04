@@ -4,7 +4,8 @@
 Simple example of bio-inference using PLN by hand using full biospace.
 
 Usage:
-    cd to this file's directory, run guile, and then in guile scheme:
+    cd to this file's directory, run guile --no-auto-comile, 
+		and then in guile scheme:
     scheme@(guile-user)> (load "load-biospace.scm")
     scheme@(guile-user)> (load "simple-inference-full.scm")
 
@@ -49,8 +50,8 @@ to longevity.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load the atomspace knowledge and rules ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;(display "Loading reduced biospace... \n")
-;(load "load-reduced-biospace.scm")
+(display "Loading reduced biospace... ")
+(load "load-reduced-biospace.scm")
 (load "background-knowledge-full.scm")
 (load "pln-config.scm")
 (load "substitute.scm")
@@ -115,6 +116,36 @@ to longevity.
         ;(define m2s-target (cog-incoming-set target))
         ;(display-var "m2s-target" m2s-target)
     )
+#! version from overexpression branch
+;(display "Applying Member2Subset rule to all gene memberlinks...\n")
+; this was taking too long against the full biospace (for develpment at least)
+; Apply rule just to the gene MemberLinks
+;(define gene-memberlinks
+;    (cog-filter
+;        'MemberLink
+;        (append-map cog-incoming-set (cog-get-atoms 'GeneNode))
+;    )
+;)
+
+(display "Applying Member2Subset rule to longevity gene and target gene...\n")
+(define gene-memberlinks
+    (cog-filter 'MemberLink
+    (append-map cog-incoming-set (list long-gene target))))
+
+(display-var "gene-memberlinks")
+
+(define m2s (map cog-apply-rule
+    (make-list (length gene-memberlinks) "pln-rule-member-to-subset")
+    gene-memberlinks
+    (make-list (length gene-memberlinks) #t))
+)
+; remove inner listlinks for nicer print formatting
+(set! m2s (map (lambda(x) (list-ref (cog-outgoing-set x) 0)) m2s))
+(display-var "m2s")
+
+;(define m2s-target (cog-incoming-set target))
+;(display-var "m2s-target")
+!#
 
 #!
     (SubsetLink
@@ -271,6 +302,12 @@ to longevity.
                         (SetLink target) (SetLink long-gene)))
     (if VERBOSE (display-var "IS-sets (via create-intensional-similarity-link)" IS-sets))
 
+#! version from overexpression branch
+(define is-l-plau (cog-create-intensional-links
+                    (SetLink target) (SetLink long-gene))
+)
+(display-var "is-l-plau")
+!#
 
 #!
     (IntensionalSimilarityLink (stv 0.00014005332 0.99999982)
@@ -503,5 +540,4 @@ to longevity.
 
 
 (define round1 (similarity-to-implies-longevity target long-gene))
-;(display-var "round one: " round1)
-
+(display-var "round one: " round1)

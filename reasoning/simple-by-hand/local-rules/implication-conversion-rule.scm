@@ -45,7 +45,7 @@
 
 ; Name the rule
 (cog-name-rule "pln-rule-intensional-implication-conversion")
-(define pln-rule-intensional-implication-conversion-name
-    (Node "pln-rule-intensional-implication-conversion"))
-(DefineLink pln-rule-intensional-implication-conversion-name
-    pln-rule-intensional-implication-conversion)
+;(define pln-rule-intensional-implication-conversion-name
+;    (Node "pln-rule-intensional-implication-conversion"))
+;(DefineLink pln-rule-intensional-implication-conversion-name
+;    pln-rule-intensional-implication-conversion)
