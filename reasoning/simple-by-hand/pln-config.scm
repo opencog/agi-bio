@@ -21,7 +21,7 @@
 
 (load-from-path "utilities.scm")
 (load-from-path "av-tv.scm")
-(load-from-path "rule-engine-utils.scm")
+(load-from-path "opencog/rule-engine/rule-engine-utils.scm")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Define PLN rule-based system ;;
@@ -49,6 +49,7 @@
 ;(for-each (lambda (fp) (load (prepend-config-dir fp))) rule-files)
 
 ; Assumes that local dir and opencog/reasoning/pln are in load path
+(add-to-load-path "/usr/local/share/opencog/scm/opencog/pln/")
 (define rule-files (list "local-rules/member-to-subset.scm"
                          "local-rules/subset-direct-evaluation-rule.scm"
                          "local-rules/singleton-similarity-rule.scm"
@@ -58,7 +59,9 @@
                          "rules/implication-instantiation-rule.scm"
                          "rules/modus-ponens-rule.scm"
                          "rules/attraction-rule.scm"
-                         "rules/equivalence-transformation-rule.scm"))
+                         ;"rules/equivalence-transformation-rule.scm"
+												 "rules/equivalence-to-implication-rule.scm"
+										))
 (for-each load-from-path rule-files)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
