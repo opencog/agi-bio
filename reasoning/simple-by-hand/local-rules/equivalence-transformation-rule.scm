@@ -79,7 +79,7 @@
 
 ; Name the rule
 (define equivalence-transformation-rule-name
-  (Node "equivalence-transformation-rule"))
+  (DefinedSchemaNode "equivalence-transformation-rule"))
 (DefineLink
   equivalence-transformation-rule-name
   equivalence-transformation-rule)
@@ -113,7 +113,7 @@
 
 ; Name the rule
 (define pln-rule-intensional-equivalence-transformation-name
-  (Node "pln-rule-intensional-equivalence-transformation"))
+  (DefinedSchemaNode "pln-rule-intensional-equivalence-transformation"))
 (DefineLink
   pln-rule-intensional-equivalence-transformation-name
   pln-rule-intensional-equivalence-transformation)
@@ -145,7 +145,7 @@
 
 ; Name the rule
 (define pln-rule-extensional-equivalence-transformation-name
-  (Node "pln-rule-extensional-equivalence-transformation"))
+  (DefinedSchemaNode "pln-rule-extensional-equivalence-transformation"))
 (DefineLink
   pln-rule-extensional-equivalence-transformation-name
   pln-rule-extensional-equivalence-transformation)

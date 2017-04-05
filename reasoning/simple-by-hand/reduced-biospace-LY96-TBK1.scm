@@ -115068,6 +115068,3 @@ cat-members
    (GeneNode "TLR4" (stv 9.9999997e-06 0.89999998))
    (ConceptNode "GO:0001875" (stv 0.001 0.89999998))
 )
-
-
-
