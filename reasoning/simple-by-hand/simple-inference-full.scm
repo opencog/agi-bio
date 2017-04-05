@@ -418,11 +418,17 @@ to longevity.
     ;    (display-var "II" II)
     ;)
 
-    (set! II-over
-        (cog-apply-rule
-            "pln-rule-intensional-equivalence-transformation"
-            IE-over
-            #t))
+    ; Using cog-bind here instead of cog-apply-rule because cog-fc leads to 
+    ; exception "Not implemented!!" I believe because of PatternMatcher handling
+    ; of the ExecutionOutputLink
+    ;(set! II-over
+    ;    (cog-apply-rule
+    ;        "pln-rule-intensional-equivalence-transformation"
+    ;        IE-over
+    ;        #t))
+    
+    (set! II-over (cog-bind pln-rule-intensional-equivalence-transformation))
+    
     (if VERBOSE (display-var
         "II-over (via intensional-equivalence-transformation)" II-over))
 

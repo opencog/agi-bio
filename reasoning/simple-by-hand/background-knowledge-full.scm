@@ -11,14 +11,14 @@
 ;(define PLAU (GeneNode "PLAU"))
 ;(define setPLAU (SetLink PLAU))
 
-;(define long-gene (GeneNode "TBK1"))
-(define long-gene (GeneNode "PRKCA"))
+(define long-gene (GeneNode "TBK1"))
+;(define long-gene (GeneNode "PRKCA"))
 (define long-set (SetLink long-gene))
 
 ;(define target (GeneNode "MOCOS"))
 ;(define target (GeneNode "RYR1"))
-;(define target (GeneNode "LY96"))
-(define target (GeneNode "ADCY9"))
+(define target (GeneNode "LY96"))
+;(define target (GeneNode "ADCY9"))
 
 ; overexpression of members of LifespanObservationIncrease imply longlived
 ; todo: implement general rule to specify LSObserv members imply longlived

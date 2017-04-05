@@ -1,4 +1,4 @@
-"
+  "
  Helper functions for rule application
 
  (get-set-members set)
@@ -100,7 +100,7 @@
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ; rule needs to either be string with rule name or (Node "rule-symbol-name")
     (if (not (or (string? rule)
-                 (and (cog-atom? rule) (equal? (cog-type rule) 'Node))))
+                 (and (cog-atom? rule) (equal? (cog-type rule) 'DefinedSchemaNode))))
         (begin
             (display "\n    Usage: cog-apply-rule \"quoted-rule-name\" ")
             (display "(list atom1 atom2 ...)\n\n")
@@ -108,7 +108,7 @@
         )
         (begin
             (if (string? rule)
-                (set! rule (Node rule)))
+                (set! rule (DefinedSchemaNode rule)))
 
             ; List the rules and their weights.
             (set! rules (list (list rule 1)))
