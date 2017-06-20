@@ -20,7 +20,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include <opencog/server/Module.h>
+#include <opencog/cogserver/server/Module.h>
 #include "bioscience/types/atom_types.definitions"
 
 #define INHERITANCE_FILE "bioscience/types/atom_types.inheritance"
