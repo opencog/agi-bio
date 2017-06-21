@@ -2,7 +2,7 @@
  * opencog/bioscience/BioScienceTypes.cc
  *
  * Copyright (C) 2014 Eddie Monroe
- * All Rights Reserved	
+ * All Rights Reserved
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License v3 as
@@ -26,7 +26,7 @@
 #define INHERITANCE_FILE "bioscience/types/atom_types.inheritance"
 #define INITNAME bioscience_types_init
 
-#include <opencog/atomspace/atom_types.cc>
+#include </usr/local/include/opencog/atoms/base/atom_types.cc>
 
 using namespace opencog;
 TRIVIAL_MODULE(BioScienceTypesModule)
