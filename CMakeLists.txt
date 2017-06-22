@@ -16,6 +16,18 @@ ELSE (ATOMSPACE_FOUND)
 	MESSAGE(FATAL_ERROR "AtomSpace missing: it is needed for everything!")
 ENDIF (ATOMSPACE_FOUND)
 
+# Configure compiler
+IF (CMAKE_COMPILER_IS_GNUCXX)
+	# 1) -Wno-variadic-macros is to avoid warnings regarding using
+	# variadic in macro OC_ASSERT (the warning warns that this is only
+	# available from C99, lol!)
+	#
+	# 2) -fopenmp for multithreading support
+	#
+	# 3) -std=gnu++0x for C++0x and GNU extensions support
+	SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wno-variadic-macros -fopenmp -std=gnu++0x")
+ENDIF (CMAKE_COMPILER_IS_GNUCXX)
+
 # Adds definitions
 IF (NOT DEFINED DATADIR)
 	SET (DATADIR "${CMAKE_INSTALL_PREFIX}/share/opencog")
