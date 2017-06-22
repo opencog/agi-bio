@@ -25,7 +25,7 @@ make
 sudo make install
 ```
 
-### Loading the biosciene atom-types.
+### Loading the bioscience atom-types.
 In guile shell
 ```scheme
 scheme@(guile-user)> (use-modules (opencog) (opencog bioscience))
