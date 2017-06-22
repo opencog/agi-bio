@@ -13,7 +13,7 @@ Script convert Molecular signatures database from http://www.broadinstitute.org/
 ```
 GO_scm.py 
 ```
-Script convert Human ontology, go.obo, from http://purl.obolibrary.org/obo to scheme file. 
+Script convert Human ontology, [go.obo](http://www.berkeleybop.org/ontologies/go.obo), from http://www.berkeleybop.org/ontologies/ to scheme file. 
 
 ```
 Go_Annotation_scm.py
