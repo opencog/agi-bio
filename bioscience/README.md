@@ -1,44 +1,43 @@
 
-OpenCog Bioscience Code
+# OpenCog Bioscience Code
 -----------------------
 
-Code related to the AGI-Bio project to be built and run with the opencog server. 
-
-This directory should be moved or copied to your opencog project root directory.
+Code related to the AGI-Bio project.
 
 This directory currently contains one subdirectory:
 
-  -- types - code to create custom atomspace node types for opencog bioscience projects
+* types - code to create custom atomspace node types for opencog bioscience
+        projects
 
      Current custom atom types are:
        GeneNode
        ProteinNode
 
+### Building the code
+Follow the following steps, starting from this directory
 
-Requirements
-------------
+```bash
+cd ..
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
 
-- Move or copy this directory to your opencog project root directory
+### Loading the biosciene atom-types.
+In guile shell
+```scheme
+scheme@(guile-user)> (use-modules (opencog) (opencog bioscience))
 
-- Add following line to CMakeLists.txt in your opencog project root directory
-  after the entry for 'ADD_SUBDIRECTORY(opencog)'.
+scheme@(guile-user)> (Gene "that special gene")
+$1 = (GeneNode "that special gene")
 
-        ADD_SUBDIRECTORY(bioscience)
+scheme@(guile-user)> (Protein "the expression of the special gene")
+$2 = (ProteinNode "the expression of the special gene")
 
-- To automatically load the custom bio types module and scheme wrapper code
-  when the cogserver and scheme shell are fired up, add the following to 
-  lib/opencog.conf:
+scheme@(guile-user)> (cog-prt-atomspace)
+(GeneNode "that special gene")
+(ProteinNode "the expression of the special gene")
 
-    In the 'MODULES' section:
-
-        bioscience/types/libbioscience-types.so
-
-    In the 'SCM_PRELOAD' section:
-
-        bioscience/types/bioscience_types.scm
-
-
-
-
-
-
+```
