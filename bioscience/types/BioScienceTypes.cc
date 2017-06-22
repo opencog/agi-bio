@@ -20,14 +20,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include <opencog/cogserver/server/Module.h>
 #include "bioscience/types/atom_types.definitions"
 
 #define INHERITANCE_FILE "bioscience/types/atom_types.inheritance"
 #define INITNAME bioscience_types_init
 
-#include </usr/local/include/opencog/atoms/base/atom_types.cc>
-
-using namespace opencog;
-TRIVIAL_MODULE(BioScienceTypesModule)
-DECLARE_MODULE(BioScienceTypesModule)
+#include <opencog/atoms/base/atom_types.cc>
