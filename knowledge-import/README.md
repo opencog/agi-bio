@@ -8,7 +8,7 @@ Description
 ```
 MSigDB_to_scheme.py
 ```
-Script convert Molecular signatures database from http://www.broadinstitute.org/gsea/msigdb/download_file.jsp?filePath=/resources/msigdb/4.0/msigdb_v4.0.xml to Atomspace representation scheme file. 
+Script for converting [Molecular signatures database (MSigDB)](http://www.broadinstitute.org/gsea/downloads.jsp#msigdb) from [msigdb_v5.0.xml](http://www.broadinstitute.org/gsea/msigdb/download_file.jsp?filePath=/resources/msigdb/5.0/msigdb_v5.0.xml) to Atomspace representation scheme file. 
 
 ```
 GO_scm.py 
