@@ -33,6 +33,6 @@ INSTALL (FILES
 )
 
 INSTALL (FILES
-	${CMAKE_CURRENT_BINARY_DIR}/nlp_types.scm
+	${CMAKE_CURRENT_BINARY_DIR}/bioscience_types.scm
 	DESTINATION "${DATADIR}/scm/opencog/bioscience/types"
 )
