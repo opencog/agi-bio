@@ -23,9 +23,12 @@ ADD_LIBRARY (bioscience-types SHARED
 TARGET_LINK_LIBRARIES(bioscience-types
 	${ATOMSPACE_LIBRARIES}
 )
-
 # Without this, parallel make will race and crap up the generated files.
 ADD_DEPENDENCIES(bioscience-types bioscience_atom_types)
+
+INSTALL (TARGETS bioscience-types
+	LIBRARY DESTINATION "lib${LIB_DIR_SUFFIX}/opencog"
+)
 
 INSTALL (FILES
 	${CMAKE_CURRENT_BINARY_DIR}/atom_types.h
