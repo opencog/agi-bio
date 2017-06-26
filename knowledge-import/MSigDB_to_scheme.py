@@ -1,22 +1,22 @@
 #!/usr/bin/env python2.7
 # Script to convert MSigDB to atomspace representation in scheme
 # Requires: file msigdb_v5.0.xml, http://www.broadinstitute.org/gsea/msigdb/download_file.jsp?filePath=/resources/msigdb/5.0/msigdb_v5.0.xml
-# Note: also works with msigdb_v4.0.xml, http://www.broadinstitute.org/gsea/msigdb/download_file.jsp?filePath=/resources/msigdb/4.0/msigdb_v4.0.xml 
+# Note: also works with msigdb_v4.0.xml, http://www.broadinstitute.org/gsea/msigdb/download_file.jsp?filePath=/resources/msigdb/4.0/msigdb_v4.0.xml
 # Outputs scheme file to use for atomspace import
 # Added creation date, MSigDB version, and MSigDB fields included
-# Option to creat MSigDB scheme with or with out Description fields 
+# Option to creat MSigDB scheme with or with out Description fields
 
 import datetime
 from xml.dom import minidom
 
-GeneSet = "msigdb_v5.0.xml"
+GeneSet = "msigdb_v6.0.xml"
 sc_filename= GeneSet.split('.xml')[0]
 fields= []
 
 #read msigdb
 xmldoc = minidom.parse(GeneSet)
-msigdb_info = xmldoc.getElementsByTagName('MSIGDB') 
-genelist = xmldoc.getElementsByTagName('GENESET') 
+msigdb_info = xmldoc.getElementsByTagName('MSIGDB')
+genelist = xmldoc.getElementsByTagName('GENESET')
 
 version = msigdb_info[0].attributes["VERSION"].value.encode('ascii','ignore')
 
@@ -35,8 +35,8 @@ def evaLink(predicate , node1,node1_type, node2,node2_type):
 	    f.write("\t )\n")
 	    f.write(")\n\n")
 def memLink(members,geneset):
-           f.write("(MemberLink \n")  
-	   f.write("\t\t(GeneNode \"" + members + "\")\n") 
+           f.write("(MemberLink \n")
+	   f.write("\t\t(GeneNode \"" + members + "\")\n")
 	   f.write("\t\t(ConceptNode \"" + "MSigDB_GeneSet: "+ geneset + "\"))\n")
 
 #function to write scheme file without description
@@ -64,24 +64,24 @@ def scheme_writer(fields):
   #loop in genesets
   count = 0
   for s in genelist :
-    
+
 	if  not(not (s.attributes["STANDARD_NAME"].value).encode('ascii','ignore')):
-	   
+
             inLink((s.attributes["STANDARD_NAME"].value).encode('ascii','ignore').replace('\\', '\\\\') , "MsigDB_GeneSet_v"+version)
 
 	if  not(not (s.attributes["ORGANISM"].value).encode('ascii','ignore')):
             node1_type = "ConceptNode"
-            node2_type = "ConceptNode"   
+            node2_type = "ConceptNode"
             PredicateNode = "organism"
 	    evaLink(PredicateNode ,(s.attributes["STANDARD_NAME"].value).encode('ascii','ignore').replace('\\', '\\\\') ,node1_type, (s.attributes["ORGANISM"].value).encode('ascii','ignore').replace('\\', '\\\\'), node2_type)
-	    
+
 	if  not(not (s.attributes["HISTORICAL_NAMES"].value).encode('ascii','ignore')):
 	    node1_type = "ConceptNode"
-            node2_type = "WordNode"  
+            node2_type = "WordNode"
 	    PredicateNode = "historical_name_of"
             evaLink(PredicateNode, (s.attributes["STANDARD_NAME"].value).encode('ascii','ignore').replace('\\', '\\\\'),node1_type,(s.attributes["HISTORICAL_NAMES"].value).encode('ascii','ignore').replace('\\', '\\\\'), node2_type )
-		    
-	if  not(not (s.attributes["MEMBERS_SYMBOLIZED"].value).encode('ascii','ignore')):	    
+
+	if  not(not (s.attributes["MEMBERS_SYMBOLIZED"].value).encode('ascii','ignore')):
 	    for memebers in [x.strip() for x in ((s.attributes["MEMBERS_SYMBOLIZED"].value).encode('ascii','ignore')).split(',')]:
 		memLink(memebers, (s.attributes["STANDARD_NAME"].value).encode('ascii','ignore').replace('\\', '\\\\'))
         count = count + 1
@@ -97,14 +97,14 @@ def scheme_des_writer(fields):
         for s in genelist:
 	 if  not(not (s.attributes["DESCRIPTION_BRIEF"].value).encode('ascii','ignore')):
 	    node1_type = "ConceptNode"
-	    node2_type = "PhraseNode"  
+	    node2_type = "PhraseNode"
 	    PredicateNode = "brief_description_of"
 	    evaLink(PredicateNode,(s.attributes["STANDARD_NAME"].value).encode('ascii','ignore').replace('\\', '\\\\'),node1_type,(s.attributes["DESCRIPTION_BRIEF"].value).encode('ascii','ignore').replace('\\', '\\\\'),node2_type)
-	    
 
-	 if  not(not (s.attributes["DESCRIPTION_FULL"].value).encode('ascii','ignore')): 
+
+	 if  not(not (s.attributes["DESCRIPTION_FULL"].value).encode('ascii','ignore')):
 	    node1_type = "ConceptNode"
-	    node2_type = "PhraseNode"   
+	    node2_type = "PhraseNode"
 	    PredicateNode = "full_description_of"
 	    evaLink(PredicateNode, (s.attributes["STANDARD_NAME"].value).encode('ascii','ignore').replace('\\', '\\\\'),node1_type,(s.attributes["DESCRIPTION_FULL"].value).encode('ascii','ignore').replace('\\', '\\\\'),node2_type)
          count = count + 1
@@ -113,7 +113,7 @@ def scheme_des_writer(fields):
 	  #f.write("(display count)\n")
 	  #f.write("(display message)\n")
 ####
-#If the user press "D" , scheme file with description generated else the description fields will not be included. 
+#If the user press "D" , scheme file with description generated else the description fields will not be included.
 value = raw_input("Press D to generate scheme file with description or press Enter. \n")
 if value == "D":
   fields.extend(["STANDARD_NAME", "HISTORICAL_NAMES","ORGANISM", "DESCRIPTION_BRIEF", "DESCRIPTION_FULL", "MEMBERS_SYMBOLIZED"])
@@ -137,7 +137,7 @@ if value == "D":
   f.write("(display \" minutes\\n\")\n")
   f.close()
 
-elif not(value): 
+elif not(value):
   fields.extend(["STANDARD_NAME", "HISTORICAL_NAMES","ORGANISM","MEMBERS_SYMBOLIZED"])
   sc_filename = sc_filename + ".scm"
   f = open(sc_filename, 'a')
@@ -161,13 +161,3 @@ elif not(value):
   f.close()
 else:
   print "wrong choice"
-
-
-
-
-
-
-
-
-
-

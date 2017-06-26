@@ -1,0 +1,266 @@
+ REACTS-WITH
+(EvaluationLink
+     	(PredicateNode "reacts with")
+     	(ListLink
+          (ConceptNode "$P1")
+          (ConceptNode "$P2"))
+)
+
+ INTERACTS-WITH
+(EvaluationLink
+       	(PredicateNode "interacts with")
+       	(ListLink
+                   	(ProteinNode "$P1")
+                   	(ProteinNode "$P2"))
+)
+
+ IN-COMPLEX-WITH
+
+
+ CONTROLS-STATE-CHANGE-OF
+(EquivalenceLink
+	(EvaluationLink
+	(PredicateNode "controls state change of")
+	(ListLink
+        	(ProteinNode "$P1")
+                (ProteinNode "$P2"))
+	)
+(PredictiveImplicationLink
+	(EvaluationLink
+	(PredicateNode "interacts with")
+       	(ListLink
+        	(ProteinNode "$P1")
+                (ProteinNode "$P2"))
+		)
+	(EvaluationLink
+       	        (PredicateNode "is modified")
+       		(ProteinNode "$P2")
+	)
+)
+)
+
+ CONTROLS-PHOSPHORYLATION-OF
+
+(EquivalenceLink
+(EvaluationLink
+(PredicateNode "controls phosphorylation of")
+(ListLink
+                               	(ProteinNode "$P1")
+                               	(ProteinNode "$P2"))
+	)
+(PredictiveImplicationLink
+(EvaluationLink
+       	        		(PredicateNode "interacts with")
+       	        		(ListLink
+                   	        		(ProteinNode "$P1")
+                   	        		(ProteinNode "$P2"))
+		)
+(EvaluationLink
+       	        		(PredicateNode "is phosphorylated")
+       			(ProteinNode "$P2")
+		)
+	)
+)
+
+ USED-TO-PRODUCE
+
+(EquivalenceLink
+	(EvaluationLink
+	(PredicateNode "used to produce")
+	(ListLink
+        	(ConceptNode "$P1")
+                (ConceptNode "$P2"))
+	)
+(PredictiveImplicationLink
+	(EvaluationLink
+	(PredicateNode "reacts with")
+	(ListLink
+		(ConceptNode "$P1")
+		(ConceptNode "$P2"))
+	)
+	(EvaluationLink
+       	(PredicateNode "quantity increased")
+       	(ConceptNode "$P2")
+		)
+	)
+)
+
+
+ CONTROLS-PRODUCTION-OF
+
+(EquivalenceLink
+(EvaluationLink
+(PredicateNode "controls production of")
+(ListLink
+                               	(ProteinNode "$P1")
+                               	(ConceptNode "$P2"))
+	)
+(PredictiveImplicationLink
+(EvaluationLink
+       	        		(PredicateNode "interacts with")
+       	        		(ListLink
+                   	        		(ProteinNode "$P1")
+                   	        		(ConceptNode "$P2"))
+		)
+(EvaluationLink
+       	        		(PredicateNode "quantity increased")
+       			(ConceptNode "$P2")
+		)
+	)
+)
+
+ CONSUMPTION-CONTROLLED-BY
+
+(EquivalenceLink
+(EvaluationLink
+(PredicateNode "consumption controlled by")
+(ListLink
+                               	(ConceptNode "$P1")
+                               	(ProteinNode "$P2"))
+	)
+(PredictiveImplicationLink
+(EvaluationLink
+       	        		(PredicateNode "interacts with")
+       	        		(ListLink
+                   	        		(ConceptNode "$P1")
+                   	        		(ProteinNode "$P2"))
+		)
+(EvaluationLink
+       	        		(PredicateNode "quantity decreased")
+       			(ConceptNode "$P2")
+		)
+	)
+)
+
+
+ CATALYSIS-PRECEDES
+
+ (EquivalenceLink
+   (EvaluationLink
+       (PredicateNode "catalysis precedes")
+           (ListLink
+               (ConceptNode "P1")
+               (ConceptNode "P2"))
+    )
+  (ExistsLink
+     (VariableList
+           (VariableNode $S1)
+           (VAriableNode $S2))
+   (AndLink
+       (EvaluationLink
+           (PredicateNode "controls production of")
+               (ListLink
+                      (ProteinNode "P1")
+                      (VariableNode "S1"))
+        )
+       (EvaluationLink
+           (PredicateNode "used to produce")
+               (ListLink
+                      (VariableNode "S1")
+                      (VariableNode "S2"))
+        )
+       (EvaluationLink
+           (PredicateNode "consumption controlled by")
+               (ListLink
+                   (VariableNode "S1")
+                      (ProteinNode "P2"))
+        )
+       (EvaluationLink
+           (PredicateNode "controls production of")
+               (ListLink
+                   (ProteinNode "P2")
+                      (VariableNode "S2"))
+        )
+   )
+ )
+ )
+
+ CHEMICAL-AFFECTS
+
+(EquivalenceLink
+(EvaluationLink
+(PredicateNode "chemical affects"
+(ListLink
+                               	(ConceptNode "$P1")
+                               	(ProteinNode "$P2"))
+	)
+(PredictiveImplicationLink
+(EvaluationLink
+       	        		(PredicateNode "interacts with")
+       	        		(ListLink
+                   	        		(ConceptNode "$P1")
+                   	        		(ProteinNode "$P2"))
+		)
+(EvaluationLink
+       	        		(PredicateNode "is modified")
+       			(ProteinNode "$P2")
+		)
+	)
+)
+)
+
+ CONTROLS-EXPRESSION-OF
+
+(EquivalenceLink
+(EvaluationLink
+(PredicateNode "controls expression of")
+(ListLink
+                               	(ProteinNode "$P1")
+                               	(ProteinNode "$P2"))
+	)
+(PredictiveImplicationLink
+(EvaluationLink
+       	        		(PredicateNode "changes quantity")
+       	        		(ProteinNode "$P1")
+		)
+(EvaluationLink
+       	        		(PredicateNode "changes quantity")
+       	        		(ProteinNode "$P2")
+		)
+	)
+)
+
+
+ CONTROLS-TRANSPORT-OF
+
+(EquivalenceLink
+(EvaluationLink
+(PredicateNode "controls transport of")
+(ListLink
+                               	(ProteinNode "$P1")
+                               	(ProteinNode "$P2"))
+	)
+(PredictiveImplicationLink
+(EvaluationLink
+       	        		(PredicateNode "interacts with")
+       	        		(ProteinNode "$P1")
+       	        		(ProteinNode "$P2")
+		)
+(EvaluationLink
+       	        		(PredicateNode "changes location")
+       	        		(ProteinNode "$P2")
+		)
+	)
+)
+
+ CONTROLS-TRANSPORT-OF-CHEMICAL
+
+(EquivalenceLink
+(EvaluationLink
+(PredicateNode "controls transport of chemical")
+(ListLink
+                               	(ProteinNode "$P1")
+                               	(ConceptNode "$P2"))
+	)
+(PredictiveImplicationLink
+(EvaluationLink
+       	        		(PredicateNode "interacts with")
+       	        		(ProteinNode "$P1")
+       	        		(ConceptNode "$P2")
+		)
+(EvaluationLink
+       	        		(PredicateNode "changes location")
+       	        		(ConceptNode "$P2")
+		)
+	)
+)
