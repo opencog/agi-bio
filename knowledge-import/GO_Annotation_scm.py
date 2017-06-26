@@ -4,11 +4,11 @@
 # Requires: file gene_association.goa_ref_human.gz from http://geneontology.org/gene-associations/gene_association.goa_ref_human.gz
 
 
-f = open('gene_association.goa_ref_human')
+f = open('goa_human')
 lines = f.readlines()
 line_no = []
 
-with open('gene_association.goa_ref_human') as  f:  
+with open('goa_human') as  f:  
  for num, line in enumerate(f , 1):
   if "UniProtKB" in line :
       line_no.append(num)
