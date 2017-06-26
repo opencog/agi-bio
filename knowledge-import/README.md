@@ -18,7 +18,7 @@ Script convert Human ontology, [go.obo](http://www.berkeleybop.org/ontologies/go
 ```
 Go_Annotation_scm.py
 ```
-Script to generate atomspace representation of Human gene annotation from http://geneontology.org/gene-associations/gene_association.goa_ref_human.gz.
+Script to generate atomspace representation of Human gene annotation from http://geneontology.org/gene-associations/goa_human.gaf.gz.
 
 ```
 Aging-Mythelation.py
@@ -28,7 +28,8 @@ Script read Aging-Mythelation_Geneset dataset, mmc4.xls, and rewrite it in to sc
 ```
 lifeSpanObservation_2015.py
 ```
-Script to convert Human homologue genes from file Lifespan-observations_2015-02-21.csv to scheme file, equivalent atomspace representation.
+Script to convert Human homologue genes from csv dump of Lifespan observations DB  equivalent atomspace representation.  The current raw version of the cvs file is [here](http://lifespandb.sageweb.org/search?format=csv)
+but `lifespan_observation_to_human_homologue.R`  is broken.
 
 ```
 SifToScheme.py
