@@ -135,17 +135,26 @@ FOREACH (LINE ${TYPE_SCRIPT_CONTENTS})
         MESSAGE(STATUS "Atom type name: ${TYPE_NAME} ${SHORT_NAME}")
 
         # Try to guess if the thing is a node or link based on its name
+        STRING(REGEX MATCH "VALUE$" ISVALUE ${TYPE})
         STRING(REGEX MATCH "NODE$" ISNODE ${TYPE})
         STRING(REGEX MATCH "LINK$" ISLINK ${TYPE})
 
-        # If not named as a node or a link, assume its a link
-        # This is kind of hacky, but I don't know what else to do ...
-        IF (NOT ISNODE STREQUAL "NODE" AND NOT ISLINK STREQUAL "LINK")
+        # If not explicitly named, assume its a link. This is kind of
+        # hacky, but is needed for e.g. "VariableList" ...
+        IF (NOT ISNODE STREQUAL "NODE" AND NOT ISVALUE STREQUAL "VALUE")
             SET(ISLINK "LINK")
-        ENDIF (NOT ISNODE STREQUAL "NODE" AND NOT ISLINK STREQUAL "LINK")
+        ENDIF (NOT ISNODE STREQUAL "NODE" AND NOT ISVALUE STREQUAL "VALUE")
+
+        IF (${TYPE} STREQUAL "VALUATION")
+            SET(ISLINK "")
+        ENDIF (${TYPE} STREQUAL "VALUATION")
 
         # Print out the scheme definitions
         FILE(APPEND "${SCM_FILE}" "(define-public ${TYPE_NAME}Type (cog-type->int '${TYPE_NAME}))\n")
+        IF (ISVALUE STREQUAL "VALUE")
+            FILE(APPEND "${SCM_FILE}" "(define-public (${TYPE_NAME} . x)\n")
+            FILE(APPEND "${SCM_FILE}" "\t(apply cog-new-value (append (list ${TYPE_NAME}Type) x)))\n")
+        ENDIF (ISVALUE STREQUAL "VALUE")
         IF (ISNODE STREQUAL "NODE")
             FILE(APPEND "${SCM_FILE}" "(define-public (${TYPE_NAME} . x)\n")
             FILE(APPEND "${SCM_FILE}" "\t(apply cog-new-node (append (list ${TYPE_NAME}Type) x)))\n")
@@ -163,9 +172,15 @@ FOREACH (LINE ${TYPE_SCRIPT_CONTENTS})
             ENDIF (NOT SHORT_NAME STREQUAL "")
         ENDIF (ISLINK STREQUAL "LINK")
 
-        # Print out the python definitions. Note: We special-case Atom since we don't want
-        # to create a function with the same identifier as the Python Atom object.
+        # Print out the python definitions. Note: We special-case Atom
+        # since we don't want to create a function with the same
+        # identifier as the Python Atom object.
         IF (NOT TYPE_NAME STREQUAL "Atom")
+            IF (ISVALUE STREQUAL "VALUE")
+                # XXX FIXME -- invent something for python
+                # FILE(APPEND "${PYTHON_FILE}" "def ${TYPE_NAME}(node_name, tv=None):\n")
+                # FILE(APPEND "${PYTHON_FILE}" "    return atomspace.add_node(types.${TYPE_NAME}, node_name, tv)\n")
+            ENDIF (ISVALUE STREQUAL "VALUE")
             IF (ISNODE STREQUAL "NODE")
                 FILE(APPEND "${PYTHON_FILE}" "def ${TYPE_NAME}(node_name, tv=None):\n")
                 FILE(APPEND "${PYTHON_FILE}" "    return atomspace.add_node(types.${TYPE_NAME}, node_name, tv)\n")
@@ -175,6 +190,17 @@ FOREACH (LINE ${TYPE_SCRIPT_CONTENTS})
                 FILE(APPEND "${PYTHON_FILE}" "    return atomspace.add_link(types.${TYPE_NAME}, args)\n")
             ENDIF (ISLINK STREQUAL "LINK")
         ENDIF (NOT TYPE_NAME STREQUAL "Atom")
+
+        # If not named as a node or a link, assume its a link
+        # This is kind of hacky, but I don't know what else to do ... 
+        IF (NOT ISNODE STREQUAL "NODE" AND
+            NOT ISLINK STREQUAL "LINK" AND
+            NOT ISVALUE STREQUAL "VALUE")
+            FILE(APPEND "${PYTHON_FILE}" "def ${TYPE_NAME}(*args):\n")
+            FILE(APPEND "${PYTHON_FILE}" "    return atomspace.add_link(types.${TYPE_NAME}, args)\n")
+        ENDIF (NOT ISNODE STREQUAL "NODE" AND
+            NOT ISLINK STREQUAL "LINK" AND
+            NOT ISVALUE STREQUAL "VALUE")
 
         IF (PARENT_TYPES)
             STRING(REGEX REPLACE "[ 	]*,[ 	]*" ";" PARENT_TYPES "${PARENT_TYPES}")
