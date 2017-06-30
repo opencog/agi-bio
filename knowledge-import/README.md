@@ -13,7 +13,7 @@ Script for converting [Molecular signatures database (MSigDB)](http://software.b
 ```
 GO_scm.py
 ```
-Script convert Human ontology, [go.obo](http://www.berkeleybop.org/ontologies/go.obo), from http://www.berkeleybop.org/ontologies/ to scheme file.
+Script convert Human ontology, [go.obo](http://purl.obolibrary.org/obo/go.obo), from http://geneontology.org/page/download-ontology to scheme file.
 
 ```
 Go_Annotation_scm.py
