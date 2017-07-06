@@ -14,9 +14,6 @@
                    	(ProteinNode "$P2"))
 )
 
- IN-COMPLEX-WITH
-
-
  CONTROLS-STATE-CHANGE-OF
 (EquivalenceLink
 	(EvaluationLink
@@ -139,18 +136,18 @@
    (EvaluationLink
        (PredicateNode "catalysis precedes")
            (ListLink
-               (ConceptNode "P1")
-               (ConceptNode "P2"))
+               (ConceptNode "$P1")
+               (ConceptNode "$P2"))
     )
   (ExistsLink
      (VariableList
-           (VariableNode $S1)
-           (VAriableNode $S2))
+           (VariableNode "S1")
+           (VariableNode "S2"))
    (AndLink
        (EvaluationLink
            (PredicateNode "controls production of")
                (ListLink
-                      (ProteinNode "P1")
+                      (ProteinNode "$P1")
                       (VariableNode "S1"))
         )
        (EvaluationLink
@@ -163,12 +160,12 @@
            (PredicateNode "consumption controlled by")
                (ListLink
                    (VariableNode "S1")
-                      (ProteinNode "P2"))
+                      (ProteinNode "$P2"))
         )
        (EvaluationLink
            (PredicateNode "controls production of")
                (ListLink
-                   (ProteinNode "P2")
+                   (ProteinNode "$P2")
                       (VariableNode "S2"))
         )
    )

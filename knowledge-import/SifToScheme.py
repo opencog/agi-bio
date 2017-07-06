@@ -27,7 +27,7 @@ def findInstruction(text, atom1, atom2):
       if(x==text):
           #check isUpper() if true then we've hit the next rule!
           copy = True
-          print "found, copy = true " + line +"\t"+ text
+#          print "found, copy = true " + line +"\t"+ text
           continue
 
       if (copy):

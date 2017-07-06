@@ -37,6 +37,7 @@ SifToScheme.py
 Script to convert PathwayCommons v9 sif files to scheme using
 `RulesOfTranslation.txt`
 
+(IN-COMPLEX-WITH not yet implemented)
 ```
 load_atoms.py
 ```
