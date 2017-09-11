@@ -50,7 +50,7 @@ done
 # Check that the header is correct (if not maybe the file format has
 # changed)
 header=$(head -n 1 "$FEATURE_CSV_FILE")
-expected_header='"feature","Freq","level"'
+expected_header='gene,Freq,level'
 if [[ "$header" != "$expected_header" ]]; then
     fatalError "Wrong header format: expect '$expected_header' but got '$header'"
 fi

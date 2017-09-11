@@ -1,3 +1,7 @@
+# TODO:
+# add in-complex-with link
+# CATALYSIS-PRECEDES needs to be instantiated:  run through pattern matcher?
+
 import os
 import sys
 import fileinput

@@ -230,10 +230,10 @@ while read combo recall precision; do
     echo "$(model_name_def "$model_name" "$scm_model")"
 
     # Output model precision
-    echo "$(model_precision_def "$model_name" aging $precision)"
+#    echo "$(model_precision_def "$model_name" aging $precision)"
 
     # Output model recall
-    echo "$(model_recall_def "$model_name" aging $recall)"
+#    echo "$(model_recall_def "$model_name" aging $recall)"
 
     ((++i))
 done < <(tail -n +2 "$MODEL_CSV_FILE") > "$OUTPUT_FILE"
