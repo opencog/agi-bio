@@ -67,14 +67,15 @@ PRG_DIR="$(dirname "$PRG_PATH")"
 ####################
 # Program argument #
 ####################
-if [[ $# == 0 || $# -gt 3 ]]; then
-    echo "Usage: $0 MODEL_CSV_FILE [-o OUTPUT_FILE]"
-    echo "Example: $0 chr10_moses.5x10.csv -o chr10_moses.5x10.scm"
+if [[ $# == 0 || $# -gt 4 ]]; then
+    echo "Usage: $0 MODEL_CSV_FILE PRED_NAME [-o OUTPUT_FILE]"
+    echo "Example: $0 chr10_moses.5x10.csv \"aging\" -o chr10_moses.5x10.scm"
     exit 1
 fi
 
 readonly MODEL_CSV_FILE="$1"
 readonly BASE_MODEL_CSV_FILE="$(basename "$MODEL_CSV_FILE")"
+readonly PRED_NAME="$2"
 shift
 OUTPUT_FILE="/dev/stdout"
 while getopts "o:" opt; do
@@ -230,10 +231,10 @@ while read combo recall precision; do
     echo "$(model_name_def "$model_name" "$scm_model")"
 
     # Output model precision
-#    echo "$(model_precision_def "$model_name" aging $precision)"
+    echo "$(model_precision_def "$model_name" $PRED_NAME $precision)"
 
     # Output model recall
-#    echo "$(model_recall_def "$model_name" aging $recall)"
+    echo "$(model_recall_def "$model_name" $PRED_NAME $recall)"
 
     ((++i))
 done < <(tail -n +2 "$MODEL_CSV_FILE") > "$OUTPUT_FILE"
