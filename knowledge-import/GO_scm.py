@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
-# 2017-11-19
-# Script to convert go.obd to atomspace representation in scheme
+# 2017-12-03
+# Script to convert go.obd to atomspace representation in scheme 
 # Requires: file go.obo from http://www.berkeleybop.org/ontologies/go.obo
 
 
@@ -43,8 +43,10 @@ def go_name(idd, name):
 def go_namespace(idd, namespace):
     evaLink("GO_namespace", idd, namespace ,"ConceptNode", "ConceptNode")
 
-def go_synonyms(idd,synonyms,synonym_type):
-    evaLink(("GO_synonym_" +synonym_type),idd ,synonyms, "ConceptNode", "ConceptNode")
+def go_definition(idd, definition):
+    evaLink("GO_definition", idd, definition ,"ConceptNode", "ConceptNode")
+# def go_synonyms(idd,synonyms,synonym_type):
+#     evaLink(("GO_synonym_" +synonym_type),idd ,synonyms, "ConceptNode", "ConceptNode")
 
 def go_isa(idd, isa_id):
     inLink(idd, isa_id)
@@ -60,10 +62,10 @@ f_go = open('GO.scm', 'a')
 
 # once for the whole DB
 
-inLink("GO_synonym_EXACT","GO_synonym")
-inLink("GO_synonym_BROAD","GO_synonym")
-inLink("GO_synonym_NARROW","GO_synonym")
-inLink("GO_synonym_RELATED","GO_synonym")
+# inLink("GO_synonym_EXACT","GO_synonym")
+# inLink("GO_synonym_BROAD","GO_synonym")
+# inLink("GO_synonym_NARROW","GO_synonym")
+# inLink("GO_synonym_RELATED","GO_synonym")
 #
 i = 0
 # partition each line and call functions
@@ -94,9 +96,11 @@ while i < len(line_no):
             name = (test[k][2].partition('\n')[0]).partition(' ')[2].replace('\\', '\\\\')
         elif (test[k][0] == 'namespace'):
             namespace = (test[k][2].partition('\n')[0]).partition(' ')[2].replace('\\', '\\\\')
-        elif (test[k][0] == 'synonym'):
-            synonym.append(((test[k][2].partition('\n')[0]).partition(' ')[2]).split('"',2)[1].replace('\\', '\\\\').strip())
-            synonym_type.append((((test[k][2].split('"',2))[2].partition('[]')[0]).partition(" ")[2]).partition(" ")[0].replace('\\', '\\\\'))
+        elif(test[k][0] == 'def'):
+            definition = (test[k][2].partition('\n')[0]).partition(' ')[2].split('"',2)[1].replace('\\', '\\\\')
+        # elif (test[k][0] == 'synonym'):
+        #     synonym.append(((test[k][2].partition('\n')[0]).partition(' ')[2]).split('"',2)[1].replace('\\', '\\\\').strip())
+        #     synonym_type.append((((test[k][2].split('"',2))[2].partition('[]')[0]).partition(" ")[2]).partition(" ")[0].replace('\\', '\\\\'))
         elif (test[k][0] == 'alt_id'):
             alt_id.append((test[k][2].partition('\n')[0]).partition(' ')[2].replace('\\', '\\\\'))
         elif (test[k][0] == 'relationship'):
@@ -112,11 +116,12 @@ while i < len(line_no):
         go_term(idd)
         go_name(idd, name)
         go_namespace(idd, namespace)
-        if len(synonym) != 0:
-            sy_len = 0
-            while sy_len < len(synonym):
-                go_synonyms(idd, synonym[sy_len], synonym_type[sy_len])
-                sy_len = sy_len + 1
+        go_definition(idd, definition)
+        # if len(synonym) != 0:
+        #     sy_len = 0
+        #     while sy_len < len(synonym):
+        #         go_synonyms(idd, synonym[sy_len], synonym_type[sy_len])
+        #         sy_len = sy_len + 1
         if len(is_a) != 0:
             isa_len = 0
             while isa_len < len(is_a):
@@ -134,3 +139,4 @@ while i < len(line_no):
                 parts_len = parts_len + 1
     i= i + 1
 f_go.close()
+

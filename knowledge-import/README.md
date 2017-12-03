@@ -8,12 +8,13 @@ Description
 ```
 MSigDB_to_scheme.py
 ```
-Script for converting [Molecular signatures database (MSigDB)](http://software.broadinstitute.org/gsea/msigdb/index.jsp) from [msigdb_v6.0.xml](http://software.broadinstitute.org/gsea/msigdb/download_file.jsp?filePath=/resources/msigdb/6.0/msigdb_v6.0.xml) to Atomspace representation scheme file.
+Script for converting [Molecular signatures database (MSigDB)](http://software.broadinstitute.org/gsea/msigdb/index.jsp) from [msigdb_v6.1.xml](http://software.broadinstitute.org/gsea/msigdb/download_file.jsp?filePath=/resources/msigdb/6.1/msigdb_v6.1.xml) to Atomspace representation scheme file.
 
 ```
 GO_scm.py
 ```
 Script convert Human ontology, [go.obo](http://purl.obolibrary.org/obo/go.obo), from http://geneontology.org/page/download-ontology to scheme file.
+latest version removes all GO synonyms and adds GO term definition strings as ConceptNodes.
 
 ```
 Go_Annotation_scm.py
@@ -39,16 +40,3 @@ Script to convert PathwayCommons v9 sif files to scheme using
 
 (IN-COMPLEX-WITH not yet implemented)
 ```
-load_atoms.py
-```
-This python script load all bio scheme files from docker container set for loading these scheme files in Hetzner server. In order to use this one needs to have acess to the server. once login to the server run the folllowing commands
-
-	$ docker exec -i -t bio_cogserver bash
-	$ cd /home/doc
-	$ python load_atoms.py
-	 once all batasets are loadded one can use the following command to access the running cogserver
-	$ rlwrap nc localhost 17001
-	 to exit from the cogserver
-	$ ctrl c
-	 to exit from the container
-	$ exit

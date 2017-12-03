@@ -19,17 +19,6 @@ Description
 -- knowledge-import -- scripts for converting external knowledge bases into
    scheme files for importing into the atomspace
 
--- bioscience - code to be built and run with the cogserver
+-- bioscience - code to be built and installed to provide GeneNode and ProteinNode atoms
 
--- generated bio data is in separate repo here: git@gitlab.com:opencog-bio/bio-data.git  
-
-Note from Nil: I don't know what's the right way to organize the
-folders, I just added my work under moses-scripts, although those
-scripts cover in fact more than MOSES.
-
-Note from Eddie: Not sure what's the best way to organize the folders
-either. In particular, the best way to organize the code to be built and
-run with the cogserver, which at present consists of just the custom atom 
-types. Currently I have instructions in the readme to copy the directory 
-to the opencog root dir. But then this will need to be redone any time 
-there are updates to this code in the repo.
+-- generated bio data is in separate repo here: git@gitlab.com:opencog-bio/bio-data.git
