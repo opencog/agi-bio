@@ -14,7 +14,7 @@ import collections
 # copy the contents of that rule (until you hit a name of another/next rule)
 # replace the "$P1" and "$P2" with the two atoms in the first file
 
-sifFile = "../PathwayCommons9.All.hgnc.sif"
+sifFile = "./PathwayCommons9.Detailed.hgnc.sif"
 ruleFile = "./RulesOfTranslation.txt"
 resultFile = "./PathwayCommons9.scm"
 
