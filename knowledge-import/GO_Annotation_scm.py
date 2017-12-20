@@ -1,14 +1,14 @@
 #!/usr/bin/env python2.7
 
-# Go Annotation to atomspace representation in scheme  
+# Go Annotation to atomspace representation in scheme
 # Requires: file gene_association.goa_ref_human.gz from http://geneontology.org/gene-associations/gene_association.goa_ref_human.gz
 
 
-f = open('goa_human')
+f = open('goa_human.gaf')
 lines = f.readlines()
 line_no = []
 
-with open('goa_human') as  f:  
+with open('goa_human.gaf') as  f:  
  for num, line in enumerate(f , 1):
   if "UniProtKB" in line :
       line_no.append(num)
@@ -40,14 +40,14 @@ def evaLink(node1 , node2, qualifier):
     f_annotation.write(")\n\n")
 
 
-#open file to write 
+#open file to write
 f_annotation = open('GO_annotation.scm', 'a')
 
-#add GOC Validation Date 
+#add GOC Validation Date
 f_annotation.write(";"+((lines[0]).split('!')[1]).split('$')[0]+ "\n")
 f_annotation.write(";"+((lines[1]).split('!')[1]).split('$')[0]+ "\n\n")
 
-#loop through lines 
+#loop through lines
 for l in lines_annotate:
     db_object_symbol =l.split('\t')[2]
     go_id = (l.split('\t')[4]).split(':')[1]
@@ -58,14 +58,3 @@ for l in lines_annotate:
 #close files
 f.close()
 f_annotation.close()
-
-
-
-
-
-
-
-
-
-
-

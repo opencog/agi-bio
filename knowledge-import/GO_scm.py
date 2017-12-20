@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
 # 2017-12-03
-# Script to convert go.obd to atomspace representation in scheme 
+# Script to convert go.obd to atomspace representation in scheme
 # Requires: file go.obo from http://www.berkeleybop.org/ontologies/go.obo
 
 
@@ -77,8 +77,8 @@ while i < len(line_no):
     test = [l.partition(':') for l in part]
     k = 0
     rel_typeno = 0
-    synonym = []
-    synonym_type = []
+#    synonym = []
+#    synonym_type = []
     is_a = []
     alt_id =[]
     relationship = []
@@ -139,4 +139,3 @@ while i < len(line_no):
                 parts_len = parts_len + 1
     i= i + 1
 f_go.close()
-
