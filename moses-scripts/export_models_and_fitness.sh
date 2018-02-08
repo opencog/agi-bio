@@ -196,8 +196,8 @@ model_recall_def() {
     local recall="$3"
     cat <<EOF
 (ImplicationLink (stv $recall 1)
-    (PredicateNode "$target"))
-    (PredicateNode "$name")
+    (PredicateNode "$target")
+    (PredicateNode "$name"))
 EOF
 }
 
