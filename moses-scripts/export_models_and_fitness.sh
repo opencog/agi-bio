@@ -228,13 +228,19 @@ while read combo recall precision; do
     # Output model name predicate associated with model
     model_name="${BASE_MODEL_CSV_FILE}:moses_model_$(pad $i $npads)"
     scm_model="$(combo-fmt-converter -c "$combo" -f scheme)"
+    echo ";;begin_model"
     echo "$(model_name_def "$model_name" "$scm_model")"
+    echo ";;end_model"
 
     # Output model precision
+    echo ";;model_${i} precision"
     echo "$(model_precision_def "$model_name" $PRED_NAME $precision)"
+    echo ";;model_${i} precision"
 
     # Output model recall
+    echo ";;model_${i} recall"
     echo "$(model_recall_def "$model_name" $PRED_NAME $recall)"
+    echo ";;model_${i} recall"
 
     ((++i))
 done < <(tail -n +2 "$MODEL_CSV_FILE") > "$OUTPUT_FILE"
