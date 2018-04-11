@@ -207,7 +207,7 @@ EOF
 
 # Count the number of models and how to pad their unique numeric ID
 rows=$(nrows "$MODEL_CSV_FILE")
-npads=$(python -c "import math; print int(math.log($rows, 10) + 1)")
+npads=$(python -c "import math; print(int(math.log($rows, 10) + 1))")
 
 # Check that the header is correct (if not maybe the file format has
 # changed)
