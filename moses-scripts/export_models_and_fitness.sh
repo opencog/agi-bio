@@ -211,11 +211,11 @@ npads=$(python -c "import math; print(int(math.log($rows, 10) + 1))")
 
 # Check that the header is correct (if not maybe the file format has
 # changed)
-header=$(head -n 1 "$MODEL_CSV_FILE")
-expected_header='"","Sensitivity","Pos Pred Value"'
-if [[ "$header" != "$expected_header" ]]; then
-    fatalError "Wrong header format: expect '$expected_header' but got '$header'"
-fi
+# header=$(head -n 1 "$MODEL_CSV_FILE")
+# expected_header='"","Sensitivity","Pos Pred Value"'
+# if [[ "$header" != "$expected_header" ]]; then
+#     fatalError "Wrong header format: expect '$expected_header' but got '$header'"
+# fi
 
 # Create a temporary pipe and save the scheme code
 tmp_pipe=$(mktemp -u)
