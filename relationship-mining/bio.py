@@ -423,7 +423,7 @@ class Bio:
 
             genes = set()
             for link in memberlinks:
-                genes.add(link.out[0])
+                genes.add(link.out[1])
             # print_atoms_in_list(genes,'GeneNodes',geneset.name)
             self.set_members_dict[geneset] = genes
 
@@ -442,8 +442,8 @@ class Bio:
                     (VariableNode "$member")
                     (ImplicationLink
                         (MemberLink
-                            (VariableNode "$member")
-                            (ConceptNode {0}))
+                            (ConceptNode {0})
+                            (VariableNode "$member"))
                         (VariableNode "$member")))
             '''.format('"' + geneset.name.strip() + '"')
             bindlink_h = scheme_eval_h(self.atomspace, bindlink_query)
