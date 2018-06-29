@@ -22,8 +22,8 @@ def memberLink(gene, goID, qualifier):
         f_annotation.write("(MemberLink (stv 0.0 1.0)\n")
     else:
         f_annotation.write("(MemberLink\n")
-    f_annotation.write("\t(GeneNode \"" + gene + "\")\n")
-    f_annotation.write("\t(ConceptNode \"GO:" + goID + "\"))\n")
+    f_annotation.write("\t(ConceptNode \"GO:" + goID + "\")\n")
+    f_annotation.write("\t(GeneNode \"" + gene + "\"))\n")
 
 # previous representation with evaluation link
 # using memberlink representation above now instead
