@@ -45,8 +45,8 @@
             (VariableNode "$member") 
             (ImplicationLink
                 (MemberLink
-                    (VariableNode "$member")
-                    (ConceptNode setname))
+                    (ConceptNode setname)
+                    (VariableNode "$member"))
                 (VariableNode "$member")))))
 
 
@@ -56,8 +56,8 @@
             (VariableNode "$setname")
             (ImplicationLink
                 (MemberLink
-                    (GeneNode membername)
-                    (VariableNode "$setname"))
+                    (VariableNode "$setname")
+                    (GeneNode membername))
                 (VariableNode "$setname")))))
 
 

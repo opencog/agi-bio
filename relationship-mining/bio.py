@@ -423,7 +423,7 @@ class Bio:
 
             genes = set()
             for link in memberlinks:
-                genes.add(link.out[0])
+                genes.add(link.out[1])
             # print_atoms_in_list(genes,'GeneNodes',geneset.name)
             self.set_members_dict[geneset] = genes
 
