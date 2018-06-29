@@ -34,8 +34,8 @@ def evaLink(predicate , node1,node1_type, node2,node2_type):
 	    f.write(")\n\n")
 def memLink(members,geneset):
            f.write("(MemberLink \n")  
-	   f.write("\t\t(GeneNode \"" + members + "\")\n") 
-	   f.write("\t\t(ConceptNode \"" + "MSigDB_GeneSet: "+ geneset + "\"))\n")
+	   f.write("\t\t(ConceptNode \"" + "MSigDB_GeneSet: "+ geneset + "\")\n")
+	   f.write("\t\t(GeneNode \"" + members + "\"))\n") 
 
 #function to write scheme file without description
 

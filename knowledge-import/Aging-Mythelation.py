@@ -24,8 +24,8 @@ def evaLink(predicate , node1,node1_type, node2,node2_type):
 
 def memLink(members):
             f_mmc4.write("(MemberLink \n")  
-	    f_mmc4.write("\t\t(GeneNode \"" + members + "\")\n") 
-	    f_mmc4.write("\t\t(ConceptNode \"" + "Aging-Mythelation_GeneSet" + "\"))\n")
+	    f_mmc4.write("\t\t(ConceptNode \"" + "Aging-Mythelation_GeneSet" + "\")\n")
+	    f_mmc4.write("\t\t(GeneNode \"" + members + "\"))\n") 
 
 # write output file 
 

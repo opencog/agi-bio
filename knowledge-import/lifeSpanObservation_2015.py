@@ -19,8 +19,8 @@ def inLink(node1 ,node2):
 
 def memLink(member, lifespanEffect):
             f_out.write("(MemberLink \n")  
-	    f_out.write("\t\t(GeneNode \"" + member + "\")\n") 
-	    f_out.write("\t\t(ConceptNode \"" + lifespanEffect + "\"))\n")
+	    f_out.write("\t\t(ConceptNode \"" + lifespanEffect + "\")\n")
+	    f_out.write("\t\t(GeneNode \"" + member + "\"))\n") 
 
 # write output file 
 
