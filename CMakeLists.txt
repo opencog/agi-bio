@@ -1,13 +1,29 @@
 # Configure cmake
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+
 PROJECT(opencog)
 
-SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/lib/")
-INCLUDE("${CMAKE_SOURCE_DIR}/lib/OpenCogMacros.cmake")
-INCLUDE("${CMAKE_SOURCE_DIR}/lib/Summary.cmake")
+# Cogutil
+FIND_PACKAGE(CogUtil 2.0.1 CONFIG REQUIRED)
+IF (COGUTIL_FOUND)
+    MESSAGE(STATUS "CogUtil found.")
+    ADD_DEFINITIONS(-DHAVE_COGUTIL)
+    SET(HAVE_COGUTIL 1)
+ELSE (COGUTIL_FOUND)
+    MESSAGE(FATAL_ERROR "CogUtil missing: it is needed for everything!")
+ENDIF (COGUTIL_FOUND)
+
+# add the 'cmake' directory from cogutil to search path
+list(APPEND CMAKE_MODULE_PATH  ${COGUTIL_DATA_DIR}/cmake)
+
+include(${COGUTIL_DATA_DIR}/cmake/Summary.cmake)
+
+# include custom opencog cmake macros
+INCLUDE("${COGUTIL_DATA_DIR}/cmake/OpenCogMacros.cmake")
+INCLUDE("${COGUTIL_DATA_DIR}/cmake/OpenCogFunctions.cmake")
 
 # Search for required packages
-FIND_PACKAGE(AtomSpace 5.0.3 REQUIRED)
+FIND_PACKAGE(AtomSpace 5.0.3 CONFIG REQUIRED)
 IF (ATOMSPACE_FOUND)
 	MESSAGE(STATUS "AtomSpace found.")
 	ADD_DEFINITIONS(-DHAVE_ATOMSPACE)
@@ -15,6 +31,10 @@ IF (ATOMSPACE_FOUND)
 ELSE (ATOMSPACE_FOUND)
 	MESSAGE(FATAL_ERROR "AtomSpace missing: it is needed for everything!")
 ENDIF (ATOMSPACE_FOUND)
+
+# set default include paths
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}
+        ${COGUTIL_INCLUDE_DIR} ${ATOMSPACE_INCLUDE_DIR})
 
 # Configure compiler
 IF (CMAKE_COMPILER_IS_GNUCXX)
