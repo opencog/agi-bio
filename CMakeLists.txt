@@ -16,11 +16,16 @@ ENDIF (COGUTIL_FOUND)
 # add the 'cmake' directory from cogutil to search path
 list(APPEND CMAKE_MODULE_PATH  ${COGUTIL_DATA_DIR}/cmake)
 
+# set datadir
+IF (NOT DEFINED DATADIR)
+	SET (DATADIR "${CMAKE_INSTALL_PREFIX}/share/opencog")
+ENDIF (NOT DEFINED DATADIR)
+
 include(${COGUTIL_DATA_DIR}/cmake/Summary.cmake)
 
 # include custom opencog cmake macros
-INCLUDE("${COGUTIL_DATA_DIR}/cmake/OpenCogMacros.cmake")
-INCLUDE("${COGUTIL_DATA_DIR}/cmake/OpenCogFunctions.cmake")
+INCLUDE("${DATADIR}/cmake/OpenCogMacros.cmake")
+INCLUDE("${DATADIR}/cmake/OpenCogFunctions.cmake")
 
 # Search for required packages
 FIND_PACKAGE(AtomSpace 5.0.3 CONFIG REQUIRED)
