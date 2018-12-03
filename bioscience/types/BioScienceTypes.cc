@@ -25,4 +25,4 @@
 #define INHERITANCE_FILE "bioscience/types/atom_types.inheritance"
 #define INITNAME bioscience_types_init
 
-#include <opencog/atoms/proto/atom_types.cc>
+#include <opencog/atoms/value/atom_types.cc>
