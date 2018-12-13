@@ -4,5 +4,5 @@ ADD_SUBDIRECTORY (types)
 
 INSTALL (FILES
 	bioscience.scm
-	DESTINATION "${DATADIR}/scm/opencog"
+	DESTINATION "${GUILE_SITE_DIR}/opencog"
 )
