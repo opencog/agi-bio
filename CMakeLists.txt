@@ -1,7 +1,12 @@
 # Configure cmake
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
-PROJECT(opencog)
+PROJECT(agi-bio)
+
+# Default build type.
+IF (CMAKE_BUILD_TYPE STREQUAL "")
+   SET(CMAKE_BUILD_TYPE Release)
+ENDIF (CMAKE_BUILD_TYPE STREQUAL "")
 
 # ===============================================================
 # Configure compiler
@@ -13,13 +18,14 @@ IF (CMAKE_COMPILER_IS_GNUCXX)
 	# 2) -fopenmp for multithreading support
 	#
 	# 3) -std=gnu++0x for C++0x and GNU extensions support
+	SET(CMAKE_C_FLAGS "-Wall -fPIC -O3 -g -fstack-protector")
 	SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wno-variadic-macros -fopenmp -std=gnu++0x")
 ENDIF (CMAKE_COMPILER_IS_GNUCXX)
 
 # Add definitions
 IF (NOT DEFINED DATADIR)
 	SET (DATADIR "${CMAKE_INSTALL_PREFIX}/share/opencog")
-	ADD_DEFINITIONS(-DDATADIR=\\"${DATADIR}\\")
+	ADD_DEFINITIONS(-DDATADIR="${DATADIR}")
 ENDIF (NOT DEFINED DATADIR)
 
 # ===============================================================
@@ -52,6 +58,19 @@ ELSE (ATOMSPACE_FOUND)
 	MESSAGE(FATAL_ERROR "AtomSpace missing: it is needed!")
 ENDIF (ATOMSPACE_FOUND)
 
+# Gnu Guile scheme interpreter
+FIND_LIBRARY(GMP_LIBRARY gmp)
+FIND_PATH(GMP_INCLUDE_DIR gmp.h)
+FIND_PACKAGE(Guile 2.2)
+IF (GUILE_FOUND AND GMP_LIBRARY AND GMP_INCLUDE_DIR)
+	ADD_DEFINITIONS(-DHAVE_GUILE)
+	SET(HAVE_GUILE 1)
+	INCLUDE_DIRECTORIES(${GUILE_INCLUDE_DIR})
+ELSE (GUILE_FOUND AND GMP_LIBRARY AND GMP_INCLUDE_DIR)
+	SET(GUILE_DIR_MESSAGE "Guile was not found")
+	MESSAGE(STATUS "${GUILE_DIR_MESSAGE}")
+ENDIF (GUILE_FOUND AND GMP_LIBRARY AND GMP_INCLUDE_DIR)
+
 # ===============================================================
 
 # Set default include paths.
@@ -61,6 +80,8 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}
 # Include macros for defining new atom types.
 INCLUDE("${DATADIR}/cmake/OpenCogMacros.cmake")
 INCLUDE("${DATADIR}/cmake/OpenCogFunctions.cmake")
+
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib/opencog")
 
 # Configure builds
 include(${COGUTIL_DATA_DIR}/cmake/Summary.cmake)
