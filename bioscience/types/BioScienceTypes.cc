@@ -1,5 +1,5 @@
 /*
- * opencog/bioscience/BioScienceTypes.cc
+ * bioscience/types/BioScienceTypes.cc
  *
  * Copyright (C) 2014 Eddie Monroe
  * All Rights Reserved

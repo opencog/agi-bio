@@ -13,6 +13,7 @@ IF (CMAKE_COMPILER_IS_GNUCXX)
 	# 2) -fopenmp for multithreading support
 	#
 	# 3) -std=gnu++0x for C++0x and GNU extensions support
+	SET(CMAKE_C_FLAGS "-Wall -fPIC -O3 -g -fstack-protector")
 	SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wno-variadic-macros -fopenmp -std=gnu++0x")
 ENDIF (CMAKE_COMPILER_IS_GNUCXX)
 
