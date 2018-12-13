@@ -77,9 +77,14 @@ ENDIF (GUILE_FOUND AND GMP_LIBRARY AND GMP_INCLUDE_DIR)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}
         ${COGUTIL_INCLUDE_DIR} ${ATOMSPACE_INCLUDE_DIR})
 
+# Macros that define how atom types get declared.
+IF (NOT DEFINED ATOMSPACE_DATA_DIR)
+   SET (ATOMSPACE_DATA_DIR "${COGUTIL_DATA_DIR}")
+ENDIF (NOT DEFINED ATOMSPACE_DATA_DIR)
+
 # Include macros for defining new atom types.
-INCLUDE("${DATADIR}/cmake/OpenCogMacros.cmake")
-INCLUDE("${DATADIR}/cmake/OpenCogFunctions.cmake")
+INCLUDE("${ATOMSPACE_DATA_DIR}/cmake/OpenCogMacros.cmake")
+INCLUDE("${ATOMSPACE_DATA_DIR}/cmake/OpenCogFunctions.cmake")
 
 SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib/opencog")
 
