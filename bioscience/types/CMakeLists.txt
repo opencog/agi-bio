@@ -37,5 +37,5 @@ INSTALL (FILES
 
 INSTALL (FILES
 	${CMAKE_CURRENT_BINARY_DIR}/bioscience_types.scm
-	DESTINATION "${DATADIR}/scm/opencog/bioscience/types"
+	DESTINATION "${GUILE_SITE_DIR}/opencog/bioscience/types"
 )
