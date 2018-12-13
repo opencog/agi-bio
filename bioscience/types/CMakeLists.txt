@@ -33,7 +33,7 @@ INSTALL (TARGETS bioscience-types
 
 INSTALL (FILES
 	${CMAKE_CURRENT_BINARY_DIR}/atom_types.h
-	DESTINATION "include/${PROJECT_NAME}/bioscience/types"
+	DESTINATION "include/opencog/bioscience/types"
 )
 
 INSTALL (FILES
