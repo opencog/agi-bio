@@ -1,7 +1,7 @@
 # Configure cmake
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
-PROJECT(opencog)
+PROJECT(agi-bio)
 
 # ===============================================================
 # Configure compiler
