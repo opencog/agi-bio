@@ -25,7 +25,7 @@ ENDIF (CMAKE_COMPILER_IS_GNUCXX)
 # Add definitions
 IF (NOT DEFINED DATADIR)
 	SET (DATADIR "${CMAKE_INSTALL_PREFIX}/share/opencog")
-	ADD_DEFINITIONS(-DDATADIR=\\"${DATADIR}\\")
+	ADD_DEFINITIONS(-DDATADIR="${DATADIR}")
 ENDIF (NOT DEFINED DATADIR)
 
 # ===============================================================
