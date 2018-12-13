@@ -3,6 +3,11 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 PROJECT(agi-bio)
 
+# Default build type.
+IF (CMAKE_BUILD_TYPE STREQUAL "")
+   SET(CMAKE_BUILD_TYPE Release)
+ENDIF (CMAKE_BUILD_TYPE STREQUAL "")
+
 # ===============================================================
 # Configure compiler
 IF (CMAKE_COMPILER_IS_GNUCXX)
@@ -75,6 +80,8 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}
 # Include macros for defining new atom types.
 INCLUDE("${DATADIR}/cmake/OpenCogMacros.cmake")
 INCLUDE("${DATADIR}/cmake/OpenCogFunctions.cmake")
+
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib/opencog")
 
 # Configure builds
 include(${COGUTIL_DATA_DIR}/cmake/Summary.cmake)
