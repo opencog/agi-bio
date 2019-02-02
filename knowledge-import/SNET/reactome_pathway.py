@@ -1,4 +1,5 @@
-# author: Hedra
+__author__ = "Hedra"
+__email__ = "hedra@singularitynet.io"
 
 # The following script imports Reactome pathways and their relationship from https://reactome.org
 
