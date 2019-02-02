@@ -1,5 +1,6 @@
-# author: Hedra
-# January 2019
+__author__ = "Hedra"
+__email__ = "hedra@singularitynet.io"
+
 
 # The following script imports the Physical Entity (PE) Identifier mapping files from https://reactome.org/download-data
 
@@ -24,18 +25,23 @@ chebi = "https://reactome.org/download/current/ChEBI2Reactome_PE_Pathway.txt"
 # If you have the files downloaded, make sure the file names are the same 
 # Or modify the file names in this code to match yours.
 
-print("Downloading the datasets, It might take a while")
+def get_data(name):
 
-if(not os.path.isfile('NCBI2Reactome_PE_Pathway.txt')): 
-	wget.download(ncbi)
+	print("Downloading the datasets, It might take a while")
 
-if(not os.path.isfile('UniProt2Reactome_PE_Pathway.txt')): 
-	wget.download(uniprot)
+	if(name in ["N", "n", "A", "a"]):
+		if(not os.path.isfile('NCBI2Reactome_PE_Pathway.txt')): 
+			wget.download(ncbi)
 
-if(not os.path.isfile('ChEBI2Reactome_PE_Pathway.txt')):
-	wget.download(chebi)
+	if(name in ["U", "u", "A", "a"]):
+		if(not os.path.isfile('UniProt2Reactome_PE_Pathway.txt')): 
+			wget.download(uniprot)
 
-print("Done")
+	if(name in ["C", "c", "A", "a"]):
+		if(not os.path.isfile('ChEBI2Reactome_PE_Pathway.txt')):
+			wget.download(chebi)
+
+	print("Done")
 
 # Helper functions for Atomese representation
  
@@ -110,13 +116,39 @@ def import_dataset(dataset, delim):
 	print("Done")
 
 ###
-# Call the import function for each dataset as:
 
-import_dataset('NCBI2Reactome_PE_Pathway.txt', '\t')
+## Import them
+if __name__ == "__main__":
+	print("Import the following files from https://reactome.org \n\n" +
+	      "Press N to import NCBI2Reactome_PE_Pathway \n"+
+	      "Press U to import UniProt2Reactome_PE_Pathway \n"+
+	      "Press C to import ChEBI2Reactome_PE_Pathway \n"+
+	      "Press A for All \n")
 
-import_dataset('UniProt2Reactome_PE_Pathway.txt', ',')
+	option = input()
+	if option == "N" or option == "n":
+		get_data(option)
+		import_dataset('NCBI2Reactome_PE_Pathway.txt', '\t')
 
-import_dataset('ChEBI2Reactome_PE_Pathway.txt', ',')
+	elif option == "U" or option == "u":
+		get_data(option)
+		import_dataset('UniProt2Reactome_PE_Pathway.txt', ',')
+
+	elif option == "C" or option == "c":
+		get_data(option)
+		import_dataset('ChEBI2Reactome_PE_Pathway.txt', ',')
+
+	elif option == "A" or option == "a":
+		get_data(option)
+		import_dataset('NCBI2Reactome_PE_Pathway.txt', '\t')
+
+		import_dataset('UniProt2Reactome_PE_Pathway.txt', ',')
+
+		import_dataset('ChEBI2Reactome_PE_Pathway.txt', ',')
+	else:
+	    print("Incorect option, Try again")
+
+
 
 
 
