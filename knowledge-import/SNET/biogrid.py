@@ -1,6 +1,7 @@
-# author: Hedra
+__author__ = "Hedra"
+__email__ = "hedra@singularitynet.io"
 
-# The following script imports Biogrid interaction between Human genes from thebiogrid.com
+# The following script imports Biogrid interaction of Human genes from thebiogrid.com
 
 # Requires: BIOGRID-ORGANISM-Homo_sapiens-3.5.168.tab2.txt 
 
@@ -13,12 +14,15 @@ from urllib.request import urlopen
 from zipfile import ZipFile
 from io import BytesIO
 
-# Get the zip file first, and read the specific file we want to import
- 
-thefile = urlopen("https://downloads.thebiogrid.org/Download/BioGRID/Release-Archive/BIOGRID-3.5.168/BIOGRID-ORGANISM-3.5.168.tab2.zip")
-extracted_files = ZipFile(BytesIO(thefile.read()))
+if not os.path.isfile('BIOGRID-ORGANISM-Homo_sapiens-3.5.168.tab2.txt'):
 
-data = pd.read_csv(extracted_files.open('BIOGRID-ORGANISM-Homo_sapiens-3.5.168.tab2.txt'), low_memory=False, delimiter='\t') 
+	# Get the latest zip file first, and import the specific file (Homo_sapiens) 
+
+	thefile = urlopen("https://downloads.thebiogrid.org/Download/BioGRID/Release-Archive/BIOGRID-3.5.168/BIOGRID-ORGANISM-3.5.168.tab2.zip")
+	extracted_files = ZipFile(BytesIO(thefile.read()))
+	data = pd.read_csv(extracted_files.open('BIOGRID-ORGANISM-Homo_sapiens-3.5.168.tab2.txt'), low_memory=False, delimiter='\t') 
+else:
+	data = pd.read_csv("BIOGRID-ORGANISM-Homo_sapiens-3.5.168.tab2.txt", low_memory=False, delimiter='\t')
 
 with open('biogrid_gene_gene.scm','a') as f:
 
