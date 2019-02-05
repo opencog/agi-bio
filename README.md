@@ -19,6 +19,6 @@ Description
 -- knowledge-import -- scripts for converting external knowledge bases into
    scheme files for importing into the atomspace
 
--- bioscience - code to be built and installed to provide GeneNode and ProteinNode atoms
+-- bioscience - code to be built and installed to provide GeneNode and MoleculeNode atoms
 
 -- generated bio data is in separate repo here: git@gitlab.com:opencog-bio/bio-data.git
