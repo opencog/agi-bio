@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
 # 2017-12-03
-# Script to convert go.obd to atomspace representation in scheme
+# Script to convert go.obo to atomspace representation in scheme
 # Requires: file go.obo from http://www.berkeleybop.org/ontologies/go.obo
 
 
