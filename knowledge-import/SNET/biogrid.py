@@ -13,6 +13,7 @@ import pandas as pd
 from urllib.request import urlopen
 from zipfile import ZipFile
 from io import BytesIO
+import os
 
 if not os.path.isfile('BIOGRID-ORGANISM-Homo_sapiens-3.5.168.tab2.txt'):
 
