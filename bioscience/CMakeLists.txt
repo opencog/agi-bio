@@ -2,7 +2,7 @@
 # Build C++ code for Bioscience atom-types.
 ADD_SUBDIRECTORY (types)
 
-INSTALL (FILES
+ADD_GUILE_MODULE (FILES
 	bioscience.scm
-	DESTINATION "${DATADIR}/scm/opencog"
+	MODULE_DESTINATION "${GUILE_SITE_DIR}/opencog"
 )

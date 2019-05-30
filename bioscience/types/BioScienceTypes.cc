@@ -1,5 +1,5 @@
 /*
- * opencog/bioscience/BioScienceTypes.cc
+ * bioscience/types/BioScienceTypes.cc
  *
  * Copyright (C) 2014 Eddie Monroe
  * All Rights Reserved
@@ -25,4 +25,4 @@
 #define INHERITANCE_FILE "bioscience/types/atom_types.inheritance"
 #define INITNAME bioscience_types_init
 
-#include <opencog/atoms/base/atom_types.cc>
+#include <opencog/atoms/atom_types/atom_types.cc>
