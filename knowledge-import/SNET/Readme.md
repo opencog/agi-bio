@@ -6,9 +6,9 @@ The Atomspace of the annotation service(MOZI-AI) integrates the follwoing
 list of biology datasets filtering only of humans (Homo sapiens species).
 
 1. The Biogrid: BioGRID is a repository for Interaction Datasets. 
-   - biogrid.py script
-   - gene2proteinMapping.py
-   - gene2proteinIDs.R
+   - biogrid.py script (update?)
+   - gene2proteinMapping.py (update?)
+   - uniprotIDmap.R
 
 2. Reactome pathway: The complete list of pathways and hierarchial relationship among them.
    - reactome.py
