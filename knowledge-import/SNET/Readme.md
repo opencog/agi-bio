@@ -30,4 +30,4 @@ The Metabolite names linked to SMPDB pathways and Protein names linked to SMPDB 
 The Genes and their ontology GO (classes used to describe gene function
 and relationships betweeen these classes)
 
-   - Check ../knowledge-import/GO_Annotation_scm.py and GO_scm.py
+   - Check ../knowledge-import/SNET/GO_Annotation_scm.py and GO_scm.py
