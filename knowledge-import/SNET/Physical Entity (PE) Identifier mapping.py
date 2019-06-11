@@ -92,26 +92,32 @@ def import_dataset(dataset, delim):
 	data_human['location'] = new_dataframe[1]
 
 	with open(dataset+".scm", 'a') as f:
+		nodes = []
 		if "NCBI" in dataset:
 			for i in range(len(data_human)):
-				if not data_human.iloc[i]['gene'].split("-")[-1].isdigit() and data_human.iloc[i]['gene'].split("-")[-1] != " ":
+				if not data_human.iloc[i]['gene'].split("-")[-1].isdigit() and data_human.iloc[i]['gene'].split("-")[-1] != " " and data_human.iloc[i]['gene'].split("-")[-1] not in nodes:
+					nodes.append(data_human.iloc[i]['gene'].split("-")[-1])					
 					f.write(member(data_human.iloc[i]['gene'].split("-")[-1], data_human.iloc[i]['pathway'] ))
 					f.write(eva('l', data_human.iloc[i]['gene'], data_human.iloc[i]['location'].split(']')[0]))
 					f.write(eva('e', data_human.iloc[i]['gene'], data_human.iloc[i]['evidence_code'])) 
 					
 		elif "UniProt" in dataset:
 			for i in range(len(data_human)):
-				f.write(member("Uniprot:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['pathway'] ))
-				f.write(eva('l', "Uniprot:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['location'].split(']')[0]))
-				f.write(eva('e', "Uniprot:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['evidence_code']))
-				f.write(eva("n", "Uniprot:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['uniprot']))
+				if str(data_human.iloc[i]['db_id']) not in nodes:
+					nodes.append(str(data_human.iloc[i]['db_id']))					
+					f.write(member("Uniprot:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['pathway'] ))
+					f.write(eva('l', "Uniprot:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['location'].split(']')[0]))
+					f.write(eva('e', "Uniprot:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['evidence_code']))
+					f.write(eva("n", "Uniprot:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['uniprot']))
 				
 		elif "ChEBI" in dataset:
 			for i in range(len(data_human)):
-				f.write(member("ChEBI:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['pathway'] ))
-				f.write(eva("n","ChEBI:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['chebi_name'] ))
-				f.write(eva('l', "ChEBI:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['location'].split(']')[0]))
-				f.write(eva('e', "ChEBI:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['evidence_code'])) 
+				if str(data_human.iloc[i]['db_id']) not in nodes:
+					nodes.append(str(data_human.iloc[i]['db_id']))
+					f.write(member("ChEBI:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['pathway'] ))
+					f.write(eva("n","ChEBI:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['chebi_name'] ))
+					f.write(eva('l', "ChEBI:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['location'].split(']')[0]))
+					f.write(eva('e', "ChEBI:"+str(data_human.iloc[i]['db_id']), data_human.iloc[i]['evidence_code'])) 
 			
 	print("Done")
 

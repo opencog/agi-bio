@@ -127,8 +127,8 @@ def import_proteins():
 ## Import them
 if __name__ == "__main__":
 	print("Import the following files from Small molecule database \n" +
-	      "Press P to import Metabolite names linked to SMPDB pathways \n"+
-	      "Press M to import Protein names linked to SMPDB pathways \n"+
+	      "Press M to import Metabolite names linked to SMPDB pathways \n"+
+	      "Press P to import Protein names linked to SMPDB pathways \n"+
 	      "Press B for both\n")
 	option = input()
 	if option == "P" or option == "p":
