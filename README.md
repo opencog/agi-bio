@@ -5,6 +5,8 @@ Prototype project utilizing the OpenCog framework for genomic
 research. In particular it aims at experimenting with cognitive
 synergy between MOSES, PLN and other OpenCog components.
 
+see [mozi.ai](https://github.com/MOZI-AI) repositories for current development of opencog bioinformatics tools as [SingularityNET](https://singularitynet.io/) sevices.
+
 Requirements
 ------------
 
@@ -13,12 +15,9 @@ Requirements
 Description
 -----------
 
--- moses-scripts -- scripts for importing MOSES models into the atomspace
-   and applying PLN
+**bioscience** - code to be built and installed with opencog to provide `GeneNode` and `MoleculeNode` atoms
 
--- knowledge-import -- scripts for converting external knowledge bases into
+**knowledge-import** -- scripts for converting external knowledge bases into
    scheme files for importing into the atomspace
 
--- bioscience - code to be built and installed to provide GeneNode and ProteinNode atoms
-
--- generated bio data is in separate repo here: git@gitlab.com:opencog-bio/bio-data.git
+**moses-scripts** -- scripts for importing MOSES models distinguishing binary phenotype categories based on gene expression data into the atomspace.

@@ -11,7 +11,7 @@ This directory currently contains one subdirectory:
 
      Current custom atom types are:
        GeneNode
-       ProteinNode
+       MoleculeNode
 
 ### Building the code
 Follow the following steps, starting from this directory
@@ -30,14 +30,14 @@ In guile shell
 ```scheme
 scheme@(guile-user)> (use-modules (opencog) (opencog bioscience))
 
-scheme@(guile-user)> (Gene "that special gene")
+scheme@(guile-user)> (GeneNode "that special gene")
 $1 = (GeneNode "that special gene")
 
-scheme@(guile-user)> (Protein "the expression of the special gene")
-$2 = (ProteinNode "the expression of the special gene")
+scheme@(guile-user)> (MoleculeNode "the expression of the special gene")
+$2 = (MoleculeNode "the expression of the special gene")
 
 scheme@(guile-user)> (cog-prt-atomspace)
 (GeneNode "that special gene")
-(ProteinNode "the expression of the special gene")
+(MoleculeNode "the expression of the special gene")
 
 ```
