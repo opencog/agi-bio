@@ -59,9 +59,9 @@ def import_metabolites():
                             '(ListLink \n'+
                             '(MoleculeNode "'+'ChEBI:'+ str(data.iloc[r]['ChEBI ID']) +'")\n' +
                             '(ConceptNode "'+ str(data.iloc[r]['IUPAC']) +'")))\n\n')
-                    break
+                    break # comment this file to import all files
             print("Imported "+filename)
-            break
+            break # comment this file to import all files
 
     print("Done. Check smpdb_chebi.scm")
 
@@ -118,9 +118,9 @@ def import_proteins():
                             '(ListLink \n'+
                             '(MoleculeNode "'+'Uniprot:'+ str(data.iloc[r]['Uniprot ID']) +'")\n' +
                             '(ConceptNode "'+ data.iloc[r]['Protein Name'] +'")))\n\n')
-                    break
+                    break # comment this file to import all files
             print("Imported "+filename)
-            break
+            break # Comment this line to import all files
 
     print("Done. Check smpdb_protein.scm")
 

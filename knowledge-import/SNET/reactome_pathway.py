@@ -17,7 +17,7 @@ def eva(name, reid):
     return ""+'(EvaluationLink \n (PredicateNode "has_name")\n (ListLink\n (ConceptNode "'+ reid + '")\n' + '(ConceptNode "'+ name + '")))\n'
 
 def inherit(parent, child):
-    return ""+"(InheritanceLink \n (ConceptNode "+ child + ")\n " + "(ConceptNode "+ parent + "))\n"
+    return ""+'(InheritanceLink \n (ConceptNode "'+ child + '")\n' + '(ConceptNode "'+ parent + '"))\n'
 
 # URL
 

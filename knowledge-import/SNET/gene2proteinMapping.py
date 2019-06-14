@@ -14,6 +14,7 @@ __email__ = "hedra@singularitynet.io"
 
 import pandas as pd
 import os
+import math
 
 # Define helper functions 
 
@@ -25,11 +26,16 @@ if not "entrez2uniprot.csv" in os.listdir(os.getcwd()):
 	print("Generate the entres to protein ID mapping table first \n" )
 
 else:
-    data = pd.read_csv("entrez2uniprot.csv")
+    data = pd.read_csv("entrez2uniprot.csv", dtype={'uniprot': str, 'entrez': float, 'symbol': str})
     print("Started importing")
-    with open("entrez_to_protein.scm", 'a') as f:
+    with open("entrez_to_protein.scm", 'w') as f:
         for i in range(len(data)):
-                f.write(expres("expresses", '(GeneNode '+ '"' + data.iloc[i]['symbol'] +'")\n', '(MoleculeNode "'+'Uniprot:'+str(data.iloc[i]['uniprot'])+'")\n'))
-                if str(data.iloc[i]['entrez']) != "N/A":
-                    f.write(expres("has_entrez_id", '(GeneNode '+ '"' + data.iloc[i]['symbol'] +'")\n', '(ConceptNode "'+'entrez:'+ str(data.iloc[i]['entrez'])+'")\n'))
+            try:
+                f.write(expres("expresses", '(GeneNode '+ '"' + data.iloc[i]['symbol'] +'")\n', '(MoleculeNode "'+'Uniprot:'+ data.iloc[i]['uniprot']+'")\n'))
+            except TypeError:
+                continue
+            if not math.isnan(data.iloc[i]['entrez']):
+                f.write(expres("has_entrez_id", '(GeneNode '+ '"' + data.iloc[i]['symbol'] +'")\n', '(ConceptNode "'+'entrez:'+ str(int(data.iloc[i]['entrez']))+'")\n'))
         print("Done")
+        print(math.isnan(data.iloc[0]['entrez']))
+
