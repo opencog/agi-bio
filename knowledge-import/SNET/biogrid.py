@@ -15,6 +15,13 @@ from zipfile import ZipFile
 from io import BytesIO
 import os
 
+def checkdisc(diction, key, value):
+  try:
+    diction.setdefault(key,[]).append(value)
+  except KeyError:
+    return "key error"
+
+
 if not os.path.isfile('BIOGRID-ORGANISM-Homo_sapiens-3.5.169.tab2.txt'):
 
 	# Get the latest zip file first, and import the specific file (Homo_sapiens) 
@@ -25,37 +32,48 @@ if not os.path.isfile('BIOGRID-ORGANISM-Homo_sapiens-3.5.169.tab2.txt'):
 else:
 	data = pd.read_csv("BIOGRID-ORGANISM-Homo_sapiens-3.5.169.tab2.txt", low_memory=False, delimiter='\t')
 
-with open('biogrid_gene_gene.scm','a') as f:
+data = data[['Entrez Gene Interactor A',	'Entrez Gene Interactor B', 'Official Symbol Interactor A', 'Official Symbol Interactor B','Pubmed ID']]  
+print("started importing")
 
+with open('biogrid_gene_gene.scm','w') as f:
+    pairs = {}
     for i in range(len(data)):
-
-        if not pd.isnull(data.iloc[i]['Official Symbol Interactor A']) and not pd.isnull(data.iloc[i]['Official Symbol Interactor B']):
-            f.write('(EvaluationLink\n'+ 
-                      '(PredicateNode "has_pubmedID")\n'+
-                      '(ListLink \n'+            
-                      '(EvaluationLink\n'+ 
-                      '(PredicateNode "Interacts_with")\n'+
-                        '(ListLink \n'+
-                            '(GeneNode "' + data.iloc[i]['Official Symbol Interactor A'] +'")\n'+
-                            '(GeneNode "'+ data.iloc[i]['Official Symbol Interactor B'] +'")))\n' +
-                      '(ConceptNode "pubmed:'+ str(data.iloc[i]['Pubmed ID']) + '")))\n')
-		
-	    # The relationship should be undirected (both way) 
+      if not pd.isnull(data.iloc[i]['Official Symbol Interactor A']) and not pd.isnull(data.iloc[i]['Official Symbol Interactor B']):
+        node1 = str(data.iloc[i]['Official Symbol Interactor A']).upper()
+        node2 = str(data.iloc[i]['Official Symbol Interactor B']).upper()
+        interactors = node1 +':'+ node2
+        pubmed = data.iloc[i]['Pubmed ID']            
+        if interactors in pairs.keys():
+            checkdisc(pairs, interactors, '(ConceptNode "' + 'https://www.ncbi.nlm.nih.gov/pubmed/?term=' + str(pubmed) + '")')
+        else:
+            checkdisc(pairs, interactors, '(ConceptNode "' + 'https://www.ncbi.nlm.nih.gov/pubmed/?term=' + str(pubmed) + '")')
+	          # The relationship should be undirected (both way) 
             f.write( '(EvaluationLink\n'+ 
-                      '(PredicateNode "Interacts_with")\n'+
+                      '(PredicateNode "interacts_with")\n'+
                         '(ListLink \n'+
-                            '(GeneNode "' + data.iloc[i]['Official Symbol Interactor B'] +'")\n'+
-                            '(GeneNode "'+ data.iloc[i]['Official Symbol Interactor A'] +'")))\n' )
-	    # We can take advantage of finding the Gene entez ID information here
+                            '(GeneNode "' + node2 +'")\n'+
+                            '(GeneNode "'+ node1 +'")))\n' )
+	          # We can take advantage of finding the Gene entez ID information here
             f.write('(EvaluationLink\n'+ 
                       '(PredicateNode "has_entrez_id")\n'+
                         '(ListLink \n'+
-                            '(GeneNode "' + data.iloc[i]['Official Symbol Interactor A'] +'")\n'+
+                            '(GeneNode "' + node1 +'")\n'+
                             '(ConceptNode "'+ "entrez:"+str(data.iloc[i]['Entrez Gene Interactor A']) +'")))\n')
 
             f.write('(EvaluationLink\n'+ 
                       '(PredicateNode "has_entrez_id")\n'+
                         '(ListLink \n'+
-                            '(GeneNode "' + data.iloc[i]['Official Symbol Interactor B'] +'")\n'+
+                            '(GeneNode "' + node2 +'")\n'+
                             '(ConceptNode "'+ "entrez:" + str(data.iloc[i]['Entrez Gene Interactor B']) +'")))\n') 
-  
+    
+    for p in pairs.keys():
+      f.write('(EvaluationLink\n'+ 
+                '(PredicateNode "has_pubmedID")\n'+
+                  '(ListLink \n'+            
+                      '(EvaluationLink\n'+ 
+                      '(PredicateNode "interacts_with")\n'+
+                        '(ListLink \n'+
+                            '(GeneNode "' + str(p).split(':')[0] +'")\n'+
+                            '(GeneNode "'+ str(p).split(':')[1] +'")))\n' +
+                      '(ListLink \n'+
+                      "\n".join(set(pairs[p]))+ ')))\n')
