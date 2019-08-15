@@ -4,7 +4,7 @@
 # Script to convert go.obd to atomspace representation in scheme
 # Requires: file go.obo from http://www.berkeleybop.org/ontologies/go.obo or http://snapshot.geneontology.org/ontology/go.obo
 
-
+import re
 f = open('go.obo')
 lines = f.readlines()
 
@@ -45,7 +45,7 @@ def go_namespace(idd, namespace):
     evaLink("GO_namespace", idd, namespace ,"ConceptNode", "ConceptNode")
 
 def go_definition(idd, definition):
-    evaLink("GO_definition", idd, definition ,"ConceptNode", "ConceptNode")
+    evaLink("GO_definition", idd, definition.replace('"', '') ,"ConceptNode", "ConceptNode")
 # def go_synonyms(idd,synonyms,synonym_type):
 #     evaLink(("GO_synonym_" +synonym_type),idd ,synonyms, "ConceptNode", "ConceptNode")
 
@@ -98,7 +98,9 @@ while i < len(line_no):
         elif (test[k][0] == 'namespace'):
             namespace = (test[k][2].partition('\n')[0]).partition(' ')[2].replace('\\', '\\\\')
         elif(test[k][0] == 'def'):
-            definition = (test[k][2].partition('\n')[0]).partition(' ')[2].split('"',2)[1].replace('\\', '\\\\')
+            definition = re.sub('\[.*?\]',"",(test[k][2].partition('\n')[0]).partition(' ')[2]).replace('\\', '')
+            if "A small, membranous protrusion" in definition:
+                print(definition.replace('\\', ''))
         # elif (test[k][0] == 'synonym'):
         #     synonym.append(((test[k][2].partition('\n')[0]).partition(' ')[2]).split('"',2)[1].replace('\\', '\\\\').strip())
         #     synonym_type.append((((test[k][2].split('"',2))[2].partition('[]')[0]).partition(" ")[2]).partition(" ")[0].replace('\\', '\\\\'))
