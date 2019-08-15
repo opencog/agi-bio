@@ -27,4 +27,4 @@ else:
 with open("uniprot2GO.scm", 'w') as f:
     for i in lines:
         if 'UniProtKB' in i:
-            f.write(inherit('(MoleculeNode "'+ i.split('\t')[1] + '")', '(ConceptNode "' + i.split('\t')[4] + '")'))
+            f.write(inherit('(MoleculeNode "'+ 'Uniprot:'+i.split('\t')[1] + '")', '(ConceptNode "' + i.split('\t')[4] + '")'))
