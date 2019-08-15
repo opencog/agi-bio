@@ -14,10 +14,16 @@ import os
 # Helper functions
 
 def eva(name, reid):
-    return ""+'(EvaluationLink \n (PredicateNode "has_name")\n (ListLink\n (ConceptNode "'+ reid + '")\n' + '(ConceptNode "'+ name + '")))\n'
+	if 'R-HSA' in reid:
+		return ""+'(EvaluationLink \n (PredicateNode "has_name")\n (ListLink\n (ConceptNode "'+ reid + '")\n' + '(ConceptNode "'+ name + '")))\n'
+	else:
+		return ""
 
 def inherit(parent, child):
-    return ""+'(InheritanceLink \n (ConceptNode "'+ child + '")\n' + '(ConceptNode "'+ parent + '"))\n'
+	if 'R-HSA' in parent and 'R-HSA' in child:
+		return ""+'(InheritanceLink \n (ConceptNode "'+ child + '")\n' + '(ConceptNode "'+ parent + '"))\n'
+	else:
+		return ""
 
 # URL
 
