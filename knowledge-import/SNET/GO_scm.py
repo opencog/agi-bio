@@ -5,16 +5,25 @@
 # Requires: file go.obo from http://www.berkeleybop.org/ontologies/go.obo or http://snapshot.geneontology.org/ontology/go.obo
 
 import re
-f = open('go.obo')
+import wget
+import metadata
+import os
+
+source = "http://snapshot.geneontology.org/ontology/go.obo"
+if os.path.exists(os.path.join(os.getcwd(),'dataset/GO.scm')):
+    os.remove('dataset/GO.scm')
+if os.path.exists('raw_data/go.obo'):
+    os.remove('raw_data/go.obo')
+dataset = wget.download(source,"raw_data/")
+f = open(dataset)
 lines = f.readlines()
 
 # store line of number --- "[Terms]" and [Typedef]
 line_no = []
-
-with open('go.obo') as  f:
-    for num, line in enumerate(f, 1):
-        if "[Term]" in line or "[Typedef]" in line:
-            line_no.append(num)
+print("\nStarted importing\n")
+for num, line in enumerate(lines, 1):
+    if "[Term]" in line or "[Typedef]" in line:
+        line_no.append(num)
 
 line_no.sort()
 # print len(line_no)
@@ -59,7 +68,7 @@ def go_relationship(idd,relate_id, relation_type):
     evaLink(("GO_" + relation_type), idd, relate_id, "ConceptNode" , "ConceptNode")
 
 # open file to write
-f_go = open('GO.scm', 'a')
+f_go = open('dataset/GO.scm', 'a')
 
 # once for the whole DB
 
@@ -68,6 +77,7 @@ f_go = open('GO.scm', 'a')
 # inLink("GO_synonym_NARROW","GO_synonym")
 # inLink("GO_synonym_RELATED","GO_synonym")
 #
+goterm = {"biological_process":[],"molecular_function":[],"cellular_component":[]}
 i = 0
 # partition each line and call functions
 while i < len(line_no):
@@ -99,8 +109,7 @@ while i < len(line_no):
             namespace = (test[k][2].partition('\n')[0]).partition(' ')[2].replace('\\', '\\\\')
         elif(test[k][0] == 'def'):
             definition = re.sub('\[.*?\]',"",(test[k][2].partition('\n')[0]).partition(' ')[2]).replace('\\', '')
-            if "A small, membranous protrusion" in definition:
-                print(definition.replace('\\', ''))
+
         # elif (test[k][0] == 'synonym'):
         #     synonym.append(((test[k][2].partition('\n')[0]).partition(' ')[2]).split('"',2)[1].replace('\\', '\\\\').strip())
         #     synonym_type.append((((test[k][2].split('"',2))[2].partition('[]')[0]).partition(" ")[2]).partition(" ")[0].replace('\\', '\\\\'))
@@ -119,7 +128,9 @@ while i < len(line_no):
         go_term(idd)
         go_name(idd, name)
         go_namespace(idd, namespace)
-        go_definition(idd, definition)
+        if namespace in goterm.keys():
+            goterm[namespace].append(idd)
+        # go_definition(idd, definition)
         # if len(synonym) != 0:
         #     sy_len = 0
         #     while sy_len < len(synonym):
@@ -142,3 +153,9 @@ while i < len(line_no):
         #         parts_len = parts_len + 1
     i= i + 1
 f_go.close()
+ns = {}
+for k in goterm.keys():
+    ns[k] = len(set(goterm[k]))
+script = "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/GO_scm.py"
+metadata.update_meta("GO Obo:latest", source,script,goterms=ns)
+print("Done, check dataset/GO.scm")
