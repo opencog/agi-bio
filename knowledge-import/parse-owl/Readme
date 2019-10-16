@@ -1,0 +1,22 @@
+# Parse owl/obo file into scheme
+
+download owl files:
+- GO owl file here http://purl.obolibrary.org/obo/go.owl
+- GO-plus owl file http://purl.obolibrary.org/obo/go/extensions/go-plus.owl
+
+How to generate the scheme result:
+
+python owl2atomese.py file_name
+
+example:
+
+python owl2atomese.py go-plus.owl
+
+
+
+TODO:
+
+The script imports everything in the owl/obo file, so preprocessing is needed to filter out 
+unwanted relationships. 
+
+
