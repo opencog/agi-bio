@@ -34,5 +34,5 @@ with open("dataset/uniprot2GO.scm", 'w') as f:
             prot.append(i.split('\t')[1])
             go.append(i.split('\t')[4])
 script = "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/uniprot2GO.py"
-metadata.update_meta("GO_Annotation:latest", dataset_url,script,prot=len(set(prot)), goterms={"go-terms":len(set(go))})
+metadata.update_meta("Uniprot-GO:latest", dataset_url,script,prot=len(set(prot)), goterms={"go-terms":len(set(go))})
 print("Done, check dataset/uniprot2GO.scm")
