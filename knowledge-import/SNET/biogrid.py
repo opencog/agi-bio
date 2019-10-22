@@ -35,7 +35,8 @@ def import_data_from_web(version):
     dataset = [i for i in extracted_files.namelist() if "BIOGRID-ORGANISM-Homo_sapiens" in i][0]
     version = dataset.split('-')[-1].replace(".tab2.txt", "")
     data = pd.read_csv(extracted_files.open(dataset), low_memory=False, delimiter='\t')
-  import_data(data, dataset, version)
+  source = 'https://downloads.thebiogrid.org/Download/BioGRID/Release-Archive/BIOGRID-'+ version +'/BIOGRID-ORGANISM-'+ version +'.tab2.zip'
+  import_data(data, source, version)
   data.to_csv("raw_data/"+dataset, sep='\t',index=False)
 
 def import_local_data(file):
