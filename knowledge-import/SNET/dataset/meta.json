@@ -1,0 +1,104 @@
+[
+  {
+    "Reactome Pathways relationship": [
+      {
+        "Version": "latest",
+        "Number of Reactome Pathway": 21142,
+        "Source": "https://reactome.org/download/current/ReactomePathwaysRelation.txt https://reactome.org/download/current/ReactomePathways.txt",
+        "Import script": "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/reactome_pathway.py",
+        "Import Date ": "2019-10-21"
+      }
+    ],
+    "Biogrid-Gene2uniprot": [
+      {
+        "Version": "latest",
+        "Source": "uniprot2biogrid.csv, gene2biogrid.csv",
+        "Number of Proteins ": 16330,
+        "Number of Genes ": "16434",
+        "Import Date ": "2019-10-21",
+        "Import script": "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/biogrid_gene2uniprot.py"
+      }
+    ],
+    "Uniprot-GO": [
+      {
+        "Version": "latest",
+        "Source": "http://current.geneontology.org/annotations/goa_human_isoform.gaf.gz",
+        "Number of Proteins ": 34339,
+        "Number of go-terms": 5444,
+        "Import script": "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/uniprot2GO.py",
+        "Import Date ": "2019-10-21"
+      }
+    ],
+    "gene2proteinMapping": [
+      {
+        "Version": "latest",
+        "Source": "entrez2uniprot.csv",
+        "Number of Proteins ": 151498,
+        "Number of Genes ": 26462,
+        "Import Date ": "2019-10-21",
+        "Import script": "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/gene2proteinMapping.py"
+      }
+    ],
+    "Biogrid": [
+      {
+        "Version": "3.5.177",
+        "Source": "https://downloads.thebiogrid.org/Download/BioGRID/Release-Archive/BIOGRID-3.5.177/BIOGRID-ORGANISM-3.5.177.tab2.zip",
+        "Number of Genes ": "20133",
+        "Import Date ": "2019-10-21",
+        "Number of interactions ": "737360",
+        "Import script": "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/biogrid.py"
+      }
+    ],
+    "Chebi2reactome_pathway_mapping": [
+      {
+        "Version": "latest",
+        "Source": "https://reactome.org/download/current/NCBI2Reactome_PE_Pathway.txt",
+        "Import Date ": "2019-10-21",
+        "Number of Reactome Pathway": 1540,
+        "Number of Small Molecules ": 2087,
+        "Import script": "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/Physical%20Entity%20(PE)%20Identifier%20mapping.py"
+      }
+    ],
+    "Uniprot2reactome_pathway_mapping": [
+      {
+        "Version": "latest",
+        "Source": "https://reactome.org/download/current/NCBI2Reactome_PE_Pathway.txt",
+        "Number of Proteins ": 11007,
+        "Import Date ": "2019-10-21",
+        "Number of Reactome Pathway": 1865,
+        "Import script": "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/Physical%20Entity%20(PE)%20Identifier%20mapping.py"
+      }
+    ],
+    "NCBI2reactome_pathway_mapping": [
+      {
+        "Version": "latest",
+        "Source": "https://reactome.org/download/current/NCBI2Reactome_PE_Pathway.txt",
+        "Number of Genes ": 10665,
+        "Import Date ": "2019-10-21",
+        "Number of Reactome Pathway": 1859,
+        "Import script": "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/Physical%20Entity%20(PE)%20Identifier%20mapping.py"
+      }
+    ],
+    "GO Obo": [
+      {
+        "Version": "latest",
+        "Number of molecular_function": 11094,
+        "Number of biological_process": 29452,
+        "Number of cellular_component": 4183,
+        "Import Date ": "2019-10-21",
+        "Source": "http://snapshot.geneontology.org/ontology/go.obo",
+        "Import script": "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/GO_scm.py"
+      }
+    ],
+    "GO_Annotation": [
+      {
+        "Version": "latest",
+        "Source": "http://current.geneontology.org/annotations/goa_human.gaf.gz",
+        "Number of Genes ": 19609,
+        "Import Date ": "2019-10-21",
+        "Number of go-terms": 18213,
+        "Import script": "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/GO_Annotation_scm.py"
+      }
+    ]
+  }
+]
