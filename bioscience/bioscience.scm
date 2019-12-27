@@ -1,12 +1,14 @@
 ;
 ; Opencog bioscience atom-types module
 ;
-
-(use-modules (opencog))
-
 (define-module (opencog bioscience))
 
+(use-modules (opencog))
+(use-modules (opencog bio-config))
+
 ; Load the C library that calls the classserver to load the types.
-(load-extension "libbioscience-types" "bioscience_types_init")
+(load-extension
+	(string-append opencog-ext-path-bio "libbioscience-types")
+	"bioscience_types_init")
 
 (load "bioscience/types/bioscience_types.scm")
