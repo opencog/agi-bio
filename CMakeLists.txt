@@ -114,6 +114,10 @@ SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 # Only list install files that have actually changed.
 SET(CMAKE_INSTALL_MESSAGE "LAZY")
 
+IF (NOT DEFINED DATADIR)
+	SET (DATADIR "${CMAKE_INSTALL_PREFIX}/share/opencog")
+ENDIF (NOT DEFINED DATADIR)
+
 ADD_CUSTOM_TARGET(uninstall
 	COMMAND bash -c "cat install_manifest.txt | xargs rm -f"
 	VERBATIM
