@@ -1,23 +1,39 @@
 AGI-Bio
 =======
 
-Prototype project utilizing the OpenCog framework for genomic
-research. In particular it aims at experimenting with cognitive
-synergy between MOSES, PLN and other OpenCog components.
+Genomic and proteomic research using the OpenCog toolset.
+This includes experiments in applying MOSES, PLN, pattern mining
+and other OpenCog components.
 
-see [mozi.ai](https://github.com/MOZI-AI) repositories for current development of opencog bioinformatics tools as [SingularityNET](https://singularitynet.io/) sevices.
+The [***MOZI.AI***](https://github.com/MOZI-AI) repositories make
+use of this package, and extend the current development of OpenCog-based
+bioinformatics tools as [***SingularityNET***](https://singularitynet.io/)
+sevices.
 
-Requirements
-------------
+Building and Installing
+=======================
+To build the AGI-Bio code, you will need to build and install the
+[OpenCog AtomSpace](https://github.com/opencog/atomspace) first.
+All of the pre-requistes listed there are sufficient to also build
+this project. Building is as "usual":
+```
+    cd to project root dir
+    mkdir build
+    cd build
+    cmake ..
+    make -j
+    sudo make install
+    make -j test
+```
 
-- OpenCog https://github.com/opencog/opencog
+Overview
+========
+The directory layout is as follows:
 
-Description
------------
+* **bioscience** - Provides the `GeneNode` and `MoleculeNode` Atom types.
 
-**bioscience** - code to be built and installed with opencog to provide `GeneNode` and `MoleculeNode` atoms
+* **knowledge-import** -- scripts for converting external knowledge
+   bases into Atomese files for importing into the AtomSpace.
 
-**knowledge-import** -- scripts for converting external knowledge bases into
-   scheme files for importing into the atomspace
-
-**moses-scripts** -- scripts for importing MOSES models distinguishing binary phenotype categories based on gene expression data into the atomspace.
+* **moses-scripts** -- scripts for importing MOSES models distinguishing
+  binary phenotype categories based on gene expression data.
