@@ -5,9 +5,9 @@ Genomic and proteomic research using the OpenCog toolset.
 This includes experiments in applying MOSES, PLN, pattern mining
 and other OpenCog components.
 
-The [***MOZI.AI***](https://github.com/MOZI-AI) repositories make
+The [**MOZI.AI**](https://github.com/MOZI-AI) repositories make
 use of this package, and extend the current development of OpenCog-based
-bioinformatics tools as [***SingularityNET***](https://singularitynet.io/)
+bioinformatics tools as [**SingularityNET**](https://singularitynet.io/)
 sevices.
 
 Building and Installing
