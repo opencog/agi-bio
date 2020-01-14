@@ -3,13 +3,17 @@ import datetime
 import os
 from collections import OrderedDict 
 
-def update_meta(version, source, script, genes=None, prot=None, chebi=None, pathways=None, goterms=None,interactions=None):
+def update_meta(version, source, script, genes=None, rna=None, ncrna=None, prot=None, chebi=None, pathways=None, goterms=None,interactions=None):
   meta_data = OrderedDict()  
   dataset_name = version.split(':')[0]
   meta_data.update({"Version": version.split(':')[1]})
   meta_data.update({"Source": source})
   if genes:
       meta_data.update({"Number of Genes ": genes})
+  if rna:
+      meta_data.update({"Number of coding RNA's ": rna})
+  if ncrna:
+      meta_data.update({"Number of Non-coding RNA's ": ncrna})
   if prot:
       meta_data.update({"Number of Proteins ": prot})
   if chebi:
@@ -37,7 +41,7 @@ def update_meta(version, source, script, genes=None, prot=None, chebi=None, path
         json.dump(a,f, indent=2)
   else:
     with open(fname) as feedsjson:
-        feeds = json.load(feedsjson)
+        feeds = json.load(feedsjson, object_pairs_hook=OrderedDict)
 
     feeds[0][dataset_name] = [meta_data] 
     with open(fname, mode='w') as f:
