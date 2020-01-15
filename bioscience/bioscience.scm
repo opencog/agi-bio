@@ -11,4 +11,4 @@
 	(string-append opencog-ext-path-bio "libbioscience-types")
 	"bioscience_types_init")
 
-(load-from-path "bioscience/types/bioscience_types.scm")
+(load-from-path "opencog/bioscience/types/bioscience_types.scm")
