@@ -99,6 +99,26 @@
         "Number of go-terms": 18213,
         "Import script": "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/GO_Annotation_scm.py"
       }
+    ],
+    "codingRNA": [
+      {
+        "Version": "GRCh37",
+        "Source": "Homo_sapiens.GRCh37.85.uniprot.tsv.gz",
+        "Number of Genes ": 18659,
+        "Number of coding RNA's ": 82950,
+        "Import script": "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/codingRNA.py",
+        "Import Date ": "2020-01-01"
+      }
+    ],
+    "noncodingRNA": [
+      {
+        "Version": "25_GRCh37",
+        "Source": "GCF_000001405.25_GRCh37.p13_feature_table.txt.gz",
+        "Number of Genes ": 28165,
+        "Number of Non-coding RNA's ": 124549,
+        "Import script": "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/noncodingRNA.py",
+        "Import Date ": "2020-01-01"
+      }
     ]
   }
 ]
