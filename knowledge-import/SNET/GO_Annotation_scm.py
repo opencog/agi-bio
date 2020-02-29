@@ -1,15 +1,22 @@
 #!/usr/bin/env python2.7
 
-# Go Annotation to atomspace representation in scheme
+# imports Go Annotation to atomese
 # Requires: file gene_association.goa_ref_human.gz from http://geneontology.org/gene-associations/gene_association.goa_ref_human.gz
+import wget
+import gzip
+import os
+import metadata
 
-
-f = open('goa_human.gaf')
-lines = f.readlines()
+source = "http://current.geneontology.org/annotations/goa_human.gaf.gz"
+if not os.path.exists("raw_data/goa_human.gaf.gz"):
+    dataset = wget.download(source, "raw_data")
+with gzip.open("raw_data/goa_human.gaf.gz", "rb") as f:
+    lines = f.readlines()
+lines = [l.decode("utf-8") for l in lines]
 line_no = []
+print("Started importing")
 
-with open('goa_human.gaf') as f:  
- for num, line in enumerate(f , 1):
+for num, line in enumerate(lines , 1):
   if "UniProtKB" in line :
       line_no.append(num)
 
@@ -41,13 +48,14 @@ def evaLink(gene , name, qualifier):
 
 
 #open file to write
-f_annotation = open('GO_annotation.scm', 'a')
+f_annotation = open('dataset/GO_annotation.scm', 'a')
 
 #add GOC Validation Date
 f_annotation.write(";"+((lines[0]).split('!')[1]).split('$')[0]+ "\n")
 f_annotation.write(";"+((lines[1]).split('!')[1]).split('$')[0]+ "\n\n")
 
 genes = []
+go = []
 #loop through lines
 for l in lines_annotate:
     db_object_symbol =l.split('\t')[2]
@@ -55,11 +63,13 @@ for l in lines_annotate:
     qualifier = l.split('\t')[3]
     gene_name = l.split('\t')[9]
     memberLink(db_object_symbol,go_id,qualifier)
+    go.append(go_id)
     if not db_object_symbol in genes:
         genes.append(db_object_symbol)
         evaLink(db_object_symbol,gene_name, qualifier)
-        
-
-#close files
-f.close()
 f_annotation.close()
+script = "https://github.com/MOZI-AI/agi-bio/blob/master/knowledge-import/SNET/GO_Annotation_scm.py"
+metadata.update_meta("GO_Annotation:latest", source,script,genes=len(genes), goterms={"go-terms":len(set(go))})
+print("Done, check dataset/GO_annotation.scm")
+
+
