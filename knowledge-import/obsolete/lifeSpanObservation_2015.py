@@ -4,6 +4,9 @@
 
 import pandas
 
+INCREASED_NAME = "Lifespan_Observations_Increased_GeneSet"
+DECREASED_NAME = "Lifespan_Observations_Decreased_GeneSet"
+
 input_dataset = pandas.read_csv('lifespan_HumanHomolog.csv', sep="," , usecols=(2,3)) # read 'lifespanEffect','symbol' columns 
 
 # open output file 
@@ -30,8 +33,25 @@ f_out.write("(define message (string-append \" Atoms loaded \" \"\\n\"))\n")
 f_out.write("(display count)\n")
 f_out.write("(display message)\n")
 
-inLink("Lifespan_Observations_Increased_GeneSet", "Geneset")
-inLink("Lifespan_Observations_Decreased_GeneSet", "Geneset")
+inLink(INCREASED_NAME, "Geneset")
+inLink(DECREASED_NAME, "Geneset")
+
+f_out.write("""
+(EvaluationLink
+    (PredicateNode "promotes")
+    (ListLink
+        (ConceptNode "{}")
+        (ConceptNode "Longevity)))\n
+""".format(INCREASED_NAME))
+
+f_out.write("""
+(EvaluationLink
+    (PredicateNode "inhibits")
+    (ListLink
+        (ConceptNode "{}")
+        (ConceptNode "Longevity)))\n
+""".format(DECREASED_NAME))
+
 
 # loop through file
 
