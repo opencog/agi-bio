@@ -1,6 +1,7 @@
 knowledge-import
 ----------------
-Scripts for converting published knowledge bases into scheme files for importing into an atomspace
+Scripts for converting published knowledge bases into Atomese files, for
+import into the AtomSpace.
 
 Description
 -----------
@@ -13,12 +14,13 @@ Script for converting [Molecular signatures database (MSigDB)](http://software.b
 ```
 SifToScheme.py [obsolete]
 ```
-experimental script to convert PathwayCommons v9 sif files to scheme atomese.
+experimental script to convert PathwayCommons v9 sif files to scheme Atomese.
 `RulesOfTranslation.txt` is an accessory file with the definitions.
 
 (IN-COMPLEX-WITH not yet implemented)
-```
-```
-https://github.com/MOZI-AI/knowledge-import
-```
-Contains scripts used to import the knowledge bases used in the singularitynet gene annotation service, see the included README
+
+See also
+--------
+The [MOZI.AI/knowlege-import](https://github.com/MOZI-AI/knowledge-import)
+git repo contains scripts used to import the knowledge bases used in
+the singularitynet gene annotation service. See the README in that repo.

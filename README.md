@@ -30,10 +30,12 @@ Overview
 ========
 The directory layout is as follows:
 
-* **bioscience** - Provides the `GeneNode` and `MoleculeNode` Atom types.
+* **[bioscience](./bioscience)** - Provides the `GeneNode` and
+  `MoleculeNode` Atom types.
 
-* **knowledge-import** -- scripts for converting external knowledge
-   bases into Atomese files for importing into the AtomSpace.
+* **[knowledge-import](./knowledge-import)** -- scripts for importing
+   external knowledge bases into the AtomSpace.
 
-* **moses-scripts** -- scripts for importing MOSES models distinguishing
-  binary phenotype categories based on gene expression data.
+* **[moses-scripts](./moses-scripts)** -- scripts for importing MOSES
+  models; such models distinguish binary phenotype categories based
+  on gene expression data.
