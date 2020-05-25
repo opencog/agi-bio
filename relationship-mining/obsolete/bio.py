@@ -33,14 +33,19 @@ Code cleanup and documentation to come ...
 __author__ = 'eddie'
 
 import opencog.cogserver
-from opencog.atomspace import AtomSpace, TruthValue, types, get_type_name, \
-    is_defined, add_type
+from opencog.atomspace import AtomSpace, TruthValue, types, get_type_name # , \
+    #is_defined, add_type
 from opencog.scheme_wrapper import load_scm, scheme_eval, scheme_eval_h, \
     __init__
 from opencog.bindlink import bindlink
 
 from utilities import load_scheme_files
 import subgraph
+
+import reasoner
+reload(reasoner)
+from reasoner import Reasoner
+
 
 import numpy as np
 import pickle
@@ -145,12 +150,61 @@ class miner(opencog.cogserver.Request):
 
 
 
+class inference(opencog.cogserver.Request):
+    def run(self, args, atomspace):
+        print 'Received request inference ' + str(args)
+        bio = Bio(atomspace)
+        #bio.atomspace = bio.a = atomspace
+
+        r = Reasoner(atomspace)
+        r.do_one_steps(*args)
+
+
+        # if args:
+        #     arg = args[0]
+        #     print "arg: {0}".format(arg)
+        #
+        #     if arg == 'clear':
+        #         bio.atomspace.clear()
+        #
+        #     elif arg == 'run':   # default
+        #         bio.do_full_mining(args)
+        #
+        #     elif arg == 'load_scheme':
+        #         bio.load_scheme()
+        #
+        #     elif arg == 'create_subgraph':
+        #         if len(args) > 1:
+        #             bio.create_connected_subgraph(args[1])
+        #         else:
+        #             bio.create_connected_subgraph()
+        #
+        #     elif arg == 'load_scheme_init':
+        #         bio.load_scheme_init_files()
+        #
+        #     elif arg == 'load_scheme_knowledge_files':
+        #         bio.load_scheme_knowledge_files()
+        #
+        #     elif args[0] == 'generate_subsets_from_pickle':
+        #         bio.unpickle_subset_values()
+        #         bio.create_subset_links()
+        #
+        #
+        #     else:
+        #         print args[0] + ' command not found'
+        #
+        # else:
+        #     bio.do_full_mining(args)
+
+
+
 
 class Bio:
     def __init__(self, atomspace=None):
         if not atomspace:
             atomspace = AtomSpace()
         self.a = self.atomspace = atomspace
+        #hmmmm.. is this needed? not sure where it came from
         __init__(self.atomspace)
 
         # To run this script outside of the cogserver required
@@ -159,10 +213,10 @@ class Bio:
         # See https://github.com/opencog/agi-bio/tree/master/bioscience for
         # instructions on how to add the custom bio atom types and use config to
         # load when the cogserver starts up
-        if not is_defined('GeneNode'):
-            types.GeneNode = add_type(types.ConceptNode, 'GeneNode')
-        if not is_defined('ProteinNode'):
-            types.ProteinNode = add_type(types.ConceptNode, 'ProteinNode')
+        # if not is_defined('GeneNode'):
+        #     types.GeneNode = add_type(types.ConceptNode, 'GeneNode')
+        # if not is_defined('ProteinNode'):
+        #     types.ProteinNode = add_type(types.ConceptNode, 'ProteinNode')
 
         # geneset (dicrect) members cache
         self.set_members_dict = {}
