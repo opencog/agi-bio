@@ -3,6 +3,7 @@ DECLARE_GUILE_CONFIG_TARGET(SCM_CONFIG "opencog bio-config" "BIO_TEST")
 
 # Build C++ code for Bioscience atom-types.
 ADD_SUBDIRECTORY (types)
+ADD_SUBDIRECTORY (cython)
 
 # Bogus boilerplate for unit-testing. This should be automated.
 WRITE_GUILE_CONFIG(
