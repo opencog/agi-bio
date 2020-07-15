@@ -10,13 +10,15 @@ INCLUDE_DIRECTORIES(
 
 ADD_LIBRARY(bioscience
 	SHARED
-        bioscience.cpp
+    bioscience.cpp
 )
 
 TARGET_LINK_LIBRARIES(bioscience
 	bioscience-types
 	${ATOMSPACE_LIBRARIES}
-        ${PYTHON_LIBRARIES}
+	${PYTHON_LIBRARIES}
+	${Boost_FILESYSTEM_LIBRARY}
+	${Boost_SYSTEM_LIBRARY}
 )
 
 SET_TARGET_PROPERTIES(bioscience PROPERTIES

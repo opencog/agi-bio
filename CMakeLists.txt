@@ -28,6 +28,21 @@ ADD_DEFINITIONS(-DPROJECT_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
 # Listed in alphabetical order, except that CogUtils comes first,
 # because it supplies the various FindXXX macros.
 
+#Boost
+# Check for boost. We need dynamic-linked, threaded libs by default.
+SET(Boost_USE_STATIC_LIBS OFF)
+SET(Boost_USE_MULTITHREADED ON)
+SET(MIN_BOOST 1.46)
+
+# Required boost packages
+FIND_PACKAGE(Boost ${MIN_BOOST} REQUIRED COMPONENTS filesystem system)
+
+IF(Boost_FOUND)
+	SET(Boost_FOUND_SAVE 1)
+ELSE(Boost_FOUND)
+	MESSAGE(FATAL_ERROR "Boost ${MIN_BOOST} or newer is needed to build OpenCog!")
+ENDIF(Boost_FOUND)
+
 # Cogutil
 FIND_PACKAGE(CogUtil 2.0.1 CONFIG REQUIRED)
 IF (COGUTIL_FOUND)
