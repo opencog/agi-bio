@@ -40,7 +40,9 @@ ENDIF (COGUTIL_FOUND)
 
 # add the 'cmake' directory from cogutil to search path
 list(APPEND CMAKE_MODULE_PATH  ${COGUTIL_DATA_DIR}/cmake)
+
 include(OpenCogGccOptions)
+include(OpenCogLibOptions)
 include(Summary)
 
 # ------------------------------------------------------------
@@ -56,34 +58,10 @@ ELSE (ATOMSPACE_FOUND)
 ENDIF (ATOMSPACE_FOUND)
 
 # ----------------------------------------------------------
-# This is required for Guile
-FIND_LIBRARY(GMP_LIBRARY gmp)
-FIND_PATH(GMP_INCLUDE_DIR gmp.h)
+# Guile and Python
 
-# Gnu Guile scheme interpreter. Mandatory
-# Version 2.2.2 is needed for mrs io ports, compilation, atomics
-FIND_PACKAGE(Guile 2.2.2)
-IF (GUILE_FOUND AND GMP_LIBRARY AND GMP_INCLUDE_DIR)
-	ADD_DEFINITIONS(-DHAVE_GUILE)
-	SET(HAVE_GUILE 1)
-	INCLUDE_DIRECTORIES(${GUILE_INCLUDE_DIR})
-ELSE (GUILE_FOUND AND GMP_LIBRARY AND GMP_INCLUDE_DIR)
-	SET(GUILE_DIR_MESSAGE "Guile was not found; it is needed.\nTo over-ride, make sure GUILE_LIBRARIES and GUILE_INCLUDE_DIRS are set.")
-	MESSAGE(FATAL_ERROR "${GUILE_DIR_MESSAGE}")
-ENDIF (GUILE_FOUND AND GMP_LIBRARY AND GMP_INCLUDE_DIR)
-
-# ----------------------------------------------------------
-# Python
-
-FIND_PACKAGE(Python3Interp)
-IF (3.4.0 VERSION_LESS ${PYTHON3_VERSION_STRING})
-   SET (HAVE_PY_INTERP 1)
-   SET (PYTHON_VER python3.5)
-   MESSAGE(STATUS "Python ${PYTHON3_VERSION_STRING} interpreter found.")
-ENDIF()
-
-# ===================================================================
-# Global includes
+include(OpenCogFindGuile)
+include(OpenCogFindPython)
 
 # -------------------------------------------------
 # Include configuration.
@@ -103,27 +81,9 @@ INCLUDE("${ATOMSPACE_DATA_DIR}/cmake/OpenCogGuile.cmake")
 INCLUDE("${ATOMSPACE_DATA_DIR}/cmake/OpenCogCython.cmake")
 
 # -------------------------------------------------
-# Library configuration
-
-# RPATH handling (see https://cmake.org/Wiki/CMake_RPATH_handling)
-# Note: RPATH only supported under Linux!
-# The idea here is that during unit tests, we use the libraries in
-# the build directories, and NOT the system directories. But that
-# means that, during install, the paths have to be tweaked.
-SET(CMAKE_SKIP_BUILD_RPATH FALSE)
-SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib/opencog")
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-
-# -------------------------------------------------
 # Install configuration
 
-# Only list install files that have actually changed.
-SET(CMAKE_INSTALL_MESSAGE "LAZY")
-
-IF (NOT DEFINED DATADIR)
-	SET (DATADIR "${CMAKE_INSTALL_PREFIX}/share/opencog")
-ENDIF (NOT DEFINED DATADIR)
+include(OpenCogInstallOptions)
 
 ADD_CUSTOM_TARGET(uninstall
 	COMMAND bash -c "cat install_manifest.txt | xargs rm -f"
