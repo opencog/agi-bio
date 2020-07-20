@@ -2,3 +2,28 @@
 
 GENE_NODE <- CONCEPT_NODE
 MOLECULE_NODE <- CONCEPT_NODE
+
+// http://geneontology.org/docs/ontology-documentation/
+CELLULAR_COMPONENT_NODE <- CONCEPT_NODE
+MOLECULAR_FUNCTION_NODE <- CONCEPT_NODE
+BIOLOGICAL_PROCESS_NODE <- CONCEPT_NODE
+
+PATHWAY_NODE <- CONCEPT_NODE
+REACTOME_NODE <- CONCEPT_NODE
+SMP_NODE <- CONCEPT_NODE
+
+// https://www.ebi.ac.uk/ols/ontologies/uberon
+UBERON_NODE <- CONCEPT_NODE
+// http://www.obofoundry.org/ontology/cl.html
+CELL_NODE <- CONCEPT_NODE
+
+RNA_NODE <- MOLECULE_NODE
+// https://www.ebi.ac.uk/chebi/
+CHEBI_NODE <- MOLECULE_NODE
+// https://www.uniprot.org/
+UNIPROT_NODE <- MOLECULE_NODE
+// https://pubchem.ncbi.nlm.nih.gov/
+PUBCHEM_NODE <- MOLECULE_NODE
+
+CODING_RNA_NODE <- RNA_NODE
+NON_CODING_RNA_NODE <- RNA_NODE
