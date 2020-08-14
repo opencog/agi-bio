@@ -1,32 +1,52 @@
 // Custom Atom types for the bio scientist project
 
+// The Gene type represents human gene symbols from https://www.genenames.org/ database.
 GENE_NODE <- CONCEPT_NODE
+
+// The Molecule type represents a biological molecule https://en.wikipedia.org/wiki/Biomolecule
 MOLECULE_NODE <- CONCEPT_NODE
 
-// http://geneontology.org/docs/ontology-documentation/
-CELLULAR_COMPONENT_NODE <- CONCEPT_NODE
-MOLECULAR_FUNCTION_NODE <- CONCEPT_NODE
-BIOLOGICAL_PROCESS_NODE <- CONCEPT_NODE
+// The Ontology type represents Biological ontologies
+ONTOLOGY_NODE <- CONCEPT_NODE
 
+// From Gene ontology http://geneontology.org/docs/ontology-documentation/
+// The CellularComponent type identifies relative cell locations in which a gene performs a function.
+CELLULAR_COMPONENT_NODE <- ONTOLOGY_NODE
+// The MolecularFunction type identifies molecular-level activities performed by gene.
+MOLECULAR_FUNCTION_NODE <- ONTOLOGY_NODE
+// The BiologicalProcess type identifies biological programs accomplished by multiple molecular activities.
+BIOLOGICAL_PROCESS_NODE <- ONTOLOGY_NODE
+
+// The Pathway type represents Biological pathways
 PATHWAY_NODE <- CONCEPT_NODE
+
+// The Reactome type identifies biological pathways from https://reactome.org/ database.
 REACTOME_NODE <- PATHWAY_NODE
+// The Smp type identifies biological pathways from https://smpdb.ca/ database.
 SMP_NODE <- PATHWAY_NODE
+// The PharmGkb type identifies biological pathways from https://www.pharmgkb.org/ database.
 PHARM_GKB_NODE <- PATHWAY_NODE
 
-// https://www.ebi.ac.uk/ols/ontologies/uberon
-UBERON_NODE <- CONCEPT_NODE
-// http://www.obofoundry.org/ontology/cl.html
-CELL_NODE <- CONCEPT_NODE
+// The Uberon type identifies biological ontologies from https://www.ebi.ac.uk/ols/ontologies/uberon
+UBERON_NODE <- ONTOLOGY_NODE
+// The Cell type identifies biological ontologies from http://www.obofoundry.org/ontology/cl.html
+CELL_NODE <- ONTOLOGY_NODE
+// The ChebiOntology identifies biological ontologies from http://www.obofoundry.org/ontology/chebi.html
+CHEBI_ONTOLOGY_NODE <- ONTOLOGY_NODE
 
+// The Rna type represents Ribonucleic acid https://en.wikipedia.org/wiki/RNA
 RNA_NODE <- MOLECULE_NODE
-// https://www.ebi.ac.uk/chebi/
+// The Chebi type identifies small molecules from https://www.ebi.ac.uk/chebi/
 CHEBI_NODE <- MOLECULE_NODE
-// https://www.uniprot.org/
+// The Uniprot type identifies proteins from https://www.uniprot.org/
 UNIPROT_NODE <- MOLECULE_NODE
-// https://pubchem.ncbi.nlm.nih.gov/
+// The Pubchem type identifies small molecules from https://pubchem.ncbi.nlm.nih.gov/
 PUBCHEM_NODE <- MOLECULE_NODE
+// The Drugbank type identifies small molecules from https://www.drugbank.ca/
+DRUGBANK_NODE <- MOLECULE_NODE
 
-// Represents noncoding RNAs
+
+// The Refseq type represents noncoding RNAs from https://rnacentral.org/
 REFSEQ_NODE <- RNA_NODE
-// Represents coding RNAs
+// The Enst type represents coding RNAs from http://ensembl.org/
 ENST_NODE <- RNA_NODE
