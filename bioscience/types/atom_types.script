@@ -50,3 +50,9 @@ DRUGBANK_NODE <- MOLECULE_NODE
 REFSEQ_NODE <- RNA_NODE
 // The Enst type represents coding RNAs from http://ensembl.org/
 ENST_NODE <- RNA_NODE
+
+// NCBITaxonomy type identifies organisms. source https://www.ncbi.nlm.nih.gov/taxonomy
+SPECIES_NODE <- CONCEPT_NODE
+NCBI_TAXONOMY_NODE <- SPECIES_NODE
+// ENTREZ type identifies gene-specific information from NCBI
+ENTREZ_NODE <- CONCEPT_NODE
