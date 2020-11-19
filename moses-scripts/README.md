@@ -150,7 +150,7 @@ ImplicationLink <TV.s = model recall>
 
 given that
 
-recall = TP / (TP + TN)
+recall = TP / (TP + FN)
 
 ### Confidence
 
