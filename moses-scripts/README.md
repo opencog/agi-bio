@@ -143,7 +143,7 @@ Similarly recall is easily translated into an Implication TV
 strength. that is
 
 ```
-ImplicationLink <TV.s = model precision>
+ImplicationLink <TV.s = model recall>
     PredicateNode <TARGET FEATURE>
     PredicateNode <MODEL>
 ```
