@@ -21,8 +21,8 @@ Models are exported in the following format
 
 ```
 EquivalenceLink <1, 1>
-    PredicateNode <MODEL_PREDICATE_NAME>
-    <MODEL_BODY>
+  PredicateNode <MODEL_PREDICATE_NAME>
+  <MODEL_BODY>
 ```
 
 ## Features
@@ -33,14 +33,14 @@ suggest to use the predicate "overexpressed" as follows:
 
 ```
 EquivalenceLink <1, 1>
-    PredicateNode <GENE_NAME>
-    LambdaLink
+  PredicateNode <GENE_NAME>
+  LambdaLink
+    VariableNode "$X"
+    EvaluationLink
+      PredicateNode "overexpressed"
+      ListLink
+        GeneNode <GENE_NAME>
         VariableNode "$X"
-        EvaluationLink
-            PredicateNode "overexpressed"
-            ListLink
-                GeneNode <GENE_NAME>
-                VariableNode "$X"
 ```
 which says that PredicateNode <GENE_NAME> over sample $X is
 equivalent to "GeneNode <GENE_NAME> is overexpressed in sample $X".
@@ -147,11 +147,11 @@ Implication
 
 ```
 ImplicationLink <TV.s = FPR, TV.count = FAL>
-    And
-	  PredicateNode <DATA>
-      Not
-	    PredicateNode <OUTCOME>
-    PredicateNode <MODEL>
+  And
+    PredicateNode <DATA>
+    Not
+      PredicateNode <OUTCOME>
+  PredicateNode <MODEL>
 ```
 
 given that
@@ -181,10 +181,10 @@ ImplicationLink <TV.strength = ACC, TV.count = TOT>
   Or
     And
       PredicateNode <MODEL>
-	  PredicateNode <OUTCOME>
+      PredicateNode <OUTCOME>
     And
       Not PredicateNode <MODEL>
-	  Not PredicateNode <OUTCOME>
+      Not PredicateNode <OUTCOME>
 ```
 
 with
@@ -206,7 +206,7 @@ As one can see `TP` is the cardinality of
 ```
     And
       PredicateNode <MODEL>
-	  PredicateNode <OUTCOME>
+      PredicateNode <OUTCOME>
 ```
 
 and `TN` is the cardinality of
@@ -214,7 +214,7 @@ and `TN` is the cardinality of
 ```
     And
       Not PredicateNode <MODEL>
-	  Not PredicateNode <OUTCOME>
+      Not PredicateNode <OUTCOME>
 ```
 
 Since these two sets are disjoint the cardinality of their union
