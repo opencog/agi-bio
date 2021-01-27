@@ -146,7 +146,7 @@ Likewise, the False Positive Rate is translated into the following
 Implication
 
 ```
-ImplicationLink <TV.s = FPR, TV.count = FAL>
+ImplicationLink <TV.strength = FPR, TV.count = FAL>
   And
     PredicateNode <DATA>
     Not
@@ -199,7 +199,7 @@ where
 TOT = TRU + FAL
 ```
 
-the total size of the population.
+is the total size of the population.
 
 As one can see `TP` is the cardinality of
 
