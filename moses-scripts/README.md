@@ -199,7 +199,7 @@ where
 TOT = TRU + FAL
 ```
 
-the total number of the population.
+the total size of the population.
 
 As one can see `TP` is the cardinality of
 
